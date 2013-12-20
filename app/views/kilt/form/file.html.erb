@@ -1,0 +1,59 @@
+<div id="file-<%= index %>" class="form-input text">
+    <label><%= Kilt::Utils.deslugify field_name %></label>
+
+    <% if object["#{field_name}"] && object["#{field_name}"] != '' %>
+        <div class="filename">
+            <span><%= link_to object["#{field_name}"], Kilt::Utils.download_location(field_name, object["#{field_name}"]), :target => '_blank' %>
+            <a class="button delete <% if !object["#{field_name}"] || object["#{field_name}"] == "" %>hidden<% end %>">Reset/remove file</a></span>
+        </div>
+    <% end %>
+
+    <div class="uploader <% if object["#{field_name}"] && object["#{field_name}"] != "" %>hidden<% end %>">
+        <input id="file-input-<%= index%>" name="<%= "#{object.type}[#{field_name}]" %>" type="file" />
+    </div>
+
+    <input id="file-hidden-<%= index%>" name="<%= "#{object.type}[#{field_name}-hidden]" %>" type="hidden" />
+
+</div>
+
+<script type="text/javascript">
+    var $file = $('#file-<%= index %>'),
+        $filename = $file.find('.filename'),
+        $reset = $file.find('a.delete'),
+        $uploader = $file.find('.uploader');
+
+    // Remove the video
+    $reset.on("click", function(e) {
+        $uploader.removeClass('hidden');
+        $('#file-hidden-<%= index %>').val('clear');
+        $reset.addClass('hidden');
+        $filename.hide();
+    });
+
+</script>
+
+<style>
+    #file-<%= index %> .filename {
+    }
+
+        #file-<%= index %> .filename span {
+            background: #efefef;
+            display: inline-block;
+            min-width: 50%;
+            padding: 8px 4px 8px 8px;
+        }
+
+    #file-<%= index %> a.delete {
+        color: #ddd;
+        display: auto;
+        float: right;
+    }
+
+    #file-<%= index %> .hidden {
+        display: none;
+    }
+
+    #file-<%= index %> .uploader {
+        display: auto;
+    }
+</style>

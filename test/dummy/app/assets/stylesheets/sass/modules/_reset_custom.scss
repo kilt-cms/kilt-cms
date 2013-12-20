@@ -1,0 +1,31 @@
+*,
+*:before,
+*:after {
+    outline: none;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+}
+a,
+input[type="submit"] {
+    cursor: pointer;
+}
+input,
+select,
+textarea {
+    -webkit-appearance: none;
+    border-radius: 0;
+}
+strong,
+b {
+    font-weight: bold;
+}
+em,
+i {
+    font-style: italic;
+}
+iframe {
+    display: block;
+}

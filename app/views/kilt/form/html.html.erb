@@ -1,0 +1,4 @@
+<div class="form-input">
+    <label><%= Kilt::Utils.deslugify field_name %></label>
+    <textarea class="html" name="<%= "#{object.type}[#{field_name}]" %>"><%= object["#{field_name}"] %></textarea>
+</div>

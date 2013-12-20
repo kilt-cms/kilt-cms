@@ -1,0 +1,30 @@
+
+<div class="wr">
+
+    <h2><%= @object['name'] %> <small><%= @type.capitalize %></small></h2>
+
+    <div class="page-actions">
+        <%= link_to "← Back to #{@type.pluralize.capitalize}", list_path(@type), :class => 'button back' %>
+    </div>
+
+    <% if flash[:error] -%>
+        <p class="error"><%= flash[:error] %></p>
+    <% end %>
+
+    <% if flash[:notice] -%>
+        <p class="notice"><%= flash[:notice] %></p>
+    <% end %>
+
+    <%= form_tag @path, :method => "post", :multipart => true do %>
+
+        <% @object.fields.each_with_index do |(key, value), index| %>
+            <%= Kilt::Form.send(value, @object, key, index) %>
+        <% end %>
+
+        <div class="form-input actions">
+            <input type="submit" class="submit save" value="Save">
+        </div>
+
+    <% end%>
+
+</div>

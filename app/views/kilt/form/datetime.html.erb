@@ -1,0 +1,4 @@
+<div class="form-input text datetime">
+    <label><%= Kilt::Utils.deslugify field_name %></label>
+    <input name="<%= "#{object.type}[#{field_name}]" %>" type="text" value="<%= object["#{field_name}"] %>" class="datepicker">
+</div>

@@ -1,0 +1,100 @@
+<div class="form-input text vimeo">
+    <label><%= Kilt::Utils.deslugify field_name %></label>
+
+    <%# Keep the actual value in a hidden field %>
+    <input id="<%= "vimeo-#{index}" %>" name="<%= "#{object.type}[#{field_name}]" %>" type="hidden" value="<%= object["#{field_name}"] %>">
+
+    <div id="vimeo-container-<%= index %>" class="<% if !(object["#{field_name}"] && object["#{field_name}"] != "") %>hidden<% end %>">
+        <div id="vimeo-placeholder-<%= index %>">
+            <%# Show the video if we have it %>
+            <div id="vimeo-placeholder-<%= index%>">
+                <% if object["#{field_name}"] && object["#{field_name}"] != "" %>
+                    <iframe src="//player.vimeo.com/video/<%= object["#{field_name}"] %>?title=0&amp;byline=0&amp;portrait=0&amp;color=dedede" width="100%" height="315" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                <% end %>
+            </div>
+            <div>
+                <a id="vimeo-reset-<%= index%>" class="button delete <% if !object["#{field_name}"] || object["#{field_name}"] == "" %>hidden<% end %>">Reset/remove video</a>
+            </div>
+        </div>
+    </div>
+    <div>
+        <input id="<%= "vimeo-input-#{index}" %>" type="text" <% if object["#{field_name}"] && object["#{field_name}"] != "" %>class="hidden"<% end %> placeholder="Paste or enter a Vimeo video URL here">
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    // Utility function
+    function vimeo_parser_<%= index%>(url){
+        var match = url.match(/http:\/\/(www\.)?vimeo.com\/(\d+)($|\/)/);
+        if (match){
+            return match[2];
+        } else {
+            return false;
+        }
+    }
+
+    // Act accordingly when we can successfully get a vimeo id
+    $('#vimeo-input-<%= index %>').bind("change keyup", function(e) {
+        val = vimeo_parser_<%= index%>($(this).val());
+        if(val != false) {
+            // Inject an iFrame with the vimeo video
+            var $iframe = $('<iframe width="100%" height="315" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
+            $iframe.attr('src', '//player.vimeo.com/video/' + val + '?title=0&byline=0&portrait=0&color=dedede');
+            $('#vimeo-placeholder-<%= index %>').html($iframe);
+
+            // Show the reset button
+            $('#vimeo-reset-<%= index %>').removeClass('hidden');
+
+            // Set the hidden field value
+            $('#vimeo-<%= index %>').val(val);
+
+            // Hide the text input
+            $(this).addClass('hidden');
+            $('#vimeo-container-<%= index %>').removeClass('hidden');
+        }
+    });
+
+    // Remove the video
+    $('#vimeo-reset-<%= index %>').on("click", function(e) {
+        $('#vimeo-placeholder-<%= index %>').html('');
+        $('#vimeo-reset-<%= index %>').addClass('hidden');
+        $('#vimeo-<%= index %>').val('');
+        $('#vimeo-input-<%= index %>').val('').removeClass('hidden');
+        $('#vimeo-container-<%= index %>').addClass('hidden');
+    });
+
+</script>
+
+<style>
+    #vimeo-container-<%= index %> {
+        background: #efefef;
+        display: inline-block;
+        min-width: 50%;
+        padding: 10px 10px;
+    }
+
+    #vimeo-container-<%= index %>.hidden {
+        display: none;
+    }
+
+    #vimeo-reset-<%= index %> {
+        background: #fff;
+        color: #ddd;
+        margin-top: 4px;
+    }
+
+        #vimeo-reset-<%= index %>:hover {
+            background: #e74c3c;
+        }
+
+    #vimeo-reset-<%= index %>,
+    #vimeo-input-<%= index %> {
+        display: auto;
+    }
+
+    #vimeo-reset-<%= index %>.hidden,
+    #vimeo-input-<%= index %>.hidden {
+        display: none;
+    }
+</style>

@@ -1,0 +1,8 @@
+db:
+  host: db.labs.asheavenue.com
+  port: 28015
+  db: kilt
+s3:
+  key: AKIAJU2Z5ERW6USCRFNQ
+  secret: VDYg7qbZQx0CISLqCKEeKgso/FR7gy/RC9PBcsBW
+  bucket: kilt-dummy

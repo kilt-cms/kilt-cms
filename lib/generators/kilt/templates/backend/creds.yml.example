@@ -1,0 +1,8 @@
+db:
+  host: <DB URL>
+  port: <DB Port>
+  db: <DB Name>
+s3:
+  key: <S3 Key>
+  secret: <S3 Secret>
+  bucket: <S3 Bucket>

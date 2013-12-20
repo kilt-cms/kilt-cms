@@ -1,0 +1,4 @@
+<div class="form-input boolean">
+    <label><%= Kilt::Utils.deslugify field_name %></label>
+    <input name="<%= "#{object.type}[#{field_name}]" %>" type="checkbox" class="checkbox" <% if object["#{field_name}"] %> checked<% end %> />
+</div>

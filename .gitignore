@@ -1,0 +1,12 @@
+/.bundle
+/db
+/log
+/tmp
+/vendor
+/public
+/test/dummy/tmp
+/test/dummy/log
+/test/dummy/public/uploads
+.project
+.sass-cache
+Gemfile.lock

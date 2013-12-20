@@ -1,0 +1,81 @@
+@mixin sprite-background($name) {
+    background-image: sprite-url($sprites);
+    background-position: sprite-position($sprites, $name);
+    background-repeat: no-repeat;
+    display: block;
+    height: image-height(sprite-file($sprites, $name));
+    text-indent: -9999em;
+    width: image-width(sprite-file($sprites, $name));
+}
+
+@mixin retina-sprite-background($name) {
+    background-image: sprite-url($retina_sprites);
+    background-position: sprite-position($retina_sprites, $name);
+    background-repeat: no-repeat;
+    background-size: image-width(sprite-path($retina_sprites)) / 2;
+    display: block;
+    height: image-height(sprite-file($retina_sprites, $name)) / 2;
+    text-indent: -9999em;
+    width: image-width(sprite-file($retina_sprites, $name)) / 2;
+}
+
+@mixin transition($transitions...) {
+    -webkit-transition: $transitions;
+       -moz-transition: $transitions;
+         -o-transition: $transitions;
+            transition: $transitions;
+}
+
+@mixin box-shadow($shadows...) {
+    -webkit-box-shadow: $shadows;
+       -moz-box-shadow: $shadows;
+         -o-box-shadow: $shadows;
+            box-shadow: $shadows;
+}
+
+@mixin opacity ($opacity) {
+    opacity: $opacity;
+    -moz-opacity: $opacity;
+    filter:alpha(opacity=($opacity * 100));
+}
+
+@mixin css-triangle($direction: "down", $size: 20px, $color: #000) {
+    width: 0;
+    height: 0;
+    border-left: $size solid #{setTriangleColor($direction, "left", $color)};
+    border-right: $size solid #{setTriangleColor($direction, "right", $color)};
+    border-bottom: $size solid #{setTriangleColor($direction, "bottom", $color)};
+    border-top: $size solid #{setTriangleColor($direction, "top", $color)};
+}
+
+@function setTriangleColor($direction, $side, $color) {
+    @if $direction == "left" and $side == "right"
+    or  $direction == "right" and $side == "left"
+    or $direction == "down" and $side == "top"
+    or $direction == "up" and $side == "bottom" {
+        @return $color
+    } @else {
+        @return "transparent";
+    }
+}
+
+@mixin font-face($family, $style, $weight, $filename) {
+    @font-face {
+        font-family: $family;
+        font-style:  $style;
+        font-weight: $weight;
+        src: url('../../font/' + $filename + '.eot');
+        src: url('../../font/' + $filename + '.eot?#iefix') format('embedded-opentype'),
+             url('../../font/' + $filename + '.woff') format('woff'),
+             url('../../font/' + $filename + '.ttf') format('truetype'),
+             url('../../font/' + $filename + '.svg#' + $family +'') format('svg');
+    }
+}
+
+@mixin user-select($value) {
+    -webkit-user-select: $value;
+       -moz-user-select: $value;
+        -ms-user-select: $value;
+         -o-user-select: $value;
+            user-select: $value;
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta charset="utf-8">
+        <title><%= Kilt.config.name %></title>
+        
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,800,300" rel="stylesheet" type="text/css">
+        <%= stylesheet_link_tag "kilt/stylesheets/screen", :media => "all" %>
+        
+        <%= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.min.js" %>
+        <%= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/codemirror/3.19.0/mode/xml/xml.min.js" %>
+        <%= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/javascript/javascript.min.js" %>
+        <%= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/codemirror/3.19.0/mode/css/css.min.js" %>
+        <%= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/htmlmixed/htmlmixed.min.js" %>
+        
+        <%= javascript_include_tag "kilt/application" %>
+        <%= csrf_meta_tags %>
+</head>
+<body>
+    <header class="hd">
+        <div class="wr">
+            <h6><a href="/admin"><%= Kilt.config.name %></a></h6>
+            <a class="button small dashboard" href="/admin">Dashboard</a>
+            <!--
+            <div class="user">
+                <span class="greeting">Hello, <span class="user-name">Decimus Meridius</span></span>
+                <a class="button log-out">Log out</a>
+            </div>
+             -->
+        </div>
+    </header>
+    
+    <section class="body">
+        <%= yield %>
+    </section>
+    
+    
+    
+</body>
+</html>

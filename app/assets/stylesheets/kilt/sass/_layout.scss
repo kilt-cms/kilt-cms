@@ -1,0 +1,85 @@
+body {
+    padding-top: 36px;
+}
+
+.wr {
+    padding: 0 30px;
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+}
+.hd .wr,
+.nav .wr {
+    max-width: 100%;
+}
+
+.hd {
+    background: $purple;
+    color: #fff;
+    font-weight: normal;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+
+    h6 {
+        display: inline-block;
+        font-weight: 800;
+        margin: 0 10px 0 0;
+
+        a {
+            color: #fff;
+        }
+    }
+
+    .button.dashboard {
+        position: relative;
+        top: -3px;
+    }
+
+    .user {
+        right: 30px;
+        position: absolute;
+        top: 4px;
+
+        .greeting {
+            display: inline-block;
+            font-size: 14px;
+            line-height: 30px;
+            margin: 0 10px 0 0;
+        }
+    }
+}
+
+.nav {
+    background: $dark_grey;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 3px 0;
+}
+
+.page-actions {
+    margin: 0 0 30px;
+}
+
+.object-list {
+    font-size: 60px;
+    font-weight: 400;
+}
+
+p.notice,
+p.error {
+    @include border-radius(3px);
+    border: 1px solid $purple;
+    color: #fff;
+    font-weight: normal;
+    color: $purple;
+    padding: 10px 30px;
+    text-align: center;
+}
+
+p.error {
+    border-color: $red;
+    color: $red;
+}

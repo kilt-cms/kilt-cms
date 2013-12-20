@@ -1,0 +1,23 @@
+<div class="form-input text number">
+    <label><%= Kilt::Utils.deslugify field_name %></label>
+    <input id="number-<%= index %>" name="<%= "#{object.type}[#{field_name}]" %>" type="text" value="<%= object["#{field_name}"] %>" />
+</div>
+
+<script type="text/javascript">
+    $('#number-<%= index %>').keypress(function(e) {
+        var charCode = e.which;
+
+        // Only allow numbers and decimals
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+
+        // Don't allow a second decimal
+        if (charCode == 46 && $(this).val().replace(/[^.]/g, "").length > 0) {
+            return false;
+        }
+
+        // Otherwise return true
+        return true;
+    });
+</script>

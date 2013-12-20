@@ -1,0 +1,16 @@
+name: <%= Rails.application.class.parent_name.titleize %>
+storage:
+  strategy: local
+objects:
+  bagpipe:
+    fields:
+      name: text
+      weight: number
+      description: longtext
+      markup: html
+      birthday: datetime
+      has_stuff: boolean
+      image: image
+      vimeo_video: vimeo
+      youtube_video: youtube
+      other: file

@@ -1,0 +1,72 @@
+<div class="form-input text">
+    <label><%= Kilt::Utils.deslugify field_name %></label>
+
+    <% if object["#{field_name}"] && object["#{field_name}"] != '' %>
+        <div id="image-container-<%= index %>">
+            <div id="image-<%= index %>">
+                <%= image_tag Kilt::Utils.download_location(field_name, object["#{field_name}"]), :width => '100%' %>
+            </div>
+            <div>
+                <a id="image-reset-<%= index%>" class="button delete <% if !object["#{field_name}"] || object["#{field_name}"] == "" %>hidden<% end %>">Reset/remove image</a>
+            </div>
+        </div>
+    <% end %>
+
+    <div id="image-placeholder-<%= index %>" class="<% if object["#{field_name}"] && object["#{field_name}"] != "" %>hidden<% end %>">
+        <input id="image-input-<%= index%>" name="<%= "#{object.type}[#{field_name}]" %>" type="file" accept="image/*" />
+        <div id="image-tip-<%= index %>" class="tip">
+            Only images of type PNG, JPEG, and GIF can be uploaded.
+        </div>
+    </div>
+
+    <input id="image-hidden-<%= index%>" name="<%= "#{object.type}[#{field_name}-hidden]" %>" type="hidden" />
+
+</div>
+
+<script type="text/javascript">
+
+    // Remove the video
+    $('#image-reset-<%= index %>').on("click", function(e) {
+        $('#image-placeholder-<%= index %>').removeClass('hidden');
+        $('#image-hidden-<%= index %>').val('clear');
+        $('#image-reset-<%= index %>').addClass('hidden');
+        $('#image-<%= index %>').hide();
+        $('#image-container-<%= index %>').addClass('hidden');
+    });
+
+</script>
+
+<style>
+    #image-container-<%= index %> {
+        background: #efefef;
+        display: inline-block;
+        min-width: 50%;
+        padding: 10px 10px;
+    }
+
+    #image-container-<%= index %>.hidden {
+        display: none;
+    }
+
+    #image-reset-<%= index %>,
+    #image-placeholder-<%= index %>,
+    #image-tip-<%= index %>{
+        display: auto;
+    }
+
+    #image-reset-<%= index %> {
+        background: #fff;
+        color: #ddd;
+        margin-top: 4px;
+    }
+
+        #image-reset-<%= index %>:hover {
+            background: #e74c3c;
+        }
+
+    #image-reset-<%= index %>.hidden,
+    #image-placeholder-<%= index %>.hidden,
+    #image-tip-<%= index %>.hidden {
+        display: none;
+    }
+</style>
