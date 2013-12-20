@@ -1,28 +1,72 @@
-== README
+- Create a new Rails project without a database:
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+    $ rails new Blah -O
+    
+- Add the Kilt CMS gem to your Gemfile:
 
-Things you may want to cover:
+    gem 'kilt-cms'
+    
+- Run bundler:
 
-* Ruby version
+    $ bundle install
 
-* System dependencies
+- Require "kilt" in your application.rb:
 
-* Configuration
+    module Blah
+      class Application < Rails::Application
+        require 'kilt'
+      end
+    end
+    
+Note: We're trying to find a way around that last step, but for now we're just explicitly adding it since we can't figure out how to get it to auto-load all of Kilt's dependency gems when starting the app.
+    
+- Run the Kilt generator:
 
-* Database creation
+    $ rails g kilt:install
+    
+- Create a creds file:
 
-* Database initialization
+    $ mv config/kilt/creds.yml.example config/kilt/creds.yml
+    
+- Add your database info to the creds.yml. You should have a RethinkDB set up and running already.
 
-* How to run the test suite
+- If you want to use S3 for your image and file uploads, add your S3 info to creds.yml. Also set the following in your config.yml:
 
-* Services (job queues, cache servers, search engines, etc.)
+    storage:
+      strategy: s3
+      
+- If you want to just have file and image uploads be placed in the public/uploads directory, set the following in your config.yml:
 
-* Deployment instructions
+    storage:
+      strategy: local
+      
+- Run the app:
 
-* ...
+    $ rails s
+    
+- Visit the CMS:
 
+    http://<your app>/admin
+    
+- Note that there's a single object created (bagpipe). Click around and see all the field types. Create some bagpipe objects.
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+- Use the Kilt rake task to see what all you can do with Kilt in your controllers and views:
+
+    $ rake kilt
+
+- Create a new object type:
+
+    $ rails g kilt:object <object name> <field name>:<field type> <field name>:<field type> <field name>:<field type>
+    
+    Example:
+    
+    $ rails g kilt:object person name:text address:text bio:longtext avatar:image
+    
+- Go back to /admin and you'll see the new object type. Click around and add some objects of that type.
+
+- From here, try using it on the front-end by creating controllers and views like you would in any other rails app. Instead of calling to a database, though, use the Kilt methods found in the rake taske, or listed on the homepage.
+
+- Dig around the code looking for holes/problems/questions, and keep a list, please.
+    
+    
+    
