@@ -6,6 +6,7 @@
 /public
 /test/dummy/tmp
 /test/dummy/log
+/test/dummy/config/kilt/creds.yml
 /test/dummy/public/uploads
 .project
 .sass-cache

@@ -6,7 +6,7 @@ module Kilt
       argument :fields, :type => :array, :required => true, :desc => "required field_name:field_type"
       
       def generate
-        if !Kilt.config.objects[self.object_name.singularize.underscore]
+        if !Kilt.config.objects || !Kilt.config.objects[self.object_name.singularize.underscore]
           out = "\n\s\s#{self.object_name.singularize.underscore}:"
           out = "#{out}\n\s\s\s\sfields:"
           self.fields.each do |field|
