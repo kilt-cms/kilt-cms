@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = "kilt-cms"
-  s.version     = "0.5.0"
+  s.version     = "0.5.1"
   s.authors     = ["Ashe Avenue"]
   s.email       = ["community@asheavenue.com"]
   s.homepage    = "http://community.asheavenue.com"
@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,lib}/**/*"] + ["Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
 
-  s.add_dependency 'rails', '4.0.1'
+  s.add_dependency 'rails', '>= 4.0.1'
   s.add_dependency 'rethinkdb'
   s.add_dependency 'rails_config'
   s.add_dependency 'jquery-rails'
