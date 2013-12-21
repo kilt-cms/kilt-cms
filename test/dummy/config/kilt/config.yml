@@ -2,6 +2,15 @@ name: Dummy
 storage:
   strategy: local
 objects:
-  test:
+  bagpipe:
     fields:
-      hello: text
+      name: text
+      weight: number
+      description: longtext
+      markup: html
+      birthday: datetime
+      has_stuff: boolean
+      image: image
+      vimeo_video: vimeo
+      youtube_video: youtube
+      other: file
