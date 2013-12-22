@@ -9,3 +9,6 @@ Settings.reload!
 
 # Attach the Kilt config the content pulled in by RailsConfig
 Kilt.config = Settings
+
+# Ensure we have a database set up
+Kilt::Utils.setup_db
