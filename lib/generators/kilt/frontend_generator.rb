@@ -6,7 +6,7 @@ module Kilt
       source_root File.expand_path("../templates/frontend",__FILE__)
       
       def generate
-        #copy files, templates for app-specific naming, inject index action into routs
+        #copy files, templates for app-specific naming, inject index action into routes
         template 'home_controller.rb.erb', Rails.root.join('app', 'controllers', "#{file_name}_controller.rb")
         copy_file 'application.html.erb', Rails.root.join('app','views','layouts','application.html.erb')
         copy_file 'index.html.erb', Rails.root.join('app', 'views', "#{file_name}", 'index.html.erb')
