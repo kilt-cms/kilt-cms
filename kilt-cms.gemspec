@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = "kilt-cms"
-  s.version     = "0.5.2"
+  s.version     = "0.5.3"
   s.authors     = ["Ashe Avenue"]
   s.email       = ["community@asheavenue.com"]
   s.homepage    = "http://community.asheavenue.com"
