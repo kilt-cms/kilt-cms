@@ -10,7 +10,7 @@ module Kilt
         template 'home_controller.rb.erb', Rails.root.join('app', 'controllers', "#{file_name}_controller.rb")
         copy_file 'application.html.erb', Rails.root.join('app','views','layouts','application.html.erb')
         copy_file 'index.html.erb', Rails.root.join('app', 'views', "#{file_name}", 'index.html.erb')
-        inject_into_file Rails.root.join('config','routes.rb'),"\n\tget '/' => '#{file_name}#index'\n", :after => "mount Kilt::Engine => '/admin'\n"
+        inject_into_file Rails.root.join('config','routes.rb'),"\n\tget '/' => '#{file_name}#index'\n", :after => "mount Kilt::Engine => '/admin', as: 'kilt_engine'\n"
         #handle assets, sans named files
         directory 'assets/images', Rails.root.join('app','assets','images')
         directory 'assets/javascripts', Rails.root.join('app','assets','javascripts')
