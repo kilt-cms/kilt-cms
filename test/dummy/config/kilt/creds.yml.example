@@ -1,8 +1,11 @@
 db:
-  host: db.labs.asheavenue.com
-  port: 28015
-  db: kilt
+  host: <DB host>
+  port: <DB port>
+  db: <DB database>
 s3:
-  key: AKIAJU2Z5ERW6USCRFNQ
-  secret: VDYg7qbZQx0CISLqCKEeKgso/FR7gy/RC9PBcsBW
-  bucket: kilt-dummy
+  key: <S3 key>
+  secret: <S3 secret>
+  bucket: <S3 bucket>
+auth:
+  username: <Username>
+  password: <Password>

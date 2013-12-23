@@ -3,6 +3,7 @@ module Kilt
     layout 'kilt/cms'
     protect_from_forgery
     before_filter :ensure_config
+    before_filter :authorize
     
     # Show all the object types
     def index
@@ -118,5 +119,16 @@ module Kilt
         render :text => lines.join("\n")
       end
     end
+    
+    def authorize
+      if Kilt.config.auth && Kilt.config.auth.username && Kilt.config.auth.password
+        authenticate_or_request_with_http_basic('Authorization Required') do |username, password|
+          username == Kilt.config.auth.username && password == Kilt.config.auth.password
+        end
+      else
+        true
+      end
+    end
+    
   end
 end
