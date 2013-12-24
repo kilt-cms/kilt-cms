@@ -9,11 +9,9 @@ module Kilt
     
     def self.method_missing(method, *args)
       locals = { object: args[0], field_name: args[1], index: args[2] }
-      begin
-        render_view method, locals
-      rescue
-        render_view '_default', locals
-      end
+      render_view method, locals
+    rescue
+      render_view '_default', locals
     end
 
     private
