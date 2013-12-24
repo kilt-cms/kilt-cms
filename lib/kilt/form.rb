@@ -9,23 +9,19 @@ module Kilt
     
     def self.method_missing(method, *args)
       begin
-        
-        # Get the method name
-        name = method.to_s
-        
-        # Get the object type and field name
-        object = args[0]
-        field_name = args[1]
-        index = args[2]
-        
-        # Render the corresponding form field, or fall back to the default if we have an issue
+        locals = { object: args[0], field_name: args[1], index: args[2] }
         begin
-          ActionView::Base.new(TEMPLATES_DIR).render(:file => "#{name}.html.erb", :locals => {:object => object, :field_name => field_name, :index => index})
+          render_view method, locals
         rescue
-          ActionView::Base.new(TEMPLATES_DIR).render(:file => "_default.html.erb", :locals => {:object => object, :field_name => field_name, :index => index})
+          render_view '_default', locals
         end
-        
       end
+    end
+
+    private
+
+    def self.render_view name, locals
+      ActionView::Base.new(TEMPLATES_DIR).render(:file => "#{name.to_s}.html.erb", :locals => locals)
     end
     
   end
