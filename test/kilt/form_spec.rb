@@ -4,31 +4,40 @@ describe Kilt::Form do
 
   describe "method_missing" do
 
-    it "should return a rendered action view" do
+    ['blah', 'another', 'apple'].each do |method|
 
-      rendered_action_view = Object.new
+      describe "when the view exists" do
 
-      object     = Object.new
-      field_name = Object.new
-      index      = Object.new
+        it "should return a rendered action view" do
 
-      action_view = Object.new
-      action_view.expects(:render)
-                 .with(file: 'blah.html.erb', 
-                       locals: { 
-                                 object:     object, 
-                                 field_name: field_name,
-                                 index:      index
-                               } )
-                 .returns rendered_action_view
+          rendered_action_view = Object.new
 
-      ActionView::Base.expects(:new)
-                      .with(Kilt::Form::TEMPLATES_DIR)
-                      .returns action_view
+          object     = Object.new
+          field_name = Object.new
+          index      = Object.new
 
-      result = Kilt::Form.blah(object, field_name, index)
-      
-      result.must_be_same_as rendered_action_view
+          action_view = Object.new
+          action_view.expects(:render)
+                     .with(file: "#{method}.html.erb", 
+                           locals: { 
+                                     object:     object, 
+                                     field_name: field_name,
+                                     index:      index
+                                   } )
+                     .returns rendered_action_view
+
+          ActionView::Base.expects(:new)
+                          .with(Kilt::Form::TEMPLATES_DIR)
+                          .returns action_view
+
+          result = Kilt::Form.send(method.to_sym, object, field_name, index)
+          
+          result.must_be_same_as rendered_action_view
+
+        end
+
+      end
+
     end
 
   end
