@@ -1,5 +1,7 @@
 require 'rake/testtask'
 
+task :default => [:test]
+
 Rake::TestTask.new(:test) do |t|
   ENV['RAILS_ENV'] = 'test'
   t.libs << 'test'
