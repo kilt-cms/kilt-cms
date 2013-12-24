@@ -19,7 +19,11 @@ module Kilt
     private
 
     def self.render_view name, locals
-      ActionView::Base.new(TEMPLATES_DIR).render(:file => "#{name.to_s}.html.erb", :locals => locals)
+      data = {
+               file:   "#{name.to_s}.html.erb",
+               locals: locals
+             }
+      ActionView::Base.new(TEMPLATES_DIR).render data
     end
     
   end
