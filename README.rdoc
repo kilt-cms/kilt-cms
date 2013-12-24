@@ -1,3 +1,5 @@
+{<img src="https://travis-ci.org/AsheAvenue/Kilt.png?branch=unit_testing" alt="Build Status" />}[https://travis-ci.org/AsheAvenue/Kilt]
+
 - Create a new Rails project without a database:
 
     $ rails new Blah -O
