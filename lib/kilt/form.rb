@@ -1,7 +1,11 @@
 module Kilt
   module Form
     
-    TEMPLATES_DIR = "#{Kilt::Engine.root}/app/views/kilt/form"
+    TEMPLATES_DIR = if ENV['RAILS_ENV'] == 'test'
+                      '/'
+                    else
+                      "#{Kilt::Engine.root}/app/views/kilt/form"
+                    end
     
     def self.method_missing(method, *args)
       begin
