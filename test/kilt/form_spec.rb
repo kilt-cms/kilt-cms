@@ -18,12 +18,12 @@ describe Kilt::Form do
 
           action_view = Object.new
           action_view.expects(:render)
-                     .with(file: "#{method}.html.erb", 
-                           locals: { 
-                                     object:     object, 
-                                     field_name: field_name,
-                                     index:      index
-                                   } )
+                     .with(:file    => "#{method}.html.erb", 
+                           :locals  => { 
+                                         :object      => object, 
+                                         :field_name  => field_name,
+                                         :index       => index
+                                       } )
                      .returns rendered_action_view
 
           ActionView::Base.stubs(:new)
@@ -50,20 +50,20 @@ describe Kilt::Form do
 
           action_view = Object.new
           action_view.expects(:render)
-                     .with(file: "#{method}.html.erb", 
-                           locals: { 
-                                     object:     object, 
-                                     field_name: field_name,
-                                     index:      index
-                                   } )
+                     .with(:file    => "#{method}.html.erb", 
+                           :locals  => { 
+                                         :object      => object, 
+                                         :field_name  => field_name,
+                                         :index       => index
+                                       } )
                      .raises 'error'
 
           action_view.expects(:render)
-                     .with(file: "_default.html.erb", 
-                           locals: { 
-                                     object:     object, 
-                                     field_name: field_name,
-                                     index:      index
+                     .with(:file    => "_default.html.erb", 
+                           :locals  => { 
+                                     :object     => object, 
+                                     :field_name => field_name,
+                                     :index       => index
                                    } )
                      .returns rendered_action_view
 
