@@ -3,9 +3,8 @@ module Kilt
     class InstallGenerator < Rails::Generators::Base
       
       def install
-        #run all kilt generators
+        # Default to the backend generator
         generate "kilt:backend"
-        generate "kilt:frontend"
       end
       
     end
