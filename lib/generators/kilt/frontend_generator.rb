@@ -15,7 +15,6 @@ module Kilt
         inject_into_file Rails.root.join('config','routes.rb'),"\n\tget '/' => '#{file_name}#index'\n", :after => "mount Kilt::Engine => '/admin', as: 'kilt_engine'\n"
         
         #handle assets, sans named files
-        directory 'assets/images', Rails.root.join('app','assets','images')
         directory 'assets/javascripts', Rails.root.join('app','assets','javascripts')
         directory 'assets/stylesheets', Rails.root.join('app','assets','stylesheets')
         
