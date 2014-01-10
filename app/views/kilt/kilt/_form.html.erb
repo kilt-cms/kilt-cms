@@ -5,6 +5,7 @@
 
     <div class="page-actions">
         <%= link_to "← Back to #{@type.pluralize.capitalize}", list_path(@type), :class => 'button back' %>
+        <%= link_to "New #{@type.capitalize}", new_object_path(@type), :class => 'button back' if !@object.empty? %>
     </div>
 
     <% if flash[:error] -%>
