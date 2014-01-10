@@ -1,0 +1,12 @@
+<div class="form-input text">
+    <label><%= Kilt::Utils.deslugify field_name %></label>
+    <select name="<%= "#{object.type}[#{field_name}]" %>">
+        <% options.split("|").each do |option| %>
+            <% if option == object["#{field_name}"] %>
+                <option value="<%= option %>" selected><%= option %></option>
+            <% else %> 
+                <option value="<%= option %>"><%= option %></option>
+            <% end %>
+        <% end %>
+    </select>
+</div>

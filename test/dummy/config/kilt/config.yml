@@ -2,11 +2,16 @@ name: Ashe Avenue Community
 storage:
   strategy: local
 objects:
-  project:
+  bagpipe:
     fields:
       name: text
-      github: text
+      weight: number
       description: longtext
-      section: text
-      position: number
-      size: text
+      markup: html
+      birthday: datetime
+      has_stuff: boolean
+      pick_one: select_one(Blue|Red|Green)
+      image: image
+      vimeo_video: vimeo
+      youtube_video: youtube
+      other: file
