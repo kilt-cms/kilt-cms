@@ -19,6 +19,7 @@ module Kilt
     def order(key = 'name', direction = 'ASC')
       values = @values.sort_by { |hash| hash[key] }
       direction == 'DESC' ? values.reverse! : values
+      return self
     end
     
     def group(key)
