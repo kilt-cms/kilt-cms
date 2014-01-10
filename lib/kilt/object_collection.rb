@@ -17,8 +17,12 @@ module Kilt
     end
     
     def order(key = 'name', direction = 'ASC')
-      @values = @values.sort_by { |hash| hash[key] }
-      direction == 'DESC' ? @values.reverse! : values
+      @values = @values.sort_by { |hash|
+        is_int?(hash[key]) ? hash[key].to_i : hash[key]
+      }
+      if direction == 'DESC'
+        @values.reverse!
+      end
       return self
     end
     
@@ -49,5 +53,16 @@ module Kilt
     def empty?
       @values.empty?
     end
+    
+    private
+    
+    def is_int?(str)
+      begin
+        !!Integer(str)
+      rescue ArgumentError, TypeError
+        false
+      end
+    end
+    
   end
 end
