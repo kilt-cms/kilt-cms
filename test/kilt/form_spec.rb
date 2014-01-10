@@ -15,6 +15,7 @@ describe Kilt::Form do
           object     = Object.new
           field_name = Object.new
           index      = Object.new
+          options    = Object.new
 
           action_view = Object.new
           action_view.expects(:render)
@@ -22,7 +23,8 @@ describe Kilt::Form do
                            :locals  => { 
                                          :object      => object, 
                                          :field_name  => field_name,
-                                         :index       => index
+                                         :index       => index,
+                                         :options     => options
                                        } )
                      .returns rendered_action_view
 
@@ -30,7 +32,7 @@ describe Kilt::Form do
                           .with(Kilt::Form::TEMPLATES_DIR)
                           .returns action_view
 
-          result = Kilt::Form.send(method.to_sym, object, field_name, index)
+          result = Kilt::Form.send(method.to_sym, object, field_name, index, options)
           
           result.must_be_same_as rendered_action_view
 
@@ -47,6 +49,7 @@ describe Kilt::Form do
           object     = Object.new
           field_name = Object.new
           index      = Object.new
+          options    = Object.new
 
           action_view = Object.new
           action_view.expects(:render)
@@ -54,7 +57,8 @@ describe Kilt::Form do
                            :locals  => { 
                                          :object      => object, 
                                          :field_name  => field_name,
-                                         :index       => index
+                                         :index       => index,
+                                         :options     => options
                                        } )
                      .raises 'error'
 
@@ -63,7 +67,8 @@ describe Kilt::Form do
                            :locals  => { 
                                      :object     => object, 
                                      :field_name => field_name,
-                                     :index       => index
+                                     :index       => index,
+                                     :options     => options
                                    } )
                      .returns rendered_action_view
 
@@ -71,7 +76,7 @@ describe Kilt::Form do
                           .with(Kilt::Form::TEMPLATES_DIR)
                           .returns action_view
 
-          result = Kilt::Form.send(method.to_sym, object, field_name, index)
+          result = Kilt::Form.send(method.to_sym, object, field_name, index, options)
           
           result.must_be_same_as rendered_action_view
 
