@@ -8,9 +8,6 @@ module Kilt
       
       def generate
         
-        #if using git, add creds config to .gitignore
-        append_file Rails.root.join('.gitignore'), '/config/kilt/creds.yml' if File.exists? Rails.root.join('.gitignore')
-        
         #copy files, templates for app-specific naming, inject engine mount to routes
         template 'config.yml.erb', Rails.root.join('config', 'kilt', 'config.yml')
         copy_file 'creds.yml.example', Rails.root.join('config', 'kilt', 'creds.yml.example')
