@@ -17,8 +17,8 @@ module Kilt
     end
     
     def order(key = 'name', direction = 'ASC')
-      values = @values.sort_by { |hash| hash[key] }
-      direction == 'DESC' ? values.reverse! : values
+      @values = @values.sort_by { |hash| hash[key] }
+      direction == 'DESC' ? @values.reverse! : values
       return self
     end
     
