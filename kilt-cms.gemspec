@@ -21,8 +21,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'rails_config'
   s.add_dependency 'jquery-rails'
   s.add_dependency 'jquery-ui-rails'
-  s.add_dependency 'sass-rails'
-  s.add_dependency 'compass-rails'
   s.add_dependency 'uglifier'
   s.add_dependency 'aws-sdk'
 
