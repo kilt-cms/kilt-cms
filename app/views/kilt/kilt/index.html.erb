@@ -2,8 +2,8 @@
     <h2>Dashboard</h2>
 
     <ul class="object-list">
-        <% @types.each do |type| %>
-            <li><%= link_to type.pluralize.capitalize, list_path(type.pluralize) %></li>
+        <% @types.each do |type, name| %>
+            <li><%= link_to name, list_path(type.pluralize) %></li>
         <% end %>
     </ul>
 </div>

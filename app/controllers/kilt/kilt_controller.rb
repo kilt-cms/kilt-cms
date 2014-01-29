@@ -7,7 +7,15 @@ module Kilt
     
     # Show all the object types
     def index
-      @types = Kilt.types
+      @types = []
+      type_names = Kilt.types
+      type_names.each do |type|
+        if Kilt.send(type).name != nil
+          @types[type] = Kilt.send(type).name
+        else
+          @types[type] = type.pluralize.capitalize
+        end
+      end
     end
   
     # Show the list of items for a specific object type
