@@ -1,10 +1,18 @@
 
 <div class="wr">
 
-    <h2><%= @object['name'] %> <small><%= @type.capitalize %></small></h2>
+    <% 
+        if Kilt.send(@type).name != nil
+            name = Kilt.send(@type).name
+        else
+            name = @type.pluralize.capitalize
+        end
+    %>
+    
+    <h2><%= @object['name'] %> <small><%= name.singularize.capitalize %></small></h2>
 
     <div class="page-actions">
-        <%= link_to "← Back to #{@type.pluralize.capitalize}", list_path(@type), :class => 'button back' %>
+        <%= link_to "← Back to #{name}", list_path(@type), :class => 'button back' %>
         <%= link_to "New #{@type.capitalize}", new_object_path(@type), :class => 'button back' if !@object.empty? %>
     </div>
 

@@ -3,6 +3,7 @@ storage:
   strategy: local
 objects:
   bagpipe:
+    name: Scottish bagpipes
     fields:
       name: text
       weight: number

@@ -1,9 +1,17 @@
 <div class="wr">
 
-    <h2><%= @type.pluralize.capitalize %></h2>
+    <% 
+        if Kilt.send(@type).name != nil
+            name = Kilt.send(@type).name
+        else
+            name = @type.pluralize.capitalize
+        end
+    %>
+
+    <h2><%= name %></h2>
 
     <div class="page-actions">
-        <%= link_to "New #{@type.capitalize}", new_object_path(@type.singularize), :class => 'button' %>
+        <%= link_to "New #{name.singularize.capitalize}", new_object_path(@type.singularize), :class => 'button' %>
     </div>
 
     <!-- todo: search by title -->
@@ -18,7 +26,7 @@
 
     <% if @objects.empty? %>
 
-        No <%= @type.pluralize.capitalize %> found.
+        No <%= name %> found.
 
     <% else %>
 

@@ -3,7 +3,14 @@
         <h6><a href="<%= kilt_engine.root_path %>"><%= Kilt.config.name %></a></h6>
         <a class="button small dashboard" href="<%= kilt_engine.root_path %>">Dashboard</a>
         <% Kilt.types.each do |type| %>
-          <%= link_to type.pluralize.capitalize, list_path(type.pluralize), class: "button small dashboard" %>
+          <% 
+              if Kilt.send(type).name != nil
+                  name = Kilt.send(type).name
+              else
+                  name = type.pluralize.capitalize
+              end
+          %>
+          <%= link_to name, list_path(type.pluralize), class: "button small dashboard" %>
         <% end %>
     </div>
 </header>
