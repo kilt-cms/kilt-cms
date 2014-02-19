@@ -1,4 +1,23 @@
 <div class="form-input boolean">
     <label><%= Kilt::Utils.deslugify field_name %></label>
-    <input name="<%= "#{object.type}[#{field_name}]" %>" type="checkbox" class="checkbox" <% if object["#{field_name}"] %> checked<% end %> />
+    <input id="<%= "boolean-#{index}" %>" name="<%= "#{object.type}[#{field_name}]" %>" type="hidden" />
+    <input id="<%= "boolean-dummy-#{index}" %>" type="checkbox" class="checkbox" />
 </div>
+
+<script type="text/javascript">
+
+    // Set the initial value
+    var boolean_<%= index %>_value = "<%= object["#{field_name}"] %>";
+    if(boolean_<%= index %>_value == "true") {
+        $('#boolean-<%= index %>').attr('value', 'true');
+        $('#boolean-dummy-<%= index %>').attr('checked', 'true');
+    } else {
+        $('#boolean-<%= index %>').attr('value', 'false');
+    }
+    
+    // Handle the check action
+    $('#boolean-dummy-<%= index %>').on("change", function(e) {
+        $('#boolean-<%= index %>').attr('value', $(this).is(":checked"));
+    });
+
+</script>
