@@ -7,11 +7,10 @@ require File.expand_path(File.dirname(__FILE__) + '/../lib/kilt')
 require 'minitest/autorun'
 require 'minitest/spec'
 require 'minitest/pride'
-require 'subtle'
 require 'hashie'
 require 'mocha/setup'
 
-def default_config
+def default_test_config
   config         = Hashie::Mash.new
   config.db      = Hashie::Mash.new(db: 'kilt_test', host: '127.0.0.1', port: '28015')
   config.name    = 'Test App'
@@ -21,7 +20,7 @@ def default_config
 end
 
 def setup_the_database
-  setup_the_database_with default_config
+  setup_the_database_with default_test_config
 end
 
 def setup_the_database_with config
