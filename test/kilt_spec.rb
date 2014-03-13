@@ -14,4 +14,26 @@ describe Kilt do
 
   end
 
+  describe "creating an object" do
+
+    let(:values) do
+      {}
+    end
+
+    let(:object) do
+      Kilt::Object.new('cat', values)
+    end
+
+    it "should be able to be called without throwing an error" do
+      values['name'] = 'another test'
+      Kilt.create object
+    end
+
+    it "should return a result" do
+      values['name'] = 'another test'
+      Kilt.create(object).must_equal true
+    end
+
+  end
+
 end
