@@ -1,3 +1,4 @@
+ENV['RAILS_ENV'] = 'test'
 require 'rails'
 require 'action_pack'
 require 'action_view'
