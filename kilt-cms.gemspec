@@ -29,5 +29,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'meta_request'
   s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'mocha'
+  s.add_development_dependency 'subtle'
   
 end

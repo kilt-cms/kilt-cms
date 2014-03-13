@@ -29,8 +29,7 @@ module Kilt
   # Returns: array of type names
   # Example: Kilt.types
   def self.types
-    #Kilt.config.objects.map { |key, value| key.to_s }
-    ['1', '2', '3']
+    Kilt.config.objects.map { |key, value| key.to_s }
   end
   
   

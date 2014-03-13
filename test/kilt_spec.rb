@@ -4,16 +4,27 @@ describe Kilt do
 
   describe "types" do
 
-    it "should return the keys from the objects in the Kilt config" do
-      key1, key2, key3 = 1, 2, 3
+    [:keys,       :expected_results].to_objects {[
+      [[1, 2, 3], ['1', '2', '3']],
+      [[5, 6],    ['5', '6']]
+    ]}.each do |scenario|
 
-      config  = Object.new
-      objects = { key1 => nil, key2 => nil, key3 => nil }
+      describe "keys exist" do
 
-      config.stubs(:objects).returns objects
-      Kilt.stubs(:config).returns config
+        it "should return the keys from the objects in the Kilt config" do
 
-      Kilt.types.must_equal ['1', '2', '3']
+          config  = Object.new
+          objects = scenario.keys.reduce({}) { |t, i| t[i] = nil; t }
+
+          config.stubs(:objects).returns objects
+          Kilt.stubs(:config).returns config
+
+          Kilt.types.must_equal scenario.expected_results
+
+        end
+
+      end
+
     end
 
   end
