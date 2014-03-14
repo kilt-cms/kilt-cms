@@ -105,6 +105,20 @@ describe Kilt do
 
     end
 
+    [1, 2, 3, 4].each do |error_count|
+
+      describe "when creating a record fails" do
+
+        it "should return false" do
+          Kilt::Utils.stubs(:db).returns( { 'errors' => error_count } )
+          object = Kilt::Object.new('dog', { 'name' => 'A name.' } )
+          Kilt.create(object).must_equal false
+        end
+
+      end
+
+    end
+
   end
 
 end
