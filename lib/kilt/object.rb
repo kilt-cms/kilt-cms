@@ -38,7 +38,9 @@ module Kilt
 
     def [](key)
       # Return the values of the object as a hash
-      @values[key.to_s].html_safe if @values[key.to_s]
+      value = @values[key.to_s]
+      return nil unless value
+      value.respond_to?(:html_safe) ? value.html_safe : value
     end
 
     def []=(key, value)
