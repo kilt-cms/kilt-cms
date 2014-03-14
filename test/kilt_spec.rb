@@ -83,6 +83,24 @@ describe Kilt do
         object['slug'].must_equal scenario.slug
       end
 
+      describe "creating the record twice" do
+
+        it "should keep the slugs unique by appending the id to the second record" do
+
+          first  = Kilt::Object.new(scenario.type, values)
+          second = Kilt::Object.new(scenario.type, values.clone)
+
+          Kilt.create(first)
+          sleep(0.05)
+          Kilt.create(second)
+
+          first['slug'].must_equal scenario.slug
+          second['slug'].must_equal "#{scenario.slug}-#{scenario.unique_id}"
+
+        end
+
+      end
+
     end
 
   end
