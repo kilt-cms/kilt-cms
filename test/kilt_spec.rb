@@ -51,6 +51,16 @@ describe Kilt do
         object['type'].must_equal scenario.type
       end
 
+      it "should set the created_at" do
+        Kilt.create(object)
+        object['created_at'].must_equal Time.parse(scenario.today)
+      end
+
+      it "should set the updated_at" do
+        Kilt.create(object)
+        object['updated_at'].must_equal Time.parse(scenario.today)
+      end
+
       it "should set a slug on the object" do
         Kilt.create(object)
         object['slug'].must_equal scenario.slug
