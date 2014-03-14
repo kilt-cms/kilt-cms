@@ -16,10 +16,10 @@ describe Kilt do
   end
 
   [
-    ['1/1/2014', 'cat', 'Apple',  '1388556000000'],
-    ['2/2/2016', 'dog', 'Orange', '1454392800000'],
+    ['1/1/2014', 'cat', 'Apple',  '1388556000000', 'apple' ],
+    ['2/2/2016', 'dog', 'Orange', '1454392800000', 'orange'],
   ].map do |values|
-    Struct.new(:today, :type, :name, :unique_id).new *values
+    Struct.new(:today, :type, :name, :unique_id, :slug).new *values
   end.each do |scenario|
 
     describe "creating an object" do
@@ -51,6 +51,10 @@ describe Kilt do
         object['type'].must_equal scenario.type
       end
 
+      it "should set a slug on the object" do
+        Kilt.create(object)
+        object['slug'].must_equal scenario.slug
+      end
 
     end
 
