@@ -44,13 +44,20 @@ describe Kilt do
         values['name'] = scenario.name
       end
 
-      it "should return true" do
-        Kilt.create(object).must_equal true
-      end
-
       it "should set a unique id based on time" do
         Kilt.create(object)
         object['unique_id'].must_equal scenario.unique_id
+      end
+
+      it "should set the name" do
+        Kilt.create(object)
+        object['name'].must_equal scenario.name
+      end
+
+      it "should create an object that can be retrieved out of the database again" do
+        Kilt.create(object)
+        fresh = Kilt.get(object['slug'])
+        fresh['unique_id'].must_equal object['unique_id']
       end
 
       it "should set the type of the object" do
