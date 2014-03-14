@@ -5,11 +5,8 @@ describe Kilt do
   describe "types" do
 
     it "should return the keys from the objects in the Kilt config" do
-
       keys = default_test_config.objects.map { |k, _| k }
-
       Kilt.types.must_equal keys
-
     end
 
   end
