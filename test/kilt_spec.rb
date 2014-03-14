@@ -15,24 +15,41 @@ describe Kilt do
 
   end
 
-  describe "creating an object" do
+  [
+    ['1/1/2014', 'cat', 'Apple',  '1388556000000'],
+    ['2/2/2016', 'dog', 'Orange', '1454392800000'],
+  ].map do |values|
+    Struct.new(:today, :type, :name, :unique_id).new *values
+  end.each do |scenario|
 
-    let(:values) do
-      {}
-    end
+    describe "creating an object" do
 
-    let(:object) do
-      Kilt::Object.new('cat', values)
-    end
+      let(:values) do
+        {}
+      end
 
-    it "should be able to be called without throwing an error" do
-      values['name'] = 'another test'
-      Kilt.create object
-    end
+      let(:object) do
+        Kilt::Object.new(scenario.type, values)
+      end
 
-    it "should return a result" do
-      values['name'] = 'another test'
-      Kilt.create(object).must_equal true
+      before do
+        Timecop.freeze Time.parse(scenario.today)
+        values['name'] = scenario.name
+      end
+
+      it "should be able to be called without throwing an error" do
+        Kilt.create object
+      end
+
+      it "should return a result" do
+        Kilt.create(object).must_equal true
+      end
+
+      it "should set a unique id based on time" do
+        Kilt.create(object)
+        object['unique_id'].must_equal scenario.unique_id
+      end
+
     end
 
   end
