@@ -28,5 +28,10 @@ def setup_the_database_with config
   Kilt::Utils.setup_db
 end
 
+def clear_out_the_database
+  Kilt::Utils.db do
+    r.db(Kilt.config.db.db).table('objects').delete().run
+  end
+end
 
 setup_the_database
