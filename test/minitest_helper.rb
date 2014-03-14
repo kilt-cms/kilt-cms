@@ -8,6 +8,7 @@ require 'minitest/autorun'
 require 'minitest/spec'
 require 'minitest/pride'
 require 'hashie'
+require 'timecop'
 require 'mocha/setup'
 
 def default_test_config
