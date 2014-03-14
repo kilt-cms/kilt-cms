@@ -38,16 +38,14 @@ module Kilt
   # Example: Kilt.create(object)
   def self.create(object)
     object['created_at'] = object['updated_at'] = Time.now
-    object['unique_id'] = "#{(Time.now.to_f * 1000).to_i}"
-    object['type'] = object.instance_eval { @type }
-
-    object['slug'] = Utils.slugify(object['name'])
+    object['unique_id']  = "#{(Time.now.to_f * 1000).to_i}"
+    object['type']       = object.instance_eval { @type }
+    object['slug']       = Utils.slugify(object['name'])
 
     result = Utils.db do
       
       # Check for slug uniqueness
-      results = r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{object['slug'].to_s}"}).run
-      if results.to_a.length > 0
+      unless slug_is_unique? object['slug']
         object['slug'] = "#{object['slug']}-#{(Time.now.to_f * 1000).to_i}"
       end
       
@@ -55,7 +53,8 @@ module Kilt
       r.db(Kilt.config.db.db).table('objects').insert(object.values).run
       
     end
-    (result['errors'] == 0)
+
+    result['errors'] == 0
   end
 
   # Update an object
@@ -123,6 +122,14 @@ module Kilt
     
     # create an object collection
     Kilt::ObjectCollection.new(results.to_a)
+  end
+
+  class << self
+    private
+    def slug_is_unique? slug
+      results = r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{slug.to_s}"}).run
+      results.to_a.length == 0
+    end
   end
 
 end
