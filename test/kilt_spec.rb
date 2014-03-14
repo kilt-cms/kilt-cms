@@ -37,11 +37,7 @@ describe Kilt do
         values['name'] = scenario.name
       end
 
-      it "should be able to be called without throwing an error" do
-        Kilt.create object
-      end
-
-      it "should return a result" do
+      it "should return true" do
         Kilt.create(object).must_equal true
       end
 
@@ -49,6 +45,12 @@ describe Kilt do
         Kilt.create(object)
         object['unique_id'].must_equal scenario.unique_id
       end
+
+      it "should set the type of the object" do
+        Kilt.create(object)
+        object['type'].must_equal scenario.type
+      end
+
 
     end
 
