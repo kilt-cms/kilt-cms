@@ -40,6 +40,10 @@ module Kilt
       @db ||= r.connect(:host => Kilt.config.db.host, :port => Kilt.config.db.port).repl
       block.call
     end
+
+    def self.database
+      @database ||= Kilt::Database.new(:host => Kilt.config.db.host, :port => Kilt.config.db.port)
+    end
     
     # Ensure we have local storage dirs
     def self.ensure_local_storage_dir_exists

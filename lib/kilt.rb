@@ -48,13 +48,10 @@ module Kilt
       unless slug_is_unique? object['slug']
         object['slug'] = "#{object['slug']}-#{(Time.now.to_f * 1000).to_i}"
       end
-      
-      # Insert the record
-      r.db(Kilt.config.db.db).table('objects').insert(object.values).run
-      
     end
 
-    result['errors'] == 0
+    Utils.database.create object
+
   end
 
   # Update an object
