@@ -15,10 +15,11 @@ module Kilt
     end
 
     def slug_is_unique? slug
-      results = Utils.db do
-        r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{slug.to_s}"}).run
-      end
-      results.to_a.length == 0
+      Utils.db do
+        r.db(Kilt.config.db.db).table('objects')
+                               .filter( { 'slug' => "#{slug}" } )
+                               .run
+      end.to_a.length == 0
     end
 
   end
