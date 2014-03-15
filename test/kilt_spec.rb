@@ -121,5 +121,33 @@ describe Kilt do
 
   end
 
+  describe "updating an object" do
+
+    describe "basic scenarios" do
+
+      let(:values) { { 'name' => 'test' } }
+
+      let(:object) do
+        Kilt::Object.new('cat', values)
+      end
+
+      before do
+        Kilt.create(object)
+        Timecop.freeze Time.parse('1/1/2012')
+        values['name'] = 'something else'
+      end
+
+      it "should use the updated at date" do
+        new_date = Time.parse('1/2/2012')
+        Timecop.freeze new_date
+        Kilt.update object.slug, object
+        object['updated_at'].must_equal new_date
+        Kilt.get(object['slug'])['updated_at'].must_equal new_date
+      end
+
+    end
+
+  end
+
 end
 
