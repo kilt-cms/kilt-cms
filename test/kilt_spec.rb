@@ -200,6 +200,31 @@ describe Kilt do
 
       end
 
+      describe "when the slug is not unique" do
+
+        before do
+
+          Timecop.freeze Time.parse('1/1/2014')
+        end
+
+        it "should change the slug to a unique value" do
+
+          first = Kilt::Object.new('cat', { 'name' => 'first' } )
+          Kilt.create first
+
+          second = Kilt::Object.new('cat', { 'name' => 'second' } )
+          Kilt.create second
+
+          slug = first['slug']
+
+          first['slug'] = second['slug'].to_s
+          Kilt.update slug, first
+
+          first['slug'].must_equal 'x'
+        end
+
+      end
+
     end
 
   end
