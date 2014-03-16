@@ -124,10 +124,10 @@ describe Kilt do
   describe "updating an object" do
 
     [
-      ['1/1/2012', '2/3/2012', 'cat', 'test',  'something_else', 'A', 'B'],
-      ['2/3/2014', '5/3/2015', 'dog', 'apple', 'orange',         'L', 'S'],
+      ['1/1/2012', '2/3/2012', 'cat', 'test',  'something_else', 'A', 'B', 'test'],
+      ['2/3/2014', '5/3/2015', 'dog', 'apple', 'orange',         'L', 'S', 'apple'],
     ].map do |values|
-      Struct.new(:created_at, :updated_at, :type, :original_name, :new_name, :original_size, :new_size).new *values
+      Struct.new(:created_at, :updated_at, :type, :original_name, :new_name, :original_size, :new_size, :original_slug).new *values
     end.each do |scenario|
 
       describe "basic scenarios" do
@@ -171,6 +171,11 @@ describe Kilt do
           Kilt.get(object['slug'])['size'].must_equal scenario.new_size
         end
 
+        it "should NOT update the slug" do
+          Kilt.update object.slug, object
+
+          object['slug'].must_equal scenario.original_slug
+        end
 
       end
 
