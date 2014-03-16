@@ -181,6 +181,27 @@ describe Kilt do
 
     end
 
+    describe "updating the slug" do
+
+      describe "when the slug is unique" do
+
+        it "should update the slug" do
+
+          object = Kilt::Object.new('cat', { 'name' => 'test' } )
+          Kilt.create object
+
+          original_slug = object['slug']
+
+          object['slug'] = 'different'
+          Kilt.update original_slug, object
+
+          Kilt.get(object['slug'])['unique_id'].must_equal object['unique_id']
+        end
+
+      end
+
+    end
+
   end
 
 end
