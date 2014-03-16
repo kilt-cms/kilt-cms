@@ -15,8 +15,8 @@ def default_test_config
   config         = Hashie::Mash.new
   config.db      = Hashie::Mash.new(db: 'kilt_test', host: '127.0.0.1', port: '28015')
   config.name    = 'Test App'
-  config.objects = Hashie::Mash.new(cat: Hashie::Mash.new(fields: { name: 'text'}),
-                                    dog: Hashie::Mash.new(fields: { name: 'text'}))
+  config.objects = Hashie::Mash.new(cat: Hashie::Mash.new(fields: { name: 'text', size: 'text' } ),
+                                    dog: Hashie::Mash.new(fields: { name: 'text', size: 'text' } ))
   config
 end
 

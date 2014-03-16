@@ -124,15 +124,18 @@ describe Kilt do
   describe "updating an object" do
 
     [
-      ['1/1/2012', '2/3/2012', 'cat', 'test',  'something_else'],
-      ['2/3/2014', '5/3/2015', 'dog', 'apple', 'orange'],
+      ['1/1/2012', '2/3/2012', 'cat', 'test',  'something_else', 'A', 'B'],
+      ['2/3/2014', '5/3/2015', 'dog', 'apple', 'orange',         'L', 'S'],
     ].map do |values|
-      Struct.new(:created_at, :updated_at, :type, :original_name, :new_name).new *values
+      Struct.new(:created_at, :updated_at, :type, :original_name, :new_name, :original_size, :new_size).new *values
     end.each do |scenario|
 
       describe "basic scenarios" do
 
-        let(:values) { { 'name' => scenario.original_name } }
+        let(:values) { { 
+                         'name' => scenario.original_name,
+                         'size' => scenario.original_size
+                       } }
 
         let(:object) do
           Kilt::Object.new(scenario.type, values)
@@ -142,6 +145,7 @@ describe Kilt do
           Kilt.create(object)
           Timecop.freeze Time.parse(scenario.created_at)
           values['name'] = scenario.new_name
+          values['size'] = scenario.new_size
         end
 
         it "should use the updated at date" do
@@ -152,6 +156,21 @@ describe Kilt do
           object['updated_at'].must_equal new_date
           Kilt.get(object['slug'])['updated_at'].must_equal new_date
         end
+
+        it "should update the name" do
+          Kilt.update object.slug, object
+
+          object['name'].must_equal scenario.new_name
+          Kilt.get(object['slug'])['name'].must_equal scenario.new_name
+        end
+
+        it "should update the size" do
+          Kilt.update object.slug, object
+
+          object['size'].must_equal scenario.new_size
+          Kilt.get(object['slug'])['size'].must_equal scenario.new_size
+        end
+
 
       end
 
