@@ -123,26 +123,36 @@ describe Kilt do
 
   describe "updating an object" do
 
-    describe "basic scenarios" do
+    [
+      ['1/1/2012', '2/3/2012', 'cat', 'test',  'something_else'],
+      ['2/3/2014', '5/3/2015', 'dog', 'apple', 'orange'],
+    ].map do |values|
+      Struct.new(:created_at, :updated_at, :type, :original_name, :new_name).new *values
+    end.each do |scenario|
 
-      let(:values) { { 'name' => 'test' } }
+      describe "basic scenarios" do
 
-      let(:object) do
-        Kilt::Object.new('cat', values)
-      end
+        let(:values) { { 'name' => scenario.original_name } }
 
-      before do
-        Kilt.create(object)
-        Timecop.freeze Time.parse('1/1/2012')
-        values['name'] = 'something else'
-      end
+        let(:object) do
+          Kilt::Object.new(scenario.type, values)
+        end
 
-      it "should use the updated at date" do
-        new_date = Time.parse('1/2/2012')
-        Timecop.freeze new_date
-        Kilt.update object.slug, object
-        object['updated_at'].must_equal new_date
-        Kilt.get(object['slug'])['updated_at'].must_equal new_date
+        before do
+          Kilt.create(object)
+          Timecop.freeze Time.parse(scenario.created_at)
+          values['name'] = scenario.new_name
+        end
+
+        it "should use the updated at date" do
+          new_date = Time.parse(scenario.updated_at)
+
+          Timecop.freeze new_date
+          Kilt.update object.slug, object
+          object['updated_at'].must_equal new_date
+          Kilt.get(object['slug'])['updated_at'].must_equal new_date
+        end
+
       end
 
     end
@@ -150,4 +160,3 @@ describe Kilt do
   end
 
 end
-
