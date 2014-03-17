@@ -8,7 +8,11 @@ module Kilt
 
     def find(slug)
       Utils.db do
-        r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{slug}"}).limit(1).run
+        r.db(Kilt.config.db.db)
+          .table('objects')
+          .filter( {'slug' => "#{slug}" } )
+          .limit(1)
+          .run
       end
     end
 
@@ -21,15 +25,22 @@ module Kilt
     end
 
     def update(object)
-      result = Utils.db { r.db(Kilt.config.db.db).table('objects').filter({'unique_id' => "#{object['unique_id']}"}).update(object.values).run }
+      result = Utils.db do
+        r.db(Kilt.config.db.db)
+          .table('objects')
+          .filter( { 'unique_id' => "#{object['unique_id']}" } )
+          .update(object.values)
+          .run
+      end
       (result['errors'] == 0)
     end
 
     def slug_is_unique? slug
       Utils.db do
-        r.db(Kilt.config.db.db).table('objects')
-                               .filter( { 'slug' => "#{slug}" } )
-                               .run
+        r.db(Kilt.config.db.db)
+          .table('objects')
+          .filter( { 'slug' => "#{slug}" } )
+          .run
       end.to_a.length == 0
     end
 
