@@ -37,10 +37,6 @@ module Kilt
       (result['errors'] == 0)
     end
 
-    def slug_is_unique? slug
-      find(slug).nil?
-    end
-
   end
 
 end
