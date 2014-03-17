@@ -8,8 +8,7 @@ module Kilt
 
     def find(slug)
       results = Utils.db do
-        r.db(Kilt.config.db.db)
-          .table('objects')
+        objects_table
           .filter( {'slug' => "#{slug}" } )
           .limit(1)
           .run
@@ -22,8 +21,7 @@ module Kilt
 
     def find_all_by_type type
       Utils.db do
-        r.db(Kilt.config.db.db)
-          .table('objects')
+        objects_table
           .filter({'type' => "#{type.singularize.to_s}"})
           .run
       end.to_a
@@ -31,7 +29,7 @@ module Kilt
 
     def create(object)
       result = Utils.db do
-        r.db(Kilt.config.db.db).table('objects').insert(object.values).run
+        objects_table.insert(object.values).run
       end
 
       result['errors'] == 0
@@ -39,8 +37,7 @@ module Kilt
 
     def update(object)
       result = Utils.db do
-        r.db(Kilt.config.db.db)
-          .table('objects')
+        objects_table
           .filter( { 'unique_id' => "#{object['unique_id']}" } )
           .update(object.values)
           .run
@@ -50,13 +47,19 @@ module Kilt
 
     def delete(slug)
       result = Utils.db do
-        r.db(Kilt.config.db.db)
-          .table('objects')
+        objects_table
           .filter( { 'slug' => "#{slug.to_s}" } )
           .delete()
           .run
       end
       result['errors'] == 0
+    end
+
+    private
+
+    def objects_table
+      r.db(Kilt.config.db.db)
+        .table('objects')
     end
 
   end
