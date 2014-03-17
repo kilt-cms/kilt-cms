@@ -81,9 +81,7 @@ module Kilt
     end
     
     # Update the record
-    result = Utils.db { r.db(Kilt.config.db.db).table('objects').filter({'unique_id' => "#{original}"}).update(object.values).run }
-      
-    (result['errors'] == 0)
+    Utils.database.update object
   end
 
 

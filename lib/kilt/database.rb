@@ -20,6 +20,11 @@ module Kilt
       result['errors'] == 0
     end
 
+    def update(object)
+      result = Utils.db { r.db(Kilt.config.db.db).table('objects').filter({'unique_id' => "#{object['unique_id']}"}).update(object.values).run }
+      (result['errors'] == 0)
+    end
+
     def slug_is_unique? slug
       Utils.db do
         r.db(Kilt.config.db.db).table('objects')
