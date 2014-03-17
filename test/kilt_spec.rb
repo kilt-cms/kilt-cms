@@ -293,24 +293,33 @@ describe Kilt do
 
   end
 
-  describe "getting an object" do
+  [
+    ['dog', 'rover'],
+    ['cat', 'fluffy'],
+    ['dog', 'x'],
+    ['cat', 'y']
+  ].map { |args| Struct.new(:type, :name).new(*args) }.each do |scenario|
 
-    it "should return the object" do
-      object = Kilt::Object.new('dog', { 'name' => 'test' } )
-      Kilt.create object
+    describe "getting an object" do
 
-      result = Kilt.get object['slug']
+      it "should return the object" do
+        object = Kilt::Object.new(scenario.type, { 'name' => scenario.name } )
+        Kilt.create object
 
-      result['unique_id'].must_equal object['unique_id']
-    end
+        result = Kilt.get object['slug']
 
-    it "should return a kilt object" do
-      object = Kilt::Object.new('dog', { 'name' => 'test' } )
-      Kilt.create object
+        result['unique_id'].must_equal object['unique_id']
+      end
 
-      result = Kilt.get object['slug']
+      it "should return a kilt object" do
+        object = Kilt::Object.new(scenario.type, { 'name' => scenario.name } )
+        Kilt.create object
 
-      result.is_a? Kilt::Object
+        result = Kilt.get object['slug']
+
+        result.is_a? Kilt::Object
+      end
+
     end
 
   end
