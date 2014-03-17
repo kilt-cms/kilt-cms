@@ -293,4 +293,26 @@ describe Kilt do
 
   end
 
+  describe "getting an object" do
+
+    it "should return the object" do
+      object = Kilt::Object.new('dog', { 'name' => 'test' } )
+      Kilt.create object
+
+      result = Kilt.get object['slug']
+
+      result['unique_id'].must_equal object['unique_id']
+    end
+
+    it "should return a kilt object" do
+      object = Kilt::Object.new('dog', { 'name' => 'test' } )
+      Kilt.create object
+
+      result = Kilt.get object['slug']
+
+      result.is_a? Kilt::Object
+    end
+
+  end
+
 end
