@@ -367,4 +367,29 @@ describe Kilt do
 
   end
 
+  describe "delete" do
+
+    let(:object) do
+      o = Kilt::Object.new('cat', { 'name' => 'Anthem' })
+      Kilt.create o
+      o
+    end
+
+    it "should remove the record from the database" do
+      Kilt.delete object['slug']
+
+      Kilt.get(object['slug']).nil?.must_equal true
+    end
+
+    it "should return true if the delete did not error" do
+      Kilt.delete(object['slug']).must_equal true
+    end
+
+    it "should return false if the delete returned errors" do
+      Kilt::Utils.stubs(:db).returns( { 'errors' => 1 } )
+      Kilt.delete(object['slug']).must_equal false
+    end
+
+  end
+
 end
