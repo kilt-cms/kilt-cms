@@ -54,37 +54,37 @@ module Kilt
   # Example: Kilt.update(object)
   def self.update(slug, object)
     object['updated_at'] = Time.now
-    result = Utils.db do
-      
-      # Keep the original slug handy
-      results = r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{slug}"}).limit(1).run
-      original = results.to_a.first['unique_id']
-      
-      # Check for slug uniqueness
-      if object['slug'].to_s.strip == ''
-        new_slug = Kilt::Utils.slugify(object['name'])
-        object['slug'] = new_slug
-        results = r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{new_slug}"}).run
-        if results
-          result = results.to_a.first
-          if result && result['unique_id'] != original
-            object['slug'] = "#{new_slug}-#{(Time.now.to_f * 1000).to_i}"
-          end
-        end
-      else
-        results = r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{object['slug']}"}).run
-        if results
-          result = results.to_a.first
-          if result && result['unique_id'] != original
-            object['slug'] = "#{object['slug']}-#{(Time.now.to_f * 1000).to_i}"
-          end
+
+    results = Utils.db do
+      r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{slug}"}).limit(1).run
+    end
+
+    original = results.to_a.first['unique_id']
+    
+    # Check for slug uniqueness
+    if object['slug'].to_s.strip == ''
+      new_slug = Kilt::Utils.slugify(object['name'])
+      object['slug'] = new_slug
+      results = Utils.db { r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{new_slug}"}).run }
+      if results
+        result = results.to_a.first
+        if result && result['unique_id'] != original
+          object['slug'] = "#{new_slug}-#{(Time.now.to_f * 1000).to_i}"
         end
       end
-      
-      # Update the record
-      r.db(Kilt.config.db.db).table('objects').filter({'unique_id' => "#{original}"}).update(object.values).run
-      
+    else
+      results = Utils.db { r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{object['slug']}"}).run }
+      if results
+        result = results.to_a.first
+        if result && result['unique_id'] != original
+          object['slug'] = "#{object['slug']}-#{(Time.now.to_f * 1000).to_i}"
+        end
+      end
     end
+    
+    # Update the record
+    result = Utils.db { r.db(Kilt.config.db.db).table('objects').filter({'unique_id' => "#{original}"}).update(object.values).run }
+      
     (result['errors'] == 0)
   end
 
