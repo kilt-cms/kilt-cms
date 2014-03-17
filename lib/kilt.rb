@@ -46,9 +46,16 @@ module Kilt
   end
 
   def self.slug_for object
-    slug = Utils.slugify object['name']
-    slug_is_unique_for?(slug, object) ? slug
-                                      : "#{slug}-#{(Time.now.to_f * 1000).to_i}"
+    if object['slug'].to_s.strip == ''
+      slug = Utils.slugify object['name']
+      slug = slug_is_unique_for?(slug, object) ? slug
+                                               : "#{slug}-#{(Time.now.to_f * 1000).to_i}"
+    else
+      slug = "#{object['slug']}"
+      slug = slug_is_unique_for?(slug, object) ? slug
+                                               : "#{slug}-#{(Time.now.to_f * 1000).to_i}"
+    end
+    slug
   end
 
   # Update an object
@@ -60,21 +67,8 @@ module Kilt
     result = Utils.database.find slug
 
     original = result['unique_id']
-    
-    # Check for slug uniqueness
-    if object['slug'].to_s.strip == ''
-      new_slug = Kilt::Utils.slugify(object['name'])
-      object['slug'] = new_slug
-      result = Utils.database.find new_slug
-      if result && result['unique_id'] != original
-        object['slug'] = "#{new_slug}-#{(Time.now.to_f * 1000).to_i}"
-      end
-    else
-      result = Utils.database.find object['slug']
-      if result && result['unique_id'] != original
-        object['slug'] = "#{object['slug']}-#{(Time.now.to_f * 1000).to_i}"
-      end
-    end
+
+    object['slug'] = slug_for object
     
     # Update the record
     Utils.database.update object
