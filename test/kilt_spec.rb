@@ -203,7 +203,6 @@ describe Kilt do
       describe "when the slug is not unique" do
 
         before do
-
           Timecop.freeze Time.parse('1/1/2014')
         end
 
@@ -212,15 +211,18 @@ describe Kilt do
           first = Kilt::Object.new('cat', { 'name' => 'first' } )
           Kilt.create first
 
+          # have to update the time, as the unique id is time-based
+          Timecop.freeze Time.now + 1
+
           second = Kilt::Object.new('cat', { 'name' => 'second' } )
           Kilt.create second
 
           slug = first['slug']
 
-          first['slug'] = second['slug'].to_s
-          Kilt.update slug, first
+          first['slug'] = second['slug']
+          Kilt.update 'first', first
 
-          first['slug'].must_equal 'x'
+          first['slug'].must_equal 'second-1388556001000'
         end
 
       end

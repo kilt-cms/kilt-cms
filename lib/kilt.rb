@@ -65,7 +65,8 @@ module Kilt
       if results
         result = results.to_a.first
         if result && result['unique_id'] != original
-          object['slug'] = "#{Kilt::Utils.slugify(object['name'])}-#{(Time.now.to_f * 1000).to_i}"
+          #object['slug'] = "#{Kilt::Utils.slugify(object['name'])}-#{(Time.now.to_f * 1000).to_i}"
+          object['slug'] = "#{object['slug']}-#{(Time.now.to_f * 1000).to_i}"
         end
       end
       
