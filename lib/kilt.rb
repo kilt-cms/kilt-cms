@@ -57,22 +57,9 @@ module Kilt
   # Example: Kilt.update(object)
   def self.update(slug, object)
     object['updated_at'] = Time.now
+    object['slug']       = slug_for object
 
-    result = Utils.database.find slug
-
-    original = result['unique_id']
-
-    object['slug'] = slug_for object
-    
-    # Update the record
     Utils.database.update object
-  end
-
-  def self.slug_is_unique_for? slug, object
-    result = Utils.database.find(slug)
-    return true if result.nil?
-
-    "#{result['unique_id']}" == "#{object['unique_id']}"
   end
 
   # Delete an object
@@ -112,6 +99,16 @@ module Kilt
     
     # create an object collection
     Kilt::ObjectCollection.new(results.to_a)
+  end
+
+  class << self
+    private
+    def slug_is_unique_for? slug, object
+      result = Utils.database.find(slug)
+      return true if result.nil?
+
+      "#{result['unique_id']}" == "#{object['unique_id']}"
+    end
   end
 
 end
