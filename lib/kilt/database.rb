@@ -7,13 +7,15 @@ module Kilt
     end
 
     def find(slug)
-      Utils.db do
+      results = Utils.db do
         r.db(Kilt.config.db.db)
           .table('objects')
           .filter( {'slug' => "#{slug}" } )
           .limit(1)
           .run
       end
+      return nil unless results
+      results.to_a.first
     end
 
     def create(object)

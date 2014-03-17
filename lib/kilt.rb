@@ -57,28 +57,22 @@ module Kilt
   def self.update(slug, object)
     object['updated_at'] = Time.now
 
-    results = Utils.database.find slug
+    result = Utils.database.find slug
 
-    original = results.to_a.first['unique_id']
+    original = result['unique_id']
     
     # Check for slug uniqueness
     if object['slug'].to_s.strip == ''
       new_slug = Kilt::Utils.slugify(object['name'])
       object['slug'] = new_slug
-      results = Utils.database.find new_slug
-      if results
-        result = results.to_a.first
-        if result && result['unique_id'] != original
-          object['slug'] = "#{new_slug}-#{(Time.now.to_f * 1000).to_i}"
-        end
+      result = Utils.database.find new_slug
+      if result && result['unique_id'] != original
+        object['slug'] = "#{new_slug}-#{(Time.now.to_f * 1000).to_i}"
       end
     else
-      results = Utils.database.find object['slug']
-      if results
-        result = results.to_a.first
-        if result && result['unique_id'] != original
-          object['slug'] = "#{object['slug']}-#{(Time.now.to_f * 1000).to_i}"
-        end
+      result = Utils.database.find object['slug']
+      if result && result['unique_id'] != original
+        object['slug'] = "#{object['slug']}-#{(Time.now.to_f * 1000).to_i}"
       end
     end
     
