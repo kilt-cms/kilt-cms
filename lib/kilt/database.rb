@@ -6,6 +6,12 @@ module Kilt
       @options = options
     end
 
+    def find(slug)
+      Utils.db do
+        r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{slug}"}).limit(1).run
+      end
+    end
+
     def create(object)
       result = Utils.db do
         r.db(Kilt.config.db.db).table('objects').insert(object.values).run

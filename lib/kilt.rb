@@ -55,9 +55,7 @@ module Kilt
   def self.update(slug, object)
     object['updated_at'] = Time.now
 
-    results = Utils.db do
-      r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{slug}"}).limit(1).run
-    end
+    results = Utils.database.find slug
 
     original = results.to_a.first['unique_id']
     
@@ -65,7 +63,7 @@ module Kilt
     if object['slug'].to_s.strip == ''
       new_slug = Kilt::Utils.slugify(object['name'])
       object['slug'] = new_slug
-      results = Utils.db { r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{new_slug}"}).run }
+      results = Utils.database.find new_slug
       if results
         result = results.to_a.first
         if result && result['unique_id'] != original
@@ -73,7 +71,7 @@ module Kilt
         end
       end
     else
-      results = Utils.db { r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{object['slug']}"}).run }
+      results = Utils.database.find object['slug']
       if results
         result = results.to_a.first
         if result && result['unique_id'] != original
