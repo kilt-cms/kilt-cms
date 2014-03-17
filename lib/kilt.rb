@@ -79,13 +79,8 @@ module Kilt
   # Example: Kilt.objects('events')
   # Used directly or via method_missing
   def self.get_collection(object_type)
-    # connect to the db, get the date, close the connection, return the array
-    results = Utils.db do
-      r.db(Kilt.config.db.db).table('objects').filter({'type' => "#{object_type.singularize.to_s}"}).run
-    end
-    
-    # create an object collection
-    Kilt::ObjectCollection.new(results.to_a)
+    results = Utils.database.find_all_by_type object_type
+    Kilt::ObjectCollection.new results
   end
 
   class << self

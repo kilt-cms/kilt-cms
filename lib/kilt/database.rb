@@ -20,6 +20,15 @@ module Kilt
       results.first
     end
 
+    def find_all_by_type type
+      Utils.db do
+        r.db(Kilt.config.db.db)
+          .table('objects')
+          .filter({'type' => "#{type.singularize.to_s}"})
+          .run
+      end.to_a
+    end
+
     def create(object)
       result = Utils.db do
         r.db(Kilt.config.db.db).table('objects').insert(object.values).run
