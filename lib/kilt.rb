@@ -47,8 +47,8 @@ module Kilt
 
   def self.slug_for object
     slug = Utils.slugify object['name']
-    slug_is_unique?(slug) ? slug 
-                          : "#{slug}-#{(Time.now.to_f * 1000).to_i}"
+    slug_is_unique_for?(slug, object) ? slug
+                                      : "#{slug}-#{(Time.now.to_f * 1000).to_i}"
   end
 
   # Update an object
@@ -80,8 +80,11 @@ module Kilt
     Utils.database.update object
   end
 
-  def self.slug_is_unique? slug
-    Utils.database.find(slug).nil?
+  def self.slug_is_unique_for? slug, object
+    result = Utils.database.find(slug)
+    return true if result.nil?
+
+    "#{result['unique_id']}" == "#{object['unique_id']}"
   end
 
   # Delete an object

@@ -91,11 +91,12 @@ describe Kilt do
             second = Kilt::Object.new(scenario.type, values.clone)
 
             Kilt.create(first)
+            Timecop.freeze(Time.now + 5)
             sleep(0.05)
             Kilt.create(second)
 
             first['slug'].must_equal scenario.slug
-            second['slug'].must_equal "#{scenario.slug}-#{scenario.unique_id}"
+            second['slug'].must_equal "#{scenario.slug}-#{second['unique_id']}"
 
           end
 
