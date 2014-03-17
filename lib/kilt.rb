@@ -69,14 +69,7 @@ module Kilt
   # Returns: Kilt::Object instance
   # Example: Kilt.object('big-event')
   def self.get(slug)
-    # connect to the db, get the object, close the connection, return the object
-    values = Utils.db do
-      r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{slug.to_s}"}).run
-    end
-    
-    result = values.to_a.first
-    
-    # create an object and return it
+    result = Utils.database.find(slug)
     Kilt::Object.new(result['type'], result)
   end
   
