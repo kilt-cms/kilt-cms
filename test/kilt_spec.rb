@@ -330,4 +330,36 @@ describe Kilt do
 
   end
 
+  describe "get collection" do
+
+    it "should return an object collection" do
+      Kilt.get_collection('cat').is_a?(Kilt::ObjectCollection).must_equal true
+    end
+
+    ['cat', 'dog'].each do |type|
+
+      describe "objects exist" do
+        before do
+          Timecop.freeze Time.parse('3/4/2018')
+          ['dog', 'cat'].each do |type|
+            (1..4).map { |x| Kilt::Object.new(type, { 'name' => "#{type}#{x}" } ) }
+                  .each do |object|
+                          Timecop.freeze Time.now + 5
+                          Kilt.create object
+                        end
+          end
+        end
+
+        it "should return only the objects tied to this type" do
+          results = Kilt.get_collection type
+          results.count.must_equal 4
+          results.each { |x| x['type'].must_equal type }
+        end
+
+      end
+
+    end
+
+  end
+
 end
