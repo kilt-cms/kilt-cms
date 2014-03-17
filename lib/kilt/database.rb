@@ -7,9 +7,7 @@ module Kilt
     end
 
     def find(slug)
-      results = Utils.db do
-        slug_query(slug).limit(1).run
-      end
+      results = Utils.db { slug_query(slug).limit(1).run }
       return nil unless results
       results = results.to_a
       return nil if results.first.is_a? Array
@@ -17,16 +15,11 @@ module Kilt
     end
 
     def find_all_by_type type
-      Utils.db do
-        type_query(type).run
-      end.to_a
+      Utils.db { type_query(type).run }.to_a
     end
 
     def create(object)
-      result = Utils.db do
-        objects_table.insert(object.values).run
-      end
-
+      result = Utils.db { objects_table.insert(object.values).run }
       result['errors'] == 0
     end
 
@@ -34,21 +27,18 @@ module Kilt
       result = Utils.db do
         unique_id_query(object['unique_id']).update(object.values).run
       end
-      (result['errors'] == 0)
+      result['errors'] == 0
     end
 
     def delete(slug)
-      result = Utils.db do
-        slug_query(slug).delete().run
-      end
+      result = Utils.db { slug_query(slug).delete().run }
       result['errors'] == 0
     end
 
     private
 
     def objects_table
-      r.db(Kilt.config.db.db)
-        .table('objects')
+      r.db(Kilt.config.db.db).table('objects')
     end
 
     def slug_query(slug)
