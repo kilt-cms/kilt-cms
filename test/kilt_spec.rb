@@ -3,13 +3,6 @@ require File.expand_path(File.dirname(__FILE__) + '/minitest_helper')
 describe Kilt do
 
   before do
-    # This makes random Socket errors go away.
-    # I think the test are either running very fast
-    # or they concurrently... slowing them down
-    # seems to stop socket errors from popping up
-    # in the block passed to Utils.db.
-    sleep(0.05)
-
     clear_out_the_database
   end
 
@@ -92,7 +85,6 @@ describe Kilt do
 
             Kilt.create(first)
             Timecop.freeze(Time.now + 5)
-            sleep(0.05)
             Kilt.create(second)
 
             first['slug'].must_equal scenario.slug
