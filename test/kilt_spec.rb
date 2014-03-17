@@ -336,7 +336,12 @@ describe Kilt do
       Kilt.get_collection('cat').is_a?(Kilt::ObjectCollection).must_equal true
     end
 
-    ['cat', 'dog'].each do |type|
+    [
+      ['cat',  'cat'],
+      ['dog',  'dog'],
+      ['cats', 'cat'],
+      ['dogs', 'dog'],
+    ].map { |args| Struct.new(:type, :singular_type).new(*args) }.each do |scenario|
 
       describe "objects exist" do
         before do
@@ -351,9 +356,9 @@ describe Kilt do
         end
 
         it "should return only the objects tied to this type" do
-          results = Kilt.get_collection type
+          results = Kilt.get_collection scenario.type
           results.count.must_equal 4
-          results.each { |x| x['type'].must_equal type }
+          results.each { |x| x['type'].must_equal scenario.singular_type }
         end
 
       end
