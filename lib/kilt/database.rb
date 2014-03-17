@@ -18,9 +18,7 @@ module Kilt
 
     def find_all_by_type type
       Utils.db do
-        objects_table
-          .filter({'type' => "#{type.singularize.to_s}"})
-          .run
+        type_query(type).run
       end.to_a
     end
 
@@ -34,10 +32,7 @@ module Kilt
 
     def update(object)
       result = Utils.db do
-        objects_table
-          .filter( { 'unique_id' => "#{object['unique_id']}" } )
-          .update(object.values)
-          .run
+        unique_id_query(object['unique_id']).update(object.values).run
       end
       (result['errors'] == 0)
     end
@@ -58,6 +53,14 @@ module Kilt
 
     def slug_query(slug)
       objects_table.filter( { 'slug' => "#{slug}" } )
+    end
+
+    def type_query(type)
+      objects_table.filter( {'type' => "#{type.singularize.to_s}" } )
+    end
+
+    def unique_id_query(unique_id)
+      objects_table.filter( { 'unique_id' => "#{unique_id}" } )
     end
 
   end
