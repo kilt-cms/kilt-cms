@@ -48,6 +48,13 @@ module Kilt
       (result['errors'] == 0)
     end
 
+    def delete(slug)
+      result = Utils.db do
+        r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{slug.to_s}"}).delete().run
+      end
+      result['errors'] == 0
+    end
+
   end
 
 end

@@ -59,10 +59,7 @@ module Kilt
   # Returns: boolean
   # Example: Kilt.delete('some-object')
   def self.delete(slug)
-    result = Utils.db do
-      r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{slug.to_s}"}).delete().run
-    end
-    result['errors'] == 0
+    Utils.database.delete slug
   end
 
   # Get the content for a specific object
