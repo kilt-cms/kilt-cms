@@ -40,13 +40,15 @@ module Kilt
     object['created_at'] = object['updated_at'] = Time.now
     object['unique_id']  = "#{(Time.now.to_f * 1000).to_i}"
     object['type']       = object.instance_eval { @type }
-    object['slug']       = Utils.slugify(object['name'])
-
-    unless Utils.database.slug_is_unique? object['slug']
-      object['slug'] = "#{object['slug']}-#{(Time.now.to_f * 1000).to_i}"
-    end
+    object['slug']       = slug_for object
 
     Utils.database.create object
+  end
+
+  def self.slug_for object
+    slug = Utils.slugify object['name']
+    Utils.database.slug_is_unique?(slug) ? slug 
+                                         : "#{slug}-#{(Time.now.to_f * 1000).to_i}"
   end
 
   # Update an object
