@@ -46,16 +46,10 @@ module Kilt
   end
 
   def self.slug_for object
-    if object['slug'].to_s.strip == ''
-      slug = Utils.slugify object['name']
-      slug = slug_is_unique_for?(slug, object) ? slug
-                                               : "#{slug}-#{(Time.now.to_f * 1000).to_i}"
-    else
-      slug = "#{object['slug']}"
-      slug = slug_is_unique_for?(slug, object) ? slug
-                                               : "#{slug}-#{(Time.now.to_f * 1000).to_i}"
-    end
-    slug
+    slug = object['slug'].to_s.strip == '' ? Utils.slugify(object['name'])
+                                           : "#{object['slug']}"
+    slug_is_unique_for?(slug, object) ? slug
+                                      : "#{slug}-#{(Time.now.to_f * 1000).to_i}"
   end
 
   # Update an object
