@@ -320,6 +320,12 @@ describe Kilt do
         result.is_a? Kilt::Object
       end
 
+      describe "no match" do
+        it "should return nil" do
+          Kilt.get(scenario.name).nil?.must_equal true
+        end
+      end
+
     end
 
   end
