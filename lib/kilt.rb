@@ -61,12 +61,23 @@ module Kilt
       original = results.to_a.first['unique_id']
       
       # Check for slug uniqueness
-      results = r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{object['slug']}"}).run
-      if results
-        result = results.to_a.first
-        if result && result['unique_id'] != original
-          #object['slug'] = "#{Kilt::Utils.slugify(object['name'])}-#{(Time.now.to_f * 1000).to_i}"
-          object['slug'] = "#{object['slug']}-#{(Time.now.to_f * 1000).to_i}"
+      if object['slug'].to_s.strip == ''
+        new_slug = Kilt::Utils.slugify(object['name'])
+        object['slug'] = new_slug
+        results = r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{new_slug}"}).run
+        if results
+          result = results.to_a.first
+          if result && result['unique_id'] != original
+            object['slug'] = "#{new_slug}-#{(Time.now.to_f * 1000).to_i}"
+          end
+        end
+      else
+        results = r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{object['slug']}"}).run
+        if results
+          result = results.to_a.first
+          if result && result['unique_id'] != original
+            object['slug'] = "#{object['slug']}-#{(Time.now.to_f * 1000).to_i}"
+          end
         end
       end
       

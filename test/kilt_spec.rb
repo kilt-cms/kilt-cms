@@ -227,6 +227,67 @@ describe Kilt do
 
       end
 
+      [
+        ['do_not_clear_me', nil],
+        ['do_not_clear_me', ''],
+        ['do_not_clear_me', '   '],
+      ].map { |a| Struct.new(:name, :invalid_value).new *a }.each do |scenario|
+
+        describe "when the slug is removed" do
+
+          before do
+            Timecop.freeze Time.parse('1/1/2014')
+          end
+
+          it "should keep a valid slug" do
+
+            clear_out_the_database
+
+            first = Kilt::Object.new('cat', { 'name' => scenario.name } )
+            Kilt.create first
+
+            slug = first['slug']
+
+            first['slug'] = scenario.invalid_value
+            Kilt.update slug, first
+
+            first['slug'].must_equal slug
+          end
+
+        end
+
+        describe "when the slug is removed and the slug will collide with another" do
+
+          before do
+            Timecop.freeze Time.parse('1/1/2014')
+            clear_out_the_database
+          end
+
+          it "should keep a valid slug" do
+
+            clear_out_the_database
+
+            first = Kilt::Object.new('dog', { 'name' => 'a unique value' } )
+            Kilt.create first
+
+            Timecop.freeze Time.now + 1
+
+            second = Kilt::Object.new('dog', { 'name' => scenario.name } )
+            Kilt.create second
+
+            slug = first['slug']
+
+            first['name'] = scenario.name
+            first['slug'] = scenario.invalid_value
+            Kilt.update slug, first
+
+            first['slug'].must_equal "#{second['slug']}-1388556001000"
+          end
+
+        end
+
+      end
+
     end
 
   end
