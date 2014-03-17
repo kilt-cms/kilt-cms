@@ -8,10 +8,7 @@ module Kilt
 
     def find(slug)
       results = Utils.db do
-        objects_table
-          .filter( {'slug' => "#{slug}" } )
-          .limit(1)
-          .run
+        slug_query(slug).limit(1).run
       end
       return nil unless results
       results = results.to_a
@@ -47,10 +44,7 @@ module Kilt
 
     def delete(slug)
       result = Utils.db do
-        objects_table
-          .filter( { 'slug' => "#{slug.to_s}" } )
-          .delete()
-          .run
+        slug_query(slug).delete().run
       end
       result['errors'] == 0
     end
@@ -60,6 +54,10 @@ module Kilt
     def objects_table
       r.db(Kilt.config.db.db)
         .table('objects')
+    end
+
+    def slug_query(slug)
+      objects_table.filter( { 'slug' => "#{slug}" } )
     end
 
   end
