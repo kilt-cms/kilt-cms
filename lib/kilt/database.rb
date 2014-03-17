@@ -15,7 +15,9 @@ module Kilt
           .run
       end
       return nil unless results
-      results.to_a.first
+      results = results.to_a
+      return nil if results.first.is_a? Array
+      results.first
     end
 
     def create(object)
