@@ -134,6 +134,36 @@ describe Kilt::Object do
         object['something_else'].nil?.must_equal true
       end
 
+      describe "files and images" do
+
+        before do
+          Kilt::Upload.stubs(:send)
+        end
+
+        it "should save the result of the file upload" do
+          resume        = 'a resume'
+          upload_result = Object.new
+
+          Kilt::Upload.expects(:send).with('file', resume).returns upload_result
+
+          object.fill( { 'name' => 'x', 'resume' => resume } )
+
+          object['resume'].must_be_same_as upload_result
+        end
+
+        it "should save the result of the image upload" do
+          headshot      = 'a headshot'
+          upload_result = Object.new
+
+          Kilt::Upload.expects(:send).with('image', headshot).returns upload_result
+
+          object.fill( { 'name' => 'x', 'headshot' => headshot } )
+
+          object['headshot'].must_be_same_as upload_result
+        end
+
+      end
+
     end
 
   end
