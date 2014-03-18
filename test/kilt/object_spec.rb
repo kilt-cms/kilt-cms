@@ -106,4 +106,29 @@ describe Kilt::Object do
 
   end
 
+  describe "fill" do
+
+    describe "simple situation" do
+
+      let(:object) { Kilt::Object.new('cat') }
+
+      it "should set the values on the object" do
+        name, size = 'the name', 'the size'
+        object.fill( { 'name' => name, 'size' => size } )
+        object['name'].must_equal name
+        object['size'].must_equal size
+      end
+
+      it "should ignore fields that are not passed in the params" do
+        name, size = 'the name', 'the value'
+        object['name'] = name
+        object.fill( { 'size' => size } )
+        object['name'].must_equal name
+        object['size'].must_equal size
+      end
+
+    end
+
+  end
+
 end
