@@ -6,6 +6,10 @@ module Kilt
       @type = type
       @values = values
 
+      @values.keys
+             .select { |x| x.is_a? Symbol }
+             .each { |k| @values[k.to_s] = @values[k] }
+
       assemble_fields
     end
 
