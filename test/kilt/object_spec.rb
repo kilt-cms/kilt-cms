@@ -127,6 +127,13 @@ describe Kilt::Object do
         object['size'].must_equal size
       end
 
+      it "should ignore values that are not tied to fields" do
+        name = 'a name'
+        object.fill( { 'name' => name, 'something_else' => 'testing value' } )
+        object['name'].must_equal name
+        object['something_else'].nil?.must_equal true
+      end
+
     end
 
   end
