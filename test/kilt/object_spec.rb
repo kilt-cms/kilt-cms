@@ -50,4 +50,33 @@ describe Kilt::Object do
 
   end
 
+  describe "assembling the fields" do
+
+    ['cat', 'dog'].each do |type|
+
+      describe "basic scenario" do
+
+        let(:name) { Object.new }
+        let(:size) { Object.new }
+
+        let(:object) do
+          Kilt::Object.new(type, { 'name' => name,
+                                   'size' => size } )
+        end
+
+        it "should initialize the variables" do
+          object['name'].must_be_same_as name
+          object['size'].must_be_same_as size
+        end
+
+        it "should set the type" do
+          object.type.must_equal type
+        end
+
+      end
+
+    end
+
+  end
+
 end
