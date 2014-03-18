@@ -73,6 +73,11 @@ describe Kilt::Object do
           object.type.must_equal type
         end
 
+        it "should allow symbols to be used to retrieve values" do
+          object[:name].must_be_same_as name
+          object[:size].must_be_same_as size
+        end
+
       end
 
       describe "using symbols as keys" do
@@ -88,6 +93,11 @@ describe Kilt::Object do
         it "should initialize the variables" do
           object['name'].must_be_same_as name
           object['size'].must_be_same_as size
+        end
+
+        it "should allow symbols to be used to retrieve values" do
+          object[:name].must_be_same_as name
+          object[:size].must_be_same_as size
         end
 
       end
