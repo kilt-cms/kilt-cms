@@ -4,12 +4,7 @@ module Kilt
 
     def initialize(type, values = {})
       @type = type
-      @values = values
-
-      @values.keys
-             .select { |x| x.is_a? Symbol }
-             .each { |k| @values[k.to_s] = @values[k] }
-
+      initialize_values values
       assemble_fields
     end
 
@@ -61,6 +56,14 @@ module Kilt
     def fields_that_should_be_set_given params
       @fields.map    { |k, v| [k, v.downcase] }
              .select { |k, v| params[k] || params["#{k}-hidden"] }
+    end
+
+    def initialize_values values
+      @values = values
+
+      @values.keys
+             .select { |x| x.is_a? Symbol }
+             .each   { |k| @values[k.to_s] = @values[k] }
     end
 
   end
