@@ -36,11 +36,8 @@ module Kilt
     private
 
     def assemble_fields
-      # Get the fields from the config, and add the name field
-      @fields = Kilt.send(@type).fields.map { |key, value| [key, value] }
-      if !Kilt.send(@type).fields.to_h.has_key? :name
-        @fields.insert(0, ['name', 'text'])
-      end
+      @fields = Kilt.send(@type).fields.to_h
+      @fields['name'] = 'text' unless @fields[:name]
     end
 
     def the_value_for(key, field_type, params)
