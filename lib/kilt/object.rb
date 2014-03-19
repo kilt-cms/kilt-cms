@@ -44,10 +44,10 @@ module Kilt
     end
 
     def the_value_for(key, field_type, params)
-      if params["#{key}-hidden"] && params["#{key}-hidden"] == 'clear' && !params[key]
+      if params["#{key}-hidden"] == 'clear' && !params[key]
         ''
       elsif ['file', 'image'].include? field_type
-        Kilt::Upload.send(field_type, params[key])
+        Kilt::Upload.send field_type, params[key]
       else
         params[key]
       end
