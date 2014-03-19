@@ -18,12 +18,10 @@ module Kilt
       @fields.each do |key, value|
         if params[key] || params["#{key}-hidden"]
           field_type = value.downcase
-          if ['file', 'image'].include? field_type
-            if params["#{key}-hidden"] && params["#{key}-hidden"] == 'clear' && !params[key]
-              @values[key.to_s] = ''
-            elsif params[key]
-              @values[key.to_s] = Kilt::Upload.send(field_type, params[key])
-            end
+          if params["#{key}-hidden"] && params["#{key}-hidden"] == 'clear' && !params[key]
+            @values[key.to_s] = ''
+          elsif ['file', 'image'].include? field_type
+            @values[key.to_s] = Kilt::Upload.send(field_type, params[key])
           else
             @values[key.to_s] = params[key]
           end
