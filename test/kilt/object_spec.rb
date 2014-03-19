@@ -134,60 +134,56 @@ describe Kilt::Object do
         object['something_else'].nil?.must_equal true
       end
 
-      describe "files and images" do
+      [
+        ['cat', 'file',  'resume',   'a resume'],
+        ['dog', 'image', 'headshot', 'a headshot']
+      ].map { |x| Struct.new(:type, :field_type, :property, :value).new(*x) }.each do |scenario|
 
-        before do
-          Kilt::Upload.stubs(:send)
-        end
+        describe "files and images" do
 
-        it "should save the result of the file upload" do
-          resume        = 'a resume'
-          upload_result = Object.new
+          let(:object) { Kilt::Object.new(scenario.type) }
 
-          Kilt::Upload.expects(:send).with('file', resume).returns upload_result
-
-          object.fill( { 'name' => 'x', 'resume' => resume } )
-
-          object['resume'].must_be_same_as upload_result
-        end
-
-        it "should save the result of the image upload" do
-          headshot      = 'a headshot'
-          upload_result = Object.new
-
-          Kilt::Upload.expects(:send).with('image', headshot).returns upload_result
-
-          object.fill( { 'name' => 'x', 'headshot' => headshot } )
-
-          object['headshot'].must_be_same_as upload_result
-        end
-
-        describe "the hidden value is set to clear" do
-
-          it "should set the value to an empty string" do
-
-            upload_result = Object.new
-
-            object.fill( { 'name' => 'x', 'resume-hidden' => 'clear' } )
-
-            object['resume'].must_equal ''
-              
+          before do
+            Kilt::Upload.stubs(:send)
           end
 
-        end
-
-        describe "the hidden value is set to clear AND the value is set" do
-
-          it "should set the value to an empty string" do
-
-            headshot      = 'a headshot'
+          it "should save the result of the file upload" do
             upload_result = Object.new
 
-            Kilt::Upload.expects(:send).with('image', headshot).returns upload_result
+            Kilt::Upload.expects(:send).with(scenario.field_type, scenario.value).returns upload_result
 
-            object.fill( { 'name' => 'x', 'headshot' => headshot, 'headshot-hidden' => 'clear' } )
+            object.fill( { 'name' => 'x', scenario.property => scenario.value } )
 
-            object['headshot'].must_be_same_as upload_result
+            object[scenario.property].must_be_same_as upload_result
+          end
+
+          describe "the hidden value is set to clear" do
+
+            it "should set the value to an empty string" do
+
+              upload_result = Object.new
+
+              object.fill( { 'name' => 'x', "#{scenario.property}-hidden" => 'clear' } )
+
+              object[scenario.property].must_equal ''
+                
+            end
+
+          end
+
+          describe "the hidden value is set to clear AND the value is set" do
+
+            it "should set the value to an empty string" do
+
+              upload_result = Object.new
+
+              Kilt::Upload.expects(:send).with(scenario.field_type, scenario.value).returns upload_result
+
+              object.fill( { 'name' => 'x', scenario.property => scenario.value, "#{scenario.property}-hidden" => 'clear' } )
+
+              object[scenario.property].must_be_same_as upload_result
+            end
+
           end
 
         end
