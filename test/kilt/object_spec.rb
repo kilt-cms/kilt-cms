@@ -2,6 +2,19 @@ require File.expand_path(File.dirname(__FILE__) + '/../minitest_helper')
 
 describe Kilt::Object do
 
+  describe "defining an object" do
+    describe "the object does not have a field type specified" do
+      it "should have a name field" do
+        name = Object.new
+
+        object = Kilt::Object.new('no_namey')
+        object.fill( { 'name' => name } )
+
+        object['name'].must_be_same_as name
+      end
+    end
+  end
+
   describe "[]" do
 
     let(:values) { {} }
