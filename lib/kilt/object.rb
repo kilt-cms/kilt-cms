@@ -14,7 +14,6 @@ module Kilt
     end
 
     def fill(params)
-      puts params
       # Take the params passed in and match them up to the fields
       @fields.each do |key, value|
         if params[key] || params["#{key}-hidden"]
