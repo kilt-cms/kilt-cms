@@ -14,18 +14,8 @@ module Kilt
     end
 
     def fill(params)
-      # Take the params passed in and match them up to the fields
-      @fields.each do |key, value|
-        if params[key] || params["#{key}-hidden"]
-          field_type = value.downcase
-          if params["#{key}-hidden"] && params["#{key}-hidden"] == 'clear' && !params[key]
-            @values[key.to_s] = ''
-          elsif ['file', 'image'].include? field_type
-            @values[key.to_s] = Kilt::Upload.send(field_type, params[key])
-          else
-            @values[key.to_s] = params[key]
-          end
-        end
+      fields_that_should_be_set_given(params).each do |field, field_type|
+        self[field] = the_value_for field, field_type, params
       end
 
       # Add some extra fields
@@ -65,5 +55,21 @@ module Kilt
         @fields.insert(0, ['name', 'text'])
       end
     end
+
+    def the_value_for(key, field_type, params)
+      if params["#{key}-hidden"] && params["#{key}-hidden"] == 'clear' && !params[key]
+        ''
+      elsif ['file', 'image'].include? field_type
+        Kilt::Upload.send(field_type, params[key])
+      else
+        params[key]
+      end
+    end
+
+    def fields_that_should_be_set_given params
+      @fields.map    { |k, v| [k, v.downcase] }
+             .select { |k, v| params[k] || params["#{k}-hidden"] }
+    end
+
   end
 end
