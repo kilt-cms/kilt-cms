@@ -17,14 +17,6 @@ module Kilt
       fields_that_should_be_set_given(params).each do |field, field_type|
         self[field] = the_value_for field, field_type, params
       end
-
-      # Add some extra fields
-      if !@slug
-        @values['slug'] = Utils.slugify(@values['name'])
-      end
-      
-      @values['type'] = @type
-
     end
 
     def [](key)
