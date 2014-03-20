@@ -4,41 +4,21 @@ module Kilt
 
     def initialize(type, values = {})
       @type = type
-      @values = values
-
+      initialize_values values
       assemble_fields
     end
 
     def fill(params)
-      puts params
-      # Take the params passed in and match them up to the fields
-      @fields.each do |key, value|
-        if params[key] || params["#{key}-hidden"]
-          field_type = value.downcase
-          if ['file', 'image'].include? field_type
-            if params["#{key}-hidden"] && params["#{key}-hidden"] == 'clear' && !params[key]
-              @values[key.to_s] = ''
-            elsif params[key]
-              @values[key.to_s] = Kilt::Upload.send(field_type, params[key])
-            end
-          else
-            @values[key.to_s] = params[key]
-          end
-        end
+      fields_that_should_be_set_given(params).each do |field, field_type|
+        self[field] = the_value_for field, field_type, params
       end
-
-      # Add some extra fields
-      if !@slug
-        @values['slug'] = Utils.slugify(@values['name'])
-      end
-      
-      @values['type'] = @type
-
     end
 
     def [](key)
       # Return the values of the object as a hash
-      @values[key.to_s].html_safe if @values[key.to_s]
+      value = @values[key.to_s]
+      return nil unless value
+      value.respond_to?(:html_safe) ? value.html_safe : value
     end
 
     def []=(key, value)
@@ -56,11 +36,32 @@ module Kilt
     private
 
     def assemble_fields
-      # Get the fields from the config, and add the name field
-      @fields = Kilt.send(@type).fields.map { |key, value| [key, value] }
-      if !Kilt.send(@type).fields.to_h.has_key? :name
-        @fields.insert(0, ['name', 'text'])
+      @fields = Kilt.send(@type).fields.to_h
+      @fields['name'] = 'text' unless @fields[:name]
+    end
+
+    def the_value_for(key, field_type, params)
+      if params["#{key}-hidden"] == 'clear' && !params[key]
+        ''
+      elsif ['file', 'image'].include? field_type
+        Kilt::Upload.send field_type, params[key]
+      else
+        params[key]
       end
     end
+
+    def fields_that_should_be_set_given params
+      @fields.map    { |k, v| [k, v.downcase] }
+             .select { |k, v| params[k] || params["#{k}-hidden"] }
+    end
+
+    def initialize_values values
+      @values = values
+
+      @values.keys
+             .select { |x| x.is_a? Symbol }
+             .each   { |k| @values[k.to_s] = @values[k] }
+    end
+
   end
 end

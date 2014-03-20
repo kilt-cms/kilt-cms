@@ -38,20 +38,11 @@ module Kilt
   # Example: Kilt.create(object)
   def self.create(object)
     object['created_at'] = object['updated_at'] = Time.now
-    object['unique_id'] = "#{(Time.now.to_f * 1000).to_i}"
-    result = Utils.db do
-      
-      # Check for slug uniqueness
-      results = r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{object['slug'].to_s}"}).run
-      if results.to_a.length > 0
-        object['slug'] = "#{object['slug']}-#{(Time.now.to_f * 1000).to_i}"
-      end
-      
-      # Insert the record
-      r.db(Kilt.config.db.db).table('objects').insert(object.values).run
-      
-    end
-    (result['errors'] == 0)
+    object['unique_id']  = "#{(Time.now.to_f * 1000).to_i}"
+    object['type']       = object.instance_eval { @type }
+    object['slug']       = slug_for object
+
+    Utils.database.create object
   end
 
   # Update an object
@@ -59,52 +50,25 @@ module Kilt
   # Example: Kilt.update(object)
   def self.update(slug, object)
     object['updated_at'] = Time.now
-    result = Utils.db do
-      
-      # Keep the original slug handy
-      results = r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{slug}"}).limit(1).run
-      original = results.to_a.first['unique_id']
-      
-      # Check for slug uniqueness
-      results = r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{object['slug']}"}).run
-      if results
-        result = results.to_a.first
-        if result && result['unique_id'] != original
-          object['slug'] = "#{Kilt::Utils.slugify(object['name'])}-#{(Time.now.to_f * 1000).to_i}"
-        end
-      end
-      
-      # Update the record
-      r.db(Kilt.config.db.db).table('objects').filter({'unique_id' => "#{original}"}).update(object.values).run
-      
-    end
-    (result['errors'] == 0)
-  end
+    object['slug']       = slug_for object
 
+    Utils.database.update object
+  end
 
   # Delete an object
   # Returns: boolean
   # Example: Kilt.delete('some-object')
   def self.delete(slug)
-    result = Utils.db do
-      r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{slug.to_s}"}).delete().run
-    end
-    (result['errors'] == 0)
+    Utils.database.delete slug
   end
 
   # Get the content for a specific object
   # Returns: Kilt::Object instance
   # Example: Kilt.object('big-event')
   def self.get(slug)
-    # connect to the db, get the object, close the connection, return the object
-    values = Utils.db do
-      r.db(Kilt.config.db.db).table('objects').filter({'slug' => "#{slug.to_s}"}).run
-    end
-    
-    result = values.to_a.first
-    
-    # create an object and return it
-    Kilt::Object.new(result['type'], result)
+    result = Utils.database.find(slug)
+    result ? Kilt::Object.new(result['type'], result)
+           : nil
   end
   
   # Get a list of objects
@@ -112,13 +76,28 @@ module Kilt
   # Example: Kilt.objects('events')
   # Used directly or via method_missing
   def self.get_collection(object_type)
-    # connect to the db, get the date, close the connection, return the array
-    results = Utils.db do
-      r.db(Kilt.config.db.db).table('objects').filter({'type' => "#{object_type.singularize.to_s}"}).run
+    results = Utils.database.find_all_by_type object_type
+    Kilt::ObjectCollection.new results
+  end
+
+  class << self
+
+    private
+
+    def slug_is_unique_for? slug, object
+      result = Utils.database.find(slug)
+      return true if result.nil?
+
+      "#{result['unique_id']}" == "#{object['unique_id']}"
     end
-    
-    # create an object collection
-    Kilt::ObjectCollection.new(results.to_a)
+
+    def slug_for object
+      slug = object['slug'].to_s.strip == '' ? Utils.slugify(object['name'])
+                                             : "#{object['slug']}"
+      slug_is_unique_for?(slug, object) ? slug
+                                        : "#{slug}-#{(Time.now.to_f * 1000).to_i}"
+    end
+
   end
 
 end

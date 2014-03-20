@@ -37,10 +37,12 @@ module Kilt
     
     # Make a db call
     def self.db(&block)
-      db = r.connect(:host => Kilt.config.db.host, :port => Kilt.config.db.port).repl
-      results = block.call()
-      db.close
-      results
+      @db ||= r.connect(:host => Kilt.config.db.host, :port => Kilt.config.db.port).repl
+      block.call
+    end
+
+    def self.database
+      @database ||= Kilt::Database.new(:host => Kilt.config.db.host, :port => Kilt.config.db.port)
     end
     
     # Ensure we have local storage dirs
