@@ -11,4 +11,4 @@ Settings.reload!
 Kilt.config = Settings
 
 # Ensure we have a database set up
-Kilt::Utils.setup_db
+Kilt::Utils.rethink_setup_db
