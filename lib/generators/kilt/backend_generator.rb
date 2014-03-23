@@ -12,8 +12,7 @@ module Kilt
         template 'config.yml.erb', Rails.root.join('config', 'kilt', 'config.yml')
         copy_file 'creds.yml.example', Rails.root.join('config', 'kilt', 'creds.yml.example')
         copy_file 'kilt.rb', Rails.root.join('config', 'initializers', 'kilt.rb')
-        inject_into_file Rails.root.join('config', 'routes.rb'), "\n\tmount Kilt::Engine => '/admin', as: 'kilt_engine'\n", :after => "#{Rails.application.class.parent_name.camelize}::Application.routes.draw do\n"
-        inject_into_file Rails.root.join('config', 'routes.rb'), "\n\tmount Kilt::Engine => '/admin', as: 'kilt_engine'\n", :after => "Rails.application.routes.draw do\n"
+        inject_into_file Rails.root.join('config', 'routes.rb'), "\n\tmount Kilt::Engine => '/admin', as: 'kilt_engine'\n", :after => ".routes.draw do\n"
       
       end
     end

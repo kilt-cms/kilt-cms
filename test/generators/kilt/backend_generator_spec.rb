@@ -51,17 +51,10 @@ describe Kilt::Generators::BackendGenerator do
       generator.generate
     end
 
-    it "should inject the Kilt routes into a Rails 4.0 app's routes" do
+    it "should inject the Kilt routes into the app's routes" do
       root_result = Object.new
       root.stubs(:join).with('config', 'routes.rb').returns root_result
-      generator.expects(:inject_into_file).with root_result, "\n\tmount Kilt::Engine => '/admin', as: 'kilt_engine'\n", :after => "Test::Application.routes.draw do\n"
-      generator.generate
-    end
-
-    it "should inject the Kilt routes into a Rails 4.1 app's routes" do
-      root_result = Object.new
-      root.stubs(:join).with('config', 'routes.rb').returns root_result
-      generator.expects(:inject_into_file).with root_result, "\n\tmount Kilt::Engine => '/admin', as: 'kilt_engine'\n", :after => "Rails.application.routes.draw do\n"
+      generator.expects(:inject_into_file).with root_result, "\n\tmount Kilt::Engine => '/admin', as: 'kilt_engine'\n", :after => ".routes.draw do\n"
       generator.generate
     end
 
