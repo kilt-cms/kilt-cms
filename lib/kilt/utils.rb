@@ -3,11 +3,11 @@ module Kilt
     
     # Set up the database
     def self.rethink_setup_db
-      Kilt::Database.setup!
+      Kilt::Database.setup! Kilt.config.db
     end
     
     def self.database
-      @database ||= Kilt::Database.new(:host => Kilt.config.db.host, :port => Kilt.config.db.port)
+      @database ||= Kilt::Database.new Kilt.config.db
     end
     
     # Ensure we have local storage dirs
