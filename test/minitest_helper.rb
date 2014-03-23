@@ -31,7 +31,7 @@ def setup_the_database_with config
 end
 
 def clear_out_the_database
-  Kilt::Utils.db do
+  Kilt::Database.new(:host => Kilt.config.db.host, :port => Kilt.config.db.port).execute do
     r.db(Kilt.config.db.db).table('objects').delete().run
   end
 end

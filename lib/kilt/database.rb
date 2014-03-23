@@ -7,7 +7,7 @@ module Kilt
     end
 
     def find(slug)
-      results = Utils.db { slug_query(slug).limit(1).run }
+      results = execute { slug_query(slug).limit(1).run }
       return nil unless results
       results = results.to_a
       return nil if results.first.is_a? Array
@@ -15,24 +15,30 @@ module Kilt
     end
 
     def find_all_by_type type
-      Utils.db { type_query(type).run }.to_a
+      execute { type_query(type).run }.to_a
     end
 
     def create(object)
-      result = Utils.db { objects_table.insert(object.values).run }
+      result = execute { objects_table.insert(object.values).run }
       result['errors'] == 0
     end
 
     def update(object)
-      result = Utils.db do
+      result = execute do
         unique_id_query(object['unique_id']).update(object.values).run
       end
       result['errors'] == 0
     end
 
     def delete(slug)
-      result = Utils.db { slug_query(slug).delete().run }
+      result = execute { slug_query(slug).delete().run }
       result['errors'] == 0
+    end
+
+    # Make a db call
+    def execute(&block)
+      @db ||= r.connect(:host => @options[:host], :port => @options[:port]).repl
+      block.call
     end
 
     def self.setup!
