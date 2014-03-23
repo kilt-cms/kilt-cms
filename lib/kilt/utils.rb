@@ -3,7 +3,7 @@ module Kilt
     
     # Set up the database
     def self.rethink_setup_db
-      Kilt::Database.setup! Kilt.config.db
+      Kilt::Database.new(Kilt.config.db).setup!
     end
     
     def self.database

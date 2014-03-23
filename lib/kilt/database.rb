@@ -41,10 +41,10 @@ module Kilt
       block.call
     end
 
-    def self.setup!(options)
-      if options[:host] && options[:port]
+    def setup!
+      if @options[:host] && @options[:port]
         begin
-          db = r.connect(:host => options[:host], :port => options[:port]).repl
+          db = r.connect(:host => @options[:host], :port => @options[:port]).repl
         rescue
           raise Kilt::CantConnectToDatabaseError
         end
@@ -53,14 +53,14 @@ module Kilt
           #
           # See if the db exists and create it otherwise
           dbs = r.db_list.run
-          if !dbs.to_a.include? options[:db]
-            r.db_create(options[:db]).run
+          if !dbs.to_a.include? @options[:db]
+            r.db_create(@options[:db]).run
           end
           #
           # See if the table exists and create it otherwise
-          tables = r.db(options[:db]).table_list.run
+          tables = r.db(@options[:db]).table_list.run
           if !tables.to_a.include? "objects"
-            r.db(options[:db]).table_create("objects", :primary_key => "unique_id").run
+            r.db(@options[:db]).table_create("objects", :primary_key => "unique_id").run
           end
 
         rescue
