@@ -7,7 +7,11 @@ module Kilt
     
     def self.database
       current_environment = (ENV['RAILS_ENV'].to_s == '' ? 'development' : ENV['RAILS_ENV']).to_sym
-      db_config = Kilt.config.send(current_environment).db
+      db_config = begin
+                    Kilt.config.send(current_environment).db
+                  rescue
+                    Kilt.config.db
+                  end
       @database ||= Kilt::Database.new db_config
     end
     

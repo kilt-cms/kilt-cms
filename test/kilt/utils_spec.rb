@@ -45,6 +45,25 @@ describe Kilt::Utils do
 
         end
 
+        describe "when config is done the old Kilt way, with a single 'db'" do
+
+          it "should return a new Kilt database with the development config" do
+
+            database  = Object.new
+
+            Kilt.stubs(:config).returns Object.new
+            Kilt.config.stubs(:db).returns Object.new
+
+            Kilt::Database.stubs(:new)
+                          .with(Kilt.config.db)
+                          .returns database
+
+            Kilt::Utils.database.must_be_same_as database
+
+          end
+
+        end
+
       end
 
     end
