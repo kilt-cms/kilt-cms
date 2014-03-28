@@ -103,7 +103,7 @@ describe Kilt do
       describe "when creating a record fails" do
 
         it "should return false" do
-          Kilt::Utils.stubs(:db).returns( { 'errors' => error_count } )
+          Kilt::Database.any_instance.stubs(:execute).returns( { 'errors' => error_count } )
           object = Kilt::Object.new('dog', { 'name' => 'A name.' } )
           Kilt.create(object).must_equal false
         end
@@ -378,7 +378,7 @@ describe Kilt do
     end
 
     it "should return false if the delete returned errors" do
-      Kilt::Utils.stubs(:db).returns( { 'errors' => 1 } )
+      Kilt::Database.any_instance.stubs(:execute).returns( { 'errors' => 1 } )
       Kilt.delete(object['slug']).must_equal false
     end
 

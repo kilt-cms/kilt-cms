@@ -1,48 +1,12 @@
 module Kilt
   class Utils
     
-    # Set up the database
     def self.setup_db
-      if Kilt.config.db.host && Kilt.config.db.port
-        begin
-          db = r.connect(:host => Kilt.config.db.host, :port => Kilt.config.db.port).repl
-        rescue
-          raise Kilt::CantConnectToDatabaseError 
-        end
-        
-        begin
-          
-          # See if the db exists and create it otherwise
-          dbs = r.db_list.run
-          if !dbs.to_a.include? Kilt.config.db.db
-            r.db_create(Kilt.config.db.db).run
-          end
-          
-          # See if the table exists and create it otherwise
-          tables = r.db(Kilt.config.db.db).table_list.run
-          if !tables.to_a.include? "objects"
-            r.db(Kilt.config.db.db).table_create("objects", :primary_key => "unique_id").run
-          end
-      
-        rescue
-          raise Kilt::CantSetupDatabaseError
-        ensure
-          db.close
-        end
-        
-      else
-        raise Kilt::NoDatabaseConfigError
-      end
+      Kilt::Database.new(Kilt.config.db).setup!
     end
     
-    # Make a db call
-    def self.db(&block)
-      @db ||= r.connect(:host => Kilt.config.db.host, :port => Kilt.config.db.port).repl
-      block.call
-    end
-
     def self.database
-      @database ||= Kilt::Database.new(:host => Kilt.config.db.host, :port => Kilt.config.db.port)
+      @database ||= Kilt::Database.new Kilt.config.db
     end
     
     # Ensure we have local storage dirs
