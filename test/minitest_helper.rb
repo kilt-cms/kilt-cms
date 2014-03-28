@@ -13,8 +13,11 @@ require 'mocha/setup'
 
 def default_test_config
   config         = Hashie::Mash.new
-  config.db      = Hashie::Mash.new(db: 'kilt_test', host: '127.0.0.1', port: '28015')
-  config.name    = 'Test App'
+
+  config.test         = Hashie::Mash.new
+  config.test.db      = Hashie::Mash.new(db: 'kilt_test', host: '127.0.0.1', port: '28015')
+  config.test.name    = 'Test App'
+
   config.objects = Hashie::Mash.new(cat: Hashie::Mash.new(fields: { name: 'text', size: 'text', headshot: 'image', resume: 'file' } ),
                                     dog: Hashie::Mash.new(fields: { name: 'text', size: 'text', headshot: 'image', resume: 'file' } ),
                                     no_namey: Hashie::Mash.new(fields: { } ))
@@ -32,7 +35,7 @@ end
 
 def clear_out_the_database
   Kilt::Utils.database.execute do
-    r.db(Kilt.config.db.db).table('objects').delete().run
+    r.db(Kilt.config.test.db.db).table('objects').delete().run
   end
 end
 

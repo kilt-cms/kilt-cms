@@ -2,11 +2,11 @@ module Kilt
   class Utils
     
     def self.setup_db
-      Kilt::Database.new(Kilt.config.db).setup!
+      Kilt::Database.new(Kilt.config.test.db).setup!
     end
     
     def self.database
-      @database ||= Kilt::Database.new Kilt.config.db
+      @database ||= Kilt::Database.new Kilt.config.test.db
     end
     
     # Ensure we have local storage dirs
