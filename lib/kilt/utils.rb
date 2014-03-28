@@ -2,7 +2,7 @@ module Kilt
   class Utils
     
     def self.setup_db
-      Kilt::Database.new(Kilt.config.test.db).setup!
+      database.setup!
     end
     
     def self.database

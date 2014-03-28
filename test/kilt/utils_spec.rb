@@ -2,6 +2,19 @@ require File.expand_path(File.dirname(__FILE__) + '/../minitest_helper')
 
 describe Kilt::Utils do
 
+  describe "setting up the database" do
+    it "should call setup on the current database" do
+
+      database = Object.new
+      Kilt::Utils.stubs(:database).returns database
+
+      database.expects(:setup!)
+
+      Kilt::Utils.setup_db
+        
+    end
+  end
+
   describe "database" do
 
     ['test', 'development', 'production'].each do |environment|
