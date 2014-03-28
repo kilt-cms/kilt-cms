@@ -4,22 +4,32 @@ describe Kilt::Utils do
 
   describe "database" do
 
-    describe "when current environment is test" do
+    ['test', 'development', 'production'].each do |environment|
 
-      describe "and is called once" do
+      describe "when current environment is #{environment}" do
 
-        before { Kilt::Utils.instance_eval { @database = nil } }
+        describe "and is called once" do
 
-        it "should return a new Kilt database" do
+          before do
+            Kilt::Utils.instance_eval { @database = nil }
+            ENV.stubs(:[]).with('RAILS_ENV').returns environment
+          end
 
-          database  = Object.new
+          it "should return a new Kilt database" do
 
-          Kilt.stubs(:config).returns Object.new
-          Kilt.config.stubs(:test).returns Object.new
-          Kilt.config.test.stubs(:db).returns Object.new
+            database  = Object.new
 
-          Kilt::Database.stubs(:new).with(Kilt.config.test.db).returns database
-          Kilt::Utils.database.must_be_same_as database
+            Kilt.stubs(:config).returns Object.new
+            Kilt.config.stubs(environment.to_sym).returns Object.new
+            Kilt.config.send(environment.to_sym).stubs(:db).returns Object.new
+
+            Kilt::Database.stubs(:new)
+                          .with(Kilt.config.send(environment.to_sym).db)
+                          .returns database
+
+            Kilt::Utils.database.must_be_same_as database
+
+          end
 
         end
 

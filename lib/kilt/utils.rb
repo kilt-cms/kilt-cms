@@ -6,7 +6,8 @@ module Kilt
     end
     
     def self.database
-      @database ||= Kilt::Database.new Kilt.config.test.db
+      db_config = Kilt.config.send(ENV['RAILS_ENV'].to_sym).db
+      @database ||= Kilt::Database.new db_config
     end
     
     # Ensure we have local storage dirs
