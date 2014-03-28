@@ -27,7 +27,7 @@ end
 
 def setup_the_database_with config
   Kilt.config = config
-  Kilt::Utils.rethink_setup_db
+  Kilt::Utils.setup_db
 end
 
 def clear_out_the_database

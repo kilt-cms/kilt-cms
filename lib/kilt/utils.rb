@@ -1,8 +1,7 @@
 module Kilt
   class Utils
     
-    # Set up the database
-    def self.rethink_setup_db
+    def self.setup_db
       Kilt::Database.new(Kilt.config.db).setup!
     end
     
