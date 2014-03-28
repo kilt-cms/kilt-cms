@@ -6,13 +6,14 @@ module Kilt
     end
     
     def self.database
+      @database ||= Kilt::Database.new current_db_config
+    end
+
+    def self.current_db_config
       current_environment = (ENV['RAILS_ENV'].to_s == '' ? 'development' : ENV['RAILS_ENV']).to_sym
-      db_config = begin
-                    Kilt.config[current_environment].db
-                  rescue
-                    Kilt.config.db
-                  end
-      @database ||= Kilt::Database.new db_config
+      Kilt.config[current_environment].db
+    rescue
+      Kilt.config.db
     end
     
     # Ensure we have local storage dirs
