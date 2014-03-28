@@ -8,28 +8,24 @@ describe Kilt::Utils do
 
       describe "when current environment is #{environment}" do
 
-        describe "and is called once" do
+        before do
+          Kilt::Utils.instance_eval { @database = nil }
+          ENV.stubs(:[]).with('RAILS_ENV').returns environment
+        end
 
-          before do
-            Kilt::Utils.instance_eval { @database = nil }
-            ENV.stubs(:[]).with('RAILS_ENV').returns environment
-          end
+        it "should return a new Kilt database" do
 
-          it "should return a new Kilt database" do
+          database  = Object.new
 
-            database  = Object.new
+          Kilt.stubs(:config).returns Object.new
+          Kilt.config.stubs(environment.to_sym).returns Object.new
+          Kilt.config.send(environment.to_sym).stubs(:db).returns Object.new
 
-            Kilt.stubs(:config).returns Object.new
-            Kilt.config.stubs(environment.to_sym).returns Object.new
-            Kilt.config.send(environment.to_sym).stubs(:db).returns Object.new
+          Kilt::Database.stubs(:new)
+                        .with(Kilt.config.send(environment.to_sym).db)
+                        .returns database
 
-            Kilt::Database.stubs(:new)
-                          .with(Kilt.config.send(environment.to_sym).db)
-                          .returns database
-
-            Kilt::Utils.database.must_be_same_as database
-
-          end
+          Kilt::Utils.database.must_be_same_as database
 
         end
 
