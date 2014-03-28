@@ -29,6 +29,22 @@ describe Kilt::Utils do
 
         end
 
+        it "should return the same Kilt database everytime it is called" do
+
+          database  = Object.new
+
+          Kilt.stubs(:config).returns Object.new
+          Kilt.config.stubs(environment.to_sym).returns Object.new
+          Kilt.config.send(environment.to_sym).stubs(:db).returns Object.new
+
+          Kilt::Database.expects(:new)
+                        .with(Kilt.config.send(environment.to_sym).db)
+                        .returns database
+
+          Kilt::Utils.database.must_be_same_as Kilt::Utils.database
+
+        end
+
       end
 
     end
