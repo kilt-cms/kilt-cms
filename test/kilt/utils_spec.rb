@@ -13,6 +13,8 @@ describe Kilt::Utils do
           ENV.stubs(:[]).with('RAILS_ENV').returns environment
         end
 
+        after { Kilt::Utils.instance_eval { @database = nil } }
+
         it "should return a new Kilt database" do
 
           database  = Object.new
@@ -76,6 +78,8 @@ describe Kilt::Utils do
           Kilt::Utils.instance_eval { @database = nil }
           ENV.stubs(:[]).with('RAILS_ENV').returns environment
         end
+
+        after { Kilt::Utils.instance_eval { @database = nil } }
 
         it "should return a new Kilt database with the development config" do
 
