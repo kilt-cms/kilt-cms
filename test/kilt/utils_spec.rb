@@ -49,6 +49,35 @@ describe Kilt::Utils do
 
     end
 
+    ['', nil].each do |environment|
+
+      describe "when current environment is #{environment}" do
+
+        before do
+          Kilt::Utils.instance_eval { @database = nil }
+          ENV.stubs(:[]).with('RAILS_ENV').returns environment
+        end
+
+        it "should return a new Kilt database with the development config" do
+
+          database  = Object.new
+
+          Kilt.stubs(:config).returns Object.new
+          Kilt.config.stubs(:development).returns Object.new
+          Kilt.config.send(:development).stubs(:db).returns Object.new
+
+          Kilt::Database.stubs(:new)
+                        .with(Kilt.config.send(:development).db)
+                        .returns database
+
+          Kilt::Utils.database.must_be_same_as database
+
+        end
+
+      end
+
+    end
+
   end
 
 end
