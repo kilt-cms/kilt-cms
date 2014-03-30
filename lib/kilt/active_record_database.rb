@@ -2,14 +2,13 @@ module Kilt
   class ActiveRecordDatabase
 
     def find(slug)
-      thing = KiltObject.where(slug: slug).first
-      return nil unless thing
-      thing.data
+      object = KiltObject.where(slug: slug).first
+      object ? object.data : nil
     end
 
     def find_all_by_type type
-      things = KiltObject.where(object_type: "#{type.singularize.to_s}")
-      things.map { |x| x.data }
+      KiltObject.where(object_type: "#{type.singularize.to_s}")
+                .map { |x| x.data }
     end
 
     def create(object)
@@ -22,17 +21,17 @@ module Kilt
       false
     end
 
-    def update(object)
-      thing = KiltObject.where(unique_id: object['id']).first
-      return false unless thing
-      thing.slug = object['slug']
-      thing.data = object.values
-      thing.save
+    def update(current)
+      object = KiltObject.where(unique_id: current['id']).first
+      return false unless object
+      object.slug = current['slug']
+      object.data = current.values
+      object.save
     end
 
     def delete(slug)
-      thing = KiltObject.where(slug: slug).first
-      thing.delete if thing
+      object = KiltObject.where(slug: slug).first
+      object.delete if object
       true
     rescue
       false
