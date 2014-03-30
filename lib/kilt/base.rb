@@ -7,6 +7,7 @@ require "kilt/object_collection"
 require 'kilt/upload'
 
 require "kilt/database"
+require "kilt/active_record_database"
 require "kilt/utils"
 require "kilt/form"
 

@@ -59,6 +59,7 @@ def clear_out_rethinkdb
   Kilt::Utils.database.execute do
     r.db(Kilt.config.test.db.db).table('objects').delete().run
   end
+rescue
 end
 
 setup_the_database

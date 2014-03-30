@@ -4,9 +4,20 @@ module Kilt
     def self.setup_db
       database.setup!
     end
+
+    def self.use_db db_type
+      db_type ||= :rethinkdb
+      return if @db_type == db_type
+      @db_type = db_type
+      @database = nil
+    end
     
     def self.database
-      @database ||= Kilt::Database.new current_db_config
+      if @db_type == :active_record
+        @database ||= Kilt::ActiveRecordDatabase.new
+      else
+        @database ||= Kilt::Database.new current_db_config
+      end
     end
 
     def self.current_db_config

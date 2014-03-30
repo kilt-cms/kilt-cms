@@ -16,10 +16,15 @@ describe Kilt do
   end
 
   [
-    ['using rethinkdb for persistence', nil]
-  ].map { |args| Struct.new(:description, :the_db).new(*args) }.each do |scenario|
+    ['using rethinkdb for persistence', :rethinkdb],
+    ['using active record for persistence', :active_record]
+  ].map { |args| Struct.new(:description, :db_type).new(*args) }.each do |scenario|
 
     describe scenario.description do
+
+      before do
+        Kilt::Utils.use_db scenario.db_type
+      end
 
       describe "creating an object" do
 
@@ -107,13 +112,19 @@ describe Kilt do
         [1, 2, 3, 4].each do |error_count|
 
           describe "when creating a record fails" do
-
-            it "should return false" do
-              Kilt::Database.any_instance.stubs(:execute).returns( { 'errors' => error_count } )
-              object = Kilt::Object.new('dog', { 'name' => 'A name.' } )
-              Kilt.create(object).must_equal false
+            if scenario.db_type == :active_record
+              it "should return false" do
+                KiltObject.stubs(:create!).raises 'error'
+                object = Kilt::Object.new('dog', { 'name' => 'A name.' } )
+                Kilt.create(object).must_equal false
+              end
+            else
+              it "should return false" do
+                Kilt::Database.any_instance.stubs(:execute).returns( { 'errors' => error_count } )
+                object = Kilt::Object.new('dog', { 'name' => 'A name.' } )
+                Kilt.create(object).must_equal false
+              end
             end
-
           end
 
         end
@@ -383,9 +394,16 @@ describe Kilt do
           Kilt.delete(object['slug']).must_equal true
         end
 
-        it "should return false if the delete returned errors" do
-          Kilt::Database.any_instance.stubs(:execute).returns( { 'errors' => 1 } )
-          Kilt.delete(object['slug']).must_equal false
+        if scenario.db_type == :active_record
+          it "should return false if the delete returned errors" do
+            KiltObject.any_instance.stubs(:delete).raises 'error'
+            Kilt.delete(object['slug']).must_equal false
+          end
+        else
+          it "should return false if the delete returned errors" do
+            Kilt::Database.any_instance.stubs(:execute).returns( { 'errors' => 1 } )
+            Kilt.delete(object['slug']).must_equal false
+          end
         end
 
       end
