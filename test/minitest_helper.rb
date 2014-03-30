@@ -36,6 +36,11 @@ def setup_the_database_with config
 end
 
 def clear_out_the_database
+  clear_out_active_record
+  clear_out_rethinkdb
+end
+
+def clear_out_active_record
 
   empty_file = File.expand_path(File.dirname(__FILE__) + '/empty.sqlite3')
   test_file  = File.expand_path(File.dirname(__FILE__) + '/test.sqlite3')
@@ -43,9 +48,14 @@ def clear_out_the_database
   File.delete(test_file) if File.exists? test_file
   FileUtils.cp empty_file, test_file
 
-  file = File.expand_path(File.dirname(__FILE__) + '/test.sqlite3')
-  ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: file)
+  options = {
+              adapter: 'sqlite3',
+              database: File.expand_path(File.dirname(__FILE__) + '/test.sqlite3')
+            }
+  ActiveRecord::Base.establish_connection options
+end
 
+def clear_out_rethinkdb
   Kilt::Utils.database.execute do
     r.db(Kilt.config.test.db.db).table('objects').delete().run
   end
