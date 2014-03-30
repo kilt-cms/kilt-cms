@@ -11,3 +11,4 @@
 .project
 .sass-cache
 Gemfile.lock
+*.sqlite3
