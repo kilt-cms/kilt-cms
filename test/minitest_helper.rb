@@ -1,10 +1,11 @@
 ENV['RAILS_ENV'] = 'test'
+require_relative 'test_ar/config/application'
+require 'fileutils'
 require 'rails'
 require 'action_pack'
 require 'action_view'
 require 'active_support'
 require File.expand_path(File.dirname(__FILE__) + '/../lib/kilt')
-require_relative 'test_ar/config/application'
 require 'minitest/autorun'
 require 'minitest/spec'
 require 'minitest/pride'
@@ -35,6 +36,16 @@ def setup_the_database_with config
 end
 
 def clear_out_the_database
+
+  empty_file = File.expand_path(File.dirname(__FILE__) + '/empty.sqlite3')
+  test_file  = File.expand_path(File.dirname(__FILE__) + '/test.sqlite3')
+
+  File.delete(test_file) if File.exists? test_file
+  FileUtils.cp empty_file, test_file
+
+  file = File.expand_path(File.dirname(__FILE__) + '/test.sqlite3')
+  ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: file)
+
   Kilt::Utils.database.execute do
     r.db(Kilt.config.test.db.db).table('objects').delete().run
   end
