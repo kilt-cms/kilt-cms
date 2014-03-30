@@ -1,6 +1,6 @@
 module Kilt
 
-  class Database
+  class RethinkDbDatabase
 
     def initialize(options)
       @options = options
