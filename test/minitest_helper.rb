@@ -1,10 +1,10 @@
 ENV['RAILS_ENV'] = 'test'
-require_relative 'test_ar/config/application'
 require 'fileutils'
 require 'rails'
 require 'action_pack'
 require 'action_view'
 require 'active_support'
+require 'active_record'
 require File.expand_path(File.dirname(__FILE__) + '/../lib/kilt')
 require 'minitest/autorun'
 require 'minitest/spec'
