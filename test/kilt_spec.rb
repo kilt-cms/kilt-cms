@@ -16,7 +16,7 @@ describe Kilt do
   end
 
   [
-    ['using rethinkdb for persistence', :rethinkdb],
+    ['using rethinkdb for persistence',     :rethinkdb],
     ['using active record for persistence', :active_record]
   ].map { |args| Struct.new(:description, :db_type).new(*args) }.each do |scenario|
 
