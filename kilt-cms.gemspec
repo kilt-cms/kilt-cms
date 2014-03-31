@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency 'rails', '>= 4.0.1'
-  s.add_dependency 'rethinkdb'
+  s.add_dependency 'rethinkdb', '< 1.12.0.0'
   s.add_dependency 'rails_config'
   s.add_dependency 'jquery-rails'
   s.add_dependency 'jquery-ui-rails'
