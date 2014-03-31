@@ -18,12 +18,12 @@ describe Kilt do
   [
     ['using rethinkdb for persistence',     :rethinkdb],
     ['using active record for persistence', :active_record]
-  ].map { |args| Struct.new(:description, :db_type).new(*args) }.each do |scenario|
+  ].map { |args| Struct.new(:description, :db_type).new(*args) }.each do |persistence|
 
-    describe scenario.description do
+    describe persistence.description do
 
       before do
-        Kilt::Utils.use_db scenario.db_type
+        Kilt::Utils.use_db persistence.db_type
       end
 
       describe "creating an object" do
@@ -110,7 +110,7 @@ describe Kilt do
         [1, 2, 3, 4].each do |error_count|
 
           describe "when creating a record fails" do
-            if scenario.db_type == :active_record
+            if persistence.db_type == :active_record
               it "should return false" do
                 KiltObject.stubs(:create!).raises 'error'
                 object = Kilt::Object.new('dog', { 'name' => 'A name.' } )
@@ -392,7 +392,7 @@ describe Kilt do
           Kilt.delete(object['slug']).must_equal true
         end
 
-        if scenario.db_type == :active_record
+        if persistence.db_type == :active_record
           it "should return false if the delete returned errors" do
             KiltObject.any_instance.stubs(:delete).raises 'error'
             Kilt.delete(object['slug']).must_equal false
