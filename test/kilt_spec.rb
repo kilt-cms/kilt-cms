@@ -31,9 +31,7 @@ describe Kilt do
         [
           ['1/1/2014', 'cat', 'Apple',  '1388556000000', 'apple' ],
           ['2/2/2016', 'dog', 'Orange', '1454392800000', 'orange'],
-        ].map do |values|
-          Struct.new(:today, :type, :name, :unique_id, :slug).new *values
-        end.each do |scenario|
+        ].map { |v| Struct.new(:today, :type, :name, :unique_id, :slug).new *v }.each do |scenario|
 
           describe "basic scenarios" do
 
