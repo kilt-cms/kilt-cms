@@ -37,6 +37,9 @@ module Kilt
       false
     end
 
+    def setup!
+    end
+
   end
 
 end
