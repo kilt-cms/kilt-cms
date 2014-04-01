@@ -2,6 +2,9 @@ module Kilt
   class Utils
     
     def self.setup_db
+      if db_type = current_db_config[:type]
+        use_db(db_type.to_sym)
+      end
       database.setup!
     end
 
