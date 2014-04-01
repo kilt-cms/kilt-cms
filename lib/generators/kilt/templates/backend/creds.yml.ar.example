@@ -1,0 +1,16 @@
+test:
+  db:
+    type: active_record
+development:
+  db:
+    type: active_record
+production:
+  db:
+    type: active_record
+s3:
+  key: <S3 key>
+  secret: <S3 secret>
+  bucket: <S3 bucket>
+auth:
+  username: <Username>
+  password: <Password>
