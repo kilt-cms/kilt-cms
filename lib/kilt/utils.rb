@@ -95,7 +95,8 @@ module Kilt
     end
 
     def self.config_is_valid?
-      !(Kilt.config.empty? || !Kilt.config.db)
+      Kilt.config.empty? == false && current_db_config
+      #!(Kilt.config.empty? || !Kilt.config.db)
       #!Kilt.config.empty? && Kilt.config.db
     end
     
