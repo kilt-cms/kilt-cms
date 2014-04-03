@@ -34,10 +34,10 @@ describe Kilt::Utils do
 
           Kilt.stubs(:config).returns Object.new
           Kilt.config.stubs(:[]).with(environment.to_sym).returns Object.new
-          Kilt.config[environment.to_sym].stubs(:db).returns Object.new
+          Kilt.config[environment.to_sym].stubs(:[]).with(:db).returns Object.new
 
           Kilt::RethinkDbDatabase.stubs(:new)
-                                 .with(Kilt.config[environment.to_sym].db)
+                                 .with(Kilt.config[environment.to_sym][:db])
                                  .returns database
 
           Kilt::Utils.database.must_be_same_as database
@@ -50,10 +50,10 @@ describe Kilt::Utils do
 
           Kilt.stubs(:config).returns Object.new
           Kilt.config.stubs(:[]).with(environment.to_sym).returns Object.new
-          Kilt.config[environment.to_sym].stubs(:db).returns Object.new
+          Kilt.config[environment.to_sym].stubs(:[]).with(:db).returns Object.new
 
           Kilt::RethinkDbDatabase.expects(:new)
-                                 .with(Kilt.config[environment.to_sym].db)
+                                 .with(Kilt.config[environment.to_sym][:db])
                                  .returns database
 
           Kilt::Utils.database.must_be_same_as Kilt::Utils.database
@@ -67,10 +67,11 @@ describe Kilt::Utils do
             database  = Object.new
 
             Kilt.stubs(:config).returns Object.new
-            Kilt.config.stubs(:db).returns Object.new
+            Kilt.config.stubs(:[]).returns nil
+            Kilt.config.stubs(:[]).with(:db).returns Object.new
 
             Kilt::RethinkDbDatabase.stubs(:new)
-                                   .with(Kilt.config.db)
+                                   .with(Kilt.config[:db])
                                    .returns database
 
             Kilt::Utils.database.must_be_same_as database
@@ -100,10 +101,10 @@ describe Kilt::Utils do
 
           Kilt.stubs(:config).returns Object.new
           Kilt.config.stubs(:[]).with(:development).returns Object.new
-          Kilt.config[:development].stubs(:db).returns Object.new
+          Kilt.config[:development].stubs(:[]).with(:db).returns Object.new
 
           Kilt::RethinkDbDatabase.stubs(:new)
-                                 .with(Kilt.config[:development].db)
+                                 .with(Kilt.config[:development][:db])
                                  .returns database
 
           Kilt::Utils.database.must_be_same_as database

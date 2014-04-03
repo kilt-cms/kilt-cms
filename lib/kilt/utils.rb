@@ -25,9 +25,9 @@ module Kilt
 
     def self.current_db_config
       current_environment = (ENV['RAILS_ENV'].to_s == '' ? 'development' : ENV['RAILS_ENV']).to_sym
-      Kilt.config[current_environment].db
+      Kilt.config[current_environment][:db]
     rescue
-      Kilt.config.db
+      Kilt.config[:db]
     end
     
     # Ensure we have local storage dirs
