@@ -93,11 +93,16 @@ module Kilt
       ret.gsub! /_/, " "   
       ret.capitalize
     end
+
+    def self.config_is_valid?
+      !(Kilt.config.empty? || !Kilt.config.db)
+      #!Kilt.config.empty? && Kilt.config.db
+    end
     
     # Print a list of objects, functions, etc.
     def self.tips
       lines = []
-      if !Kilt.config.empty? && Kilt.config.db
+      if config_is_valid?
         lines << ''
         
         # Store the first type so we can use it down below

@@ -114,7 +114,7 @@ module Kilt
     private
     
     def ensure_config
-      if Kilt.config.empty? || !Kilt.config.db
+      unless Kilt::Utils.config_is_valid?
         lines = []
         lines << '<pre>'
         lines << 'The Kilt gem has been installed, but you haven\'t configured it yet.'
