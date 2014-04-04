@@ -51,27 +51,23 @@ module Kilt
 
     def setup!
       if @options[:host] && @options[:port]
-
-        #begin
-          #
+        begin
           # See if the db exists and create it otherwise
           dbs = execute { @r.db_list }.to_a
           if !dbs.to_a.include? @options[:db]
             execute { @r.db_create(@options[:db]) }
           end
-          #
+
           # See if the table exists and create it otherwise
           tables = execute { @r.db(@options[:db]).table_list }.to_a
           if !tables.to_a.include? "objects"
             execute { @r.db(@options[:db]).table_create("objects", :primary_key => "unique_id") }
           end
-
-        #rescue
-          #raise Kilt::CantSetupDatabaseError
-        #ensure
-          #db.close
-        #end
-
+        rescue
+          raise Kilt::CantSetupDatabaseError
+        ensure
+          db.close
+        end
       else
         raise Kilt::NoDatabaseConfigError
       end
