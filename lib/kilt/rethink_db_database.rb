@@ -65,8 +65,6 @@ module Kilt
           end
         rescue
           raise Kilt::CantSetupDatabaseError
-        ensure
-          db.close
         end
       else
         raise Kilt::NoDatabaseConfigError
