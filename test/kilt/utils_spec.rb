@@ -117,4 +117,31 @@ describe Kilt::Utils do
 
   end
 
+  describe "slugify a string" do
+    it "should replace spaces with dashes" do
+      Kilt::Utils.slugify("this works").must_equal "this-works"
+    end
+    it "should remove apostrophes" do
+      Kilt::Utils.slugify("this's working").must_equal "thiss-working"
+    end
+    it "should replace @ and & with at and and" do
+      Kilt::Utils.slugify("hands @ two & ten").must_equal "hands-at-two-and-ten"
+    end
+    it "should replace all non alphanumeric characters with dash" do
+      Kilt::Utils.slugify("a!b@c#d$e%f^g&h*i(j)k_l.m,n<o>p[q]r/s|t?u;v~w{x}y+z").must_equal "a-b-at-c-d-e-f-g-and-h-i-j-k-l-m-n-o-p-q-r-s-t-u-v-w-x-y-z"
+    end
+    it "should replace periods and underscores with dashes" do
+      Kilt::Utils.slugify("this_works.now").must_equal "this-works-now"
+    end
+    it "should convert double dash to single" do
+      Kilt::Utils.slugify("this--works").must_equal "this-works"
+    end
+    it "should strip leading and trailing dashes" do
+      Kilt::Utils.slugify("-this-works-").must_equal "this-works"
+    end
+    it "should downcase the string" do
+      Kilt::Utils.slugify("THIS WORKS").must_equal "this-works"
+    end
+  end
+
 end
