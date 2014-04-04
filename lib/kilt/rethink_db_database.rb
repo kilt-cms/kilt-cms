@@ -51,11 +51,6 @@ module Kilt
 
     def setup!
       if @options[:host] && @options[:port]
-        #begin
-          #db = r.connect(:host => @options[:host], :port => @options[:port]).repl
-        #rescue
-          #raise Kilt::CantConnectToDatabaseError
-        #end
 
         #begin
           #
@@ -86,8 +81,12 @@ module Kilt
 
     def setup_the_database
       unless @r && @connection
-        @r = RethinkDB::RQL.new
-        @connection = @r.connect(:host => @options[:host], :port => @options[:port], :db => @options[:db])
+        begin
+          @r = RethinkDB::RQL.new
+          @connection = @r.connect(:host => @options[:host], :port => @options[:port], :db => @options[:db])
+        rescue
+          raise Kilt::CantConnectToDatabaseError
+        end
       end
     end
 
