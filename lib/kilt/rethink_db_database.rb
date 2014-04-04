@@ -7,7 +7,7 @@ module Kilt
     end
 
     def find(slug)
-      results = execute { slug_query(slug).limit(1).run }
+      results = execute { slug_query(slug) }
       return nil unless results
       results = results.to_a
       return nil if results.first.is_a? Array
@@ -15,59 +15,67 @@ module Kilt
     end
 
     def find_all_by_type type
-      execute { type_query(type).run }.to_a
+      execute { type_query(type) }.to_a
     end
 
     def create(object)
-      result = execute { objects_table.insert(object.values).run }
+      result = execute { objects_table.insert(object.values) }
       result['errors'] == 0
     end
 
     def update(object)
       result = execute do
-        unique_id_query(object['unique_id']).update(object.values).run
+        unique_id_query(object['unique_id']).update(object.values)
       end
       result['errors'] == 0
     end
 
     def delete(slug)
-      result = execute { slug_query(slug).delete().run }
+      result = execute { slug_query(slug).delete() }
       result['errors'] == 0
+    end
+
+    def delete_all
+      execute do
+        @r.db(Kilt.config.test.db.db).table('objects').delete()
+      end
     end
 
     # Make a db call
     def execute(&block)
-      @db ||= r.connect(:host => @options[:host], :port => @options[:port]).repl
-      block.call
+      setup_the_database
+      #@db ||= r.connect(:host => @options[:host], :port => @options[:port]).repl
+      block.call.run(@connection)
+      #block.call
     end
 
     def setup!
       if @options[:host] && @options[:port]
-        begin
-          db = r.connect(:host => @options[:host], :port => @options[:port]).repl
-        rescue
-          raise Kilt::CantConnectToDatabaseError
-        end
+        #begin
+          #db = r.connect(:host => @options[:host], :port => @options[:port]).repl
+        #rescue
+          #raise Kilt::CantConnectToDatabaseError
+        #end
 
-        begin
+        #begin
           #
           # See if the db exists and create it otherwise
-          dbs = r.db_list.run
+          dbs = execute { @r.db_list }.to_a
           if !dbs.to_a.include? @options[:db]
-            r.db_create(@options[:db]).run
+            execute { @r.db_create(@options[:db]) }
           end
           #
           # See if the table exists and create it otherwise
-          tables = r.db(@options[:db]).table_list.run
+          tables = execute { @r.db(@options[:db]).table_list }.to_a
           if !tables.to_a.include? "objects"
-            r.db(@options[:db]).table_create("objects", :primary_key => "unique_id").run
+            execute { @r.db(@options[:db]).table_create("objects", :primary_key => "unique_id") }
           end
 
-        rescue
-          raise Kilt::CantSetupDatabaseError
-        ensure
-          db.close
-        end
+        #rescue
+          #raise Kilt::CantSetupDatabaseError
+        #ensure
+          #db.close
+        #end
 
       else
         raise Kilt::NoDatabaseConfigError
@@ -76,8 +84,16 @@ module Kilt
 
     private
 
+    def setup_the_database
+      unless @r && @connection
+        @r = RethinkDB::RQL.new
+        @connection = @r.connect(:host => @options[:host], :port => @options[:port], :db => @options[:db])
+      end
+    end
+
     def objects_table
-      r.db(@options[:db]).table('objects')
+      setup_the_database
+      @r.table('objects')
     end
 
     def slug_query(slug)

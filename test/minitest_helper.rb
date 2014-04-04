@@ -56,9 +56,7 @@ def clear_out_active_record
 end
 
 def clear_out_rethinkdb
-  Kilt::Utils.database.execute do
-    r.db(Kilt.config.test.db.db).table('objects').delete().run
-  end
+  Kilt::Utils.database.delete_all
 rescue
 end
 
