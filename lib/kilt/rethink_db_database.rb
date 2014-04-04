@@ -44,9 +44,7 @@ module Kilt
     # Make a db call
     def execute(&block)
       setup_the_database
-      #@db ||= r.connect(:host => @options[:host], :port => @options[:port]).repl
       block.call.run(@connection)
-      #block.call
     end
 
     def setup!
