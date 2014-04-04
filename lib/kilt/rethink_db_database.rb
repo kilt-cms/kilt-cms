@@ -7,7 +7,7 @@ module Kilt
     end
 
     def find(slug)
-      results = execute { slug_query(slug) }
+      results = execute { slug_query(slug).limit(1) }
       return nil unless results
       results = results.to_a
       return nil if results.first.is_a? Array
