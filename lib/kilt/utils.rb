@@ -76,7 +76,7 @@ module Kilt
       ret.gsub! /\s*&\s*/, " and "
 
       #replace all non alphanumeric, underscore or periods with dash
-      ret.gsub! /\s*[^A-Za-z0-9\.\_]\s*/, '-'  
+      ret.gsub! /\s*[^A-Za-z0-9]\s*/, '-'  
 
       #convert double dash to single
       ret.gsub! /-+/, "-"
