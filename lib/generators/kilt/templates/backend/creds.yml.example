@@ -1,18 +1,12 @@
 test:
   db:
-    host: 127.0.0.1
-    port: 28015
-    db: my_app_test
+    type: active_record
 development:
   db:
-    host: 127.0.0.1
-    port: 28015
-    db: my_app_development
+    type: active_record
 production:
   db:
-    host: ENV['KILT_HOST']
-    port: ENV['KILT_PORT']
-    db: ENV['KILT_DB']
+    type: active_record
 s3:
   key: <S3 key>
   secret: <S3 secret>
