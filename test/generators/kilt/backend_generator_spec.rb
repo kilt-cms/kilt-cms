@@ -39,7 +39,7 @@ describe Kilt::Generators::BackendGenerator do
 
     it "should copy the default credential file to the app" do
       root_result = Object.new
-      root.stubs(:join).with('config', 'kilt', 'creds.yml.example').returns root_result
+      root.stubs(:join).with('config', 'kilt', 'creds.yml').returns root_result
       generator.expects(:copy_file).with 'creds.yml.example', root_result
       generator.generate
     end
