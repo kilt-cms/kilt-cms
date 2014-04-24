@@ -32,5 +32,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'mocha'
   s.add_development_dependency 'hashie'
   s.add_development_dependency 'timecop'
+  s.add_development_dependency 'minitest', '4.7.5'
   
 end
