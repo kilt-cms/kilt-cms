@@ -15,10 +15,12 @@ describe Kilt do
 
   end
 
-  [
-    ['using rethinkdb for persistence',     :rethinkdb],
-    ['using active record for persistence', :active_record]
-  ].map { |args| Struct.new(:description, :db_type).new(*args) }.each do |persistence|
+  persistence_models_to_test = [['using active record for persistence', :active_record]]
+  unless ENV['TRAVIS']
+    persistence_models_to_test << ['using rethinkdb for persistence', :rethinkdb]
+  end
+
+  persistence_models_to_test.map { |args| Struct.new(:description, :db_type).new(*args) }.each do |persistence|
 
     describe persistence.description do
 
