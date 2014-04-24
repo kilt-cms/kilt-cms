@@ -22,11 +22,11 @@ describe Kilt::Utils do
       describe "when current environment is #{environment}" do
 
         before do
-          Kilt::Utils.instance_eval { @database = nil }
+          Kilt::Utils.instance_eval { @database = nil; @db_type = nil }
           ENV.stubs(:[]).with('RAILS_ENV').returns environment
         end
 
-        after { Kilt::Utils.instance_eval { @database = nil } }
+        after { Kilt::Utils.instance_eval { @database = nil; @db_type = nil } }
 
         it "should return a new Kilt database" do
 
@@ -89,11 +89,11 @@ describe Kilt::Utils do
       describe "when current environment is #{environment}" do
 
         before do
-          Kilt::Utils.instance_eval { @database = nil }
+          Kilt::Utils.instance_eval { @database = nil; @db_type = nil }
           ENV.stubs(:[]).with('RAILS_ENV').returns environment
         end
 
-        after { Kilt::Utils.instance_eval { @database = nil } }
+        after { Kilt::Utils.instance_eval { @database = nil; @db_type = nil } }
 
         it "should return a new Kilt database with the development config" do
 
