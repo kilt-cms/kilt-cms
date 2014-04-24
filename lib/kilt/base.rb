@@ -6,7 +6,7 @@ require "kilt/object_collection"
 
 require 'kilt/upload'
 
-require "kilt/rethink_db_database"
-require "kilt/active_record_database"
+require "kilt/db/rethink_db"
+require "kilt/db/active_record"
 require "kilt/utils"
 require "kilt/form"

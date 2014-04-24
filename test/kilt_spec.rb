@@ -118,7 +118,7 @@ describe Kilt do
               end
             else
               it "should return false" do
-                Kilt::RethinkDbDatabase.any_instance.stubs(:execute).returns( { 'errors' => error_count } )
+                Kilt::DB::RethinkDb.any_instance.stubs(:execute).returns( { 'errors' => error_count } )
                 object = Kilt::Object.new('dog', { 'name' => 'A name.' } )
                 Kilt.create(object).must_equal false
               end
@@ -399,7 +399,7 @@ describe Kilt do
           end
         else
           it "should return false if the delete returned errors" do
-            Kilt::RethinkDbDatabase.any_instance.stubs(:execute).returns( { 'errors' => 1 } )
+            Kilt::DB::RethinkDb.any_instance.stubs(:execute).returns( { 'errors' => 1 } )
             Kilt.delete(object['slug']).must_equal false
           end
         end
