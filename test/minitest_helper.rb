@@ -32,6 +32,7 @@ end
 
 def setup_the_database_with config
   Kilt.config = config
+  Kilt::Utils.use_db(:active_record) if ENV['TRAVIS']
   Kilt::Utils.setup_db
 end
 
