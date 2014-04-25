@@ -232,7 +232,7 @@ describe Kilt do
               first['slug'] = second['slug']
               Kilt.update 'first', first
 
-              first['slug'].must_equal 'second-1388556001000'
+              first['slug'].must_equal 'second-' + Time.now.to_i.to_s + "000"
             end
 
           end
@@ -291,7 +291,7 @@ describe Kilt do
                 first['slug'] = scenario.invalid_value
                 Kilt.update slug, first
 
-                first['slug'].must_equal "#{second['slug']}-1388556001000"
+                first['slug'].must_equal second['slug'] + '-' + Time.now.to_i.to_s + "000"
               end
 
             end
