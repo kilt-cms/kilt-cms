@@ -31,8 +31,8 @@ describe Kilt do
       describe "creating an object" do
 
         [
-          ['1/1/2014', 'cat', 'Apple',  '1388556000000', 'apple' ],
-          ['2/2/2016', 'dog', 'Orange', '1454392800000', 'orange'],
+          ['1/1/2014', 'cat', 'Apple',  Time.parse('1/1/2014').to_i.to_s + "000", 'apple' ],
+          ['2/2/2016', 'dog', 'Orange', Time.parse('2/2/2016').to_i.to_s + "000", 'orange'],
         ].map { |v| Struct.new(:today, :type, :name, :unique_id, :slug).new *v }.each do |scenario|
 
           describe "basic scenarios" do
