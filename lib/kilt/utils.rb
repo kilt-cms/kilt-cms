@@ -3,7 +3,9 @@ module Kilt
     
     def self.setup_db
       return unless current_db_config
-      use_db(db_type.to_sym) if db_type = current_db_config[:type]
+      if db_type = current_db_config[:type]
+        use_db(db_type.to_sym)
+      end
       database.setup!
     end
 
