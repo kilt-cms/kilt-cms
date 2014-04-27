@@ -175,6 +175,15 @@ describe Kilt::Object do
             end
           end
 
+          describe "the hidden value is set to an empty string" do
+            it "should NOT set the value to an empty string" do
+              upload_result = Object.new
+              object[scenario.property] = scenario.value
+              object.fill( { 'name' => 'x', "#{scenario.property}-hidden" => '' } )
+              object[scenario.property].must_equal scenario.value
+            end
+          end
+
           describe "the hidden value is set to clear AND the value is set" do
             it "should set the value to an empty string" do
               upload_result = Object.new
