@@ -87,6 +87,13 @@ describe Kilt do
               object['slug'].must_equal scenario.slug
             end
 
+            if persistence.db_type == :active_record
+              it "should set the unique_id for the object" do
+                Kilt.create(object)
+                KiltObject.first.unique_id.must_equal object['unique_id']
+              end
+            end
+
             describe "creating the record twice" do
 
               it "should keep the slugs unique by appending the id to the second record" do

@@ -15,7 +15,7 @@ module Kilt
       end
 
       def create(object)
-        KiltObject.create!(unique_id:   object['id'],
+        KiltObject.create!(unique_id:   object['unique_id'],
                            slug:        object['slug'],
                            object_type: object['type'],
                            data:        object.values)
@@ -25,7 +25,7 @@ module Kilt
       end
 
       def update(current)
-        object = KiltObject.where(unique_id: current['id']).first
+        object = KiltObject.where(unique_id: current['unique_id']).first
         return false unless object
         object.slug = current['slug']
         object.data = current.values
