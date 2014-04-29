@@ -3,6 +3,7 @@
 
     <ul class="object-list">
         <% @types.each do |type, name| %>
+            <% name = name.pluralize.split('_').map { |x| x.capitalize }.join(' ') %>
             <li><%= link_to name, list_path(type.pluralize.split('_').map { |x| x.capitalize }.join(' ')) %></li>
         <% end %>
     </ul>
