@@ -7,7 +7,7 @@
               if Kilt.send(type).name != nil
                   name = Kilt.send(type).name
               else
-                  name = type.pluralize.capitalize
+                  name = type.pluralize.humanize.split(' ').map { |x| x.capitalize }.join(' ')
               end
           %>
           <%= link_to name, list_path(type.pluralize), class: "button small dashboard" %>
