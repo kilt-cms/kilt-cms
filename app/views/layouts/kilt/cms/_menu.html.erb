@@ -9,6 +9,7 @@
               else
                   name = type.pluralize.capitalize
               end
+              name = name.pluralize.split('_').map { |x| x.capitalize }.join(' ')
           %>
           <%= link_to name, list_path(type.pluralize), class: "button small dashboard" %>
         <% end %>
