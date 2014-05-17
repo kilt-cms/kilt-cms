@@ -18,8 +18,12 @@ describe Kilt::Formatting do
           Kilt::Formatting.singular_name_of(object).must_equal example.expected
         end
 
-        it "should retur the singular form of the symbol" do
+        it "should return the singular form of the symbol" do
           Kilt::Formatting.singular_name_of(example.type).must_equal example.expected
+        end
+
+        it "should return the singular form of the string" do
+          Kilt::Formatting.singular_name_of(example.type.to_s).must_equal example.expected
         end
 
       end
