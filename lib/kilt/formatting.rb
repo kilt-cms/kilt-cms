@@ -1,7 +1,9 @@
 module Kilt
+
   module Formatting
+
     def self.singular_name_of object
-      the_type_of(object)
+      simple_name_of(object)
         .split('_')
         .map { |x| x.capitalize }
         .join(' ')
@@ -15,7 +17,7 @@ module Kilt
 
       private
 
-      def the_type_of object
+      def simple_name_of object
         type = if object.is_a? Symbol
                  object.to_s
                elsif object.is_a? String
