@@ -16,13 +16,15 @@ module Kilt
       private
 
       def the_type_of object
-        if object.is_a? Symbol
-          object.to_s
-        elsif object.is_a? String
-          object
-        else
-          object.type.to_s
-        end
+        type = if object.is_a? Symbol
+                 object.to_s
+               elsif object.is_a? String
+                 object
+               else
+                 object.type.to_s
+               end
+
+        Kilt.send(type)['name'] || type
       end
     end
   end

@@ -24,7 +24,8 @@ def default_test_config
                                     dog: Hashie::Mash.new(fields: { name: 'text', size: 'text', headshot: 'image', resume: 'file' } ),
                                     no_namey: Hashie::Mash.new(fields: { } ),
                                     horse: Hashie::Mash.new(fields: { name: 'text' } ),
-                                    big_green_alligator: Hashie::Mash.new(fields: { name: 'text' } ))
+                                    big_green_alligator: Hashie::Mash.new(fields: { name: 'text' } ),
+                                    apple: Hashie::Mash.new(name: 'Orange', fields: { name: 'text' } ))
   config
 end
 

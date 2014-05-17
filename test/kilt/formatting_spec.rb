@@ -9,6 +9,7 @@ describe Kilt::Formatting do
       [:cat,                 'Cat',                 'Cats'],
       [:no_namey,            'No Namey',            'No Nameys'],
       [:big_green_alligator, 'Big Green Alligator', 'Big Green Alligators'],
+      [:apple,               'Orange',              'Oranges'],
     ].map { |x| Struct.new(:type, :singular, :plural).new(*x) }.each do |example|
 
       describe "multiple examples" do
