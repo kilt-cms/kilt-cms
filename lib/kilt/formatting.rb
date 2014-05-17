@@ -7,6 +7,10 @@ module Kilt
         .join(' ')
     end
 
+    def self.plural_name_of object
+      singular_name_of(object).pluralize
+    end
+
     class << self
 
       private
