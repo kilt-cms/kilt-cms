@@ -10,20 +10,25 @@ describe Kilt::Formatting do
       [:no_namey,            'No Namey',            'No Nameys'],
       [:big_green_alligator, 'Big Green Alligator', 'Big Green Alligators'],
       [:apple,               'Orange',              'Oranges'],
+      [:im_not_in_config,    'Im Not In Config',    'Im Not In Configs'],
     ].map { |x| Struct.new(:type, :singular, :plural).new(*x) }.each do |example|
 
       describe "multiple examples" do
 
-        describe "passing a kilt object" do
+        if Kilt.send(example.type) # ignore this test if this is not a kilt object
 
-          it "should return the singular form of the kilt object" do
-            object = Kilt::Object.new example.type
-            Kilt::Formatting.singular_name_of(object).must_equal example.singular
-          end
+          describe "passing a kilt object" do
 
-          it "should return the plural form of the kilt object" do
-            object = Kilt::Object.new example.type
-            Kilt::Formatting.plural_name_of(object).must_equal example.plural
+            it "should return the singular form of the kilt object" do
+              object = Kilt::Object.new example.type
+              Kilt::Formatting.singular_name_of(object).must_equal example.singular
+            end
+
+            it "should return the plural form of the kilt object" do
+              object = Kilt::Object.new example.type
+              Kilt::Formatting.plural_name_of(object).must_equal example.plural
+            end
+
           end
 
         end

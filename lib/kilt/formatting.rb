@@ -24,7 +24,13 @@ module Kilt
                  object.type.to_s
                end
 
-        Kilt.send(type)['name'] || type
+        name_of_type_in_config(type) || type
+      end
+
+      def name_of_type_in_config type
+        kilt_type = Kilt.send(type)
+        return nil unless kilt_type
+        kilt_type['name']
       end
     end
   end
