@@ -2,18 +2,15 @@
 <div class="wr">
 
     <% 
-        if Kilt.send(@type).name != nil
-            name = Kilt.send(@type).name
-        else
-            name = @type.pluralize.capitalize
-        end
+        singular = Kilt::Formatting.singular_name_of @type
+        plural   = Kilt::Formatting.plural_name_of @type
     %>
     
-    <h2><%= @object['name'] %> <small><%= name.singularize.capitalize %></small></h2>
+    <h2><%= @object['name'] %> <small><%= singular %></small></h2>
 
     <div class="page-actions">
-        <%= link_to "← Back to #{name}", list_path(@type), :class => 'button back' %>
-        <%= link_to "New #{@type.capitalize}", new_object_path(@type), :class => 'button back' if !@object.empty? %>
+        <%= link_to "← Back to #{plural}", list_path(@type), :class => 'button back' %>
+        <%= link_to "New #{singular}", new_object_path(@type), :class => 'button back' if !@object.empty? %>
     </div>
 
     <% if flash[:error] -%>
