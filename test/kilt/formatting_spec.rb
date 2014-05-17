@@ -13,9 +13,13 @@ describe Kilt::Formatting do
 
       describe "multiple examples" do
 
-        it "should return the singular form of the object type" do
+        it "should return the singular form of the kilt object" do
           object = Kilt::Object.new example.type
           Kilt::Formatting.singular_name_of(object).must_equal example.expected
+        end
+
+        it "should retur the singular form of the symbol" do
+          Kilt::Formatting.singular_name_of(example.type).must_equal example.expected
         end
 
       end
