@@ -42,9 +42,6 @@ module Kilt
     private
 
     def self.render_view name, locals
-      data = { :file    =>  "#{name.to_s}.html.erb",
-               :locals  => locals }
-      #ActionView::Base.new(TEMPLATES_DIR).render data
       locals[:view].send(:render, { partial: "kilt/form/#{name}", locals: locals } )
     end
     
