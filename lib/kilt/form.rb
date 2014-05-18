@@ -8,10 +8,14 @@ module Kilt
                     end
     
     def self.method_missing(method, *args)
-      locals = { object: args[0], field_name: args[1], index: args[2], options: args[3] }
+      locals = { object: args[0], field_name: args[1], index: args[2], options: args[4], view: args[3] }
       render_view method, locals
     rescue
-      render_view '_default', locals
+      render_view 'default', locals
+    end
+
+    def self.render_field(view, data)
+      Kilt::Form.prep_field(data[:value], data[:object], data[:key], data[:index], view)
     end
     
     def self.prep_field(method, *args)
@@ -38,9 +42,7 @@ module Kilt
     private
 
     def self.render_view name, locals
-      data = { :file    =>  "#{name.to_s}.html.erb",
-               :locals  => locals }
-      ActionView::Base.new(TEMPLATES_DIR).render data
+      locals[:view].send(:render, { partial: "kilt/form/#{name}", locals: locals } )
     end
     
   end

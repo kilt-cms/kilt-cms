@@ -24,7 +24,12 @@
     <%= form_tag @path, :method => "post", :multipart => true do %>
 
         <% @object.fields.each_with_index do |(key, value), index| %>
-            <%= Kilt::Form.prep_field(value, @object, key, index) %>
+            <%= Kilt::Form.render_field(self, {
+                                                key: key,
+                                                value: value,
+                                                object: @object,
+                                                index: index
+                                              } ) %>
         <% end %>
 
         <div class="form-input actions">
