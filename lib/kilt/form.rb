@@ -11,7 +11,7 @@ module Kilt
       locals = { object: args[0], field_name: args[1], index: args[2], options: args[4], view: args[3] }
       render_view method, locals
     rescue
-      render_view '_default', locals
+      render_view 'default', locals
     end
 
     def self.render_field(view, data)
@@ -44,7 +44,8 @@ module Kilt
     def self.render_view name, locals
       data = { :file    =>  "#{name.to_s}.html.erb",
                :locals  => locals }
-      ActionView::Base.new(TEMPLATES_DIR).render data
+      #ActionView::Base.new(TEMPLATES_DIR).render data
+      locals[:view].send(:render, { partial: "kilt/form/#{name}", locals: locals } )
     end
     
   end
