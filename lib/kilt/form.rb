@@ -13,6 +13,10 @@ module Kilt
     rescue
       render_view '_default', locals
     end
+
+    def self.render_field(view, data)
+      Kilt::Form.prep_field(data[:value], data[:object], data[:key], data[:index])
+    end
     
     def self.prep_field(method, *args)
       # This is a method called before the generic method_missing.
