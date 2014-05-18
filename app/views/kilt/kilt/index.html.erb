@@ -2,8 +2,8 @@
     <h2>Dashboard</h2>
 
     <ul class="object-list">
-        <% @types.each do |type, name| %>
-            <% name = name.pluralize.split('_').map { |x| x.capitalize }.join(' ') %>
+        <% @types.each do |type, _| %>
+            <% name = Kilt::Formatting.plural_name_of(type) %>
             <li><%= link_to name, list_path(type.pluralize) %></li>
         <% end %>
     </ul>
