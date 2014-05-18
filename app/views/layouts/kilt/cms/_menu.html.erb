@@ -4,14 +4,9 @@
         <a class="button small dashboard" href="<%= kilt_engine.root_path %>">Dashboard</a>
         <% Kilt.types.each do |type| %>
           <% 
-              if Kilt.send(type).name != nil
-                  name = Kilt.send(type).name
-              else
-                  name = type.pluralize.capitalize
-              end
-              name = name.pluralize.split('_').map { |x| x.capitalize }.join(' ')
+              plural   = Kilt::Formatting.plural_name_of type
           %>
-          <%= link_to name, list_path(type.pluralize), class: "button small dashboard" %>
+          <%= link_to plural, list_path(type.pluralize), class: "button small dashboard" %>
         <% end %>
     </div>
 </header>
