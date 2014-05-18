@@ -1,17 +1,14 @@
 <div class="wr">
 
     <% 
-        if Kilt.send(@type).name != nil
-            name = Kilt.send(@type).name
-        else
-            name = @type.pluralize.capitalize
-        end
+        singular = Kilt::Formatting.singular_name_of @type
+        plural   = Kilt::Formatting.plural_name_of @type
     %>
 
-    <h2><%= name %></h2>
+    <h2><%= plural %></h2>
 
     <div class="page-actions">
-        <%= link_to "New #{name.singularize.capitalize}", new_object_path(@type.singularize), :class => 'button' %>
+        <%= link_to "New #{singular}", new_object_path(@type.singularize), :class => 'button' %>
     </div>
 
     <!-- todo: search by title -->
@@ -26,7 +23,7 @@
 
     <% if @objects.empty? %>
 
-        No <%= name %> found.
+        No <%= plural %> found.
 
     <% else %>
 
