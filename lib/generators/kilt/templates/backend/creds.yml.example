@@ -1,7 +1,12 @@
-db:
-  host: <DB host>
-  port: <DB port>
-  db: <DB database>
+test:
+  db:
+    type: active_record
+development:
+  db:
+    type: active_record
+production:
+  db:
+    type: active_record
 s3:
   key: <S3 key>
   secret: <S3 secret>

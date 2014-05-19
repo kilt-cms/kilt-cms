@@ -25,13 +25,11 @@ Note: We're trying to find a way around that last step, but for now we're just e
 - Run the Kilt generator:
 
     $ rails g kilt:install
-    
-- Create a creds file:
 
-    $ mv config/kilt/creds.yml.example config/kilt/creds.yml
+If you would like to use RethinkDB as your datastore, you'll need to copy the rethinkdb example. Add your database info to the creds.yml. You should have a RethinkDB set up and running already.
+ 
+    $ mv config/kilt/creds.yml.rethinkdb.example config/kilt/creds.yml
     
-- Add your database info to the creds.yml. You should have a RethinkDB set up and running already.
-
 - If you want to use S3 for your image and file uploads, add your S3 info to creds.yml. Also set the following in your config.yml:
 
     storage:

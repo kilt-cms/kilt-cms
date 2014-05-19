@@ -1,0 +1,22 @@
+test:
+  db:
+    host: 127.0.0.1
+    port: 28015
+    db: my_app_test
+development:
+  db:
+    host: 127.0.0.1
+    port: 28015
+    db: my_app_development
+production:
+  db:
+    host: ENV['KILT_HOST']
+    port: ENV['KILT_PORT']
+    db: ENV['KILT_DB']
+s3:
+  key: <S3 key>
+  secret: <S3 secret>
+  bucket: <S3 bucket>
+auth:
+  username: <Username>
+  password: <Password>

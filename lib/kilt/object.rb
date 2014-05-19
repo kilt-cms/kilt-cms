@@ -52,7 +52,7 @@ module Kilt
 
     def fields_that_should_be_set_given params
       @fields.map    { |k, v| [k, v.downcase] }
-             .select { |k, v| params[k] || params["#{k}-hidden"] }
+             .select { |k, v| params[k] || (params["#{k}-hidden"].to_s != '') }
     end
 
     def initialize_values values

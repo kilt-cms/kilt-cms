@@ -1,48 +1,33 @@
 module Kilt
   class Utils
     
-    # Set up the database
     def self.setup_db
-      if Kilt.config.db.host && Kilt.config.db.port
-        begin
-          db = r.connect(:host => Kilt.config.db.host, :port => Kilt.config.db.port).repl
-        rescue
-          raise Kilt::CantConnectToDatabaseError 
-        end
-        
-        begin
-          
-          # See if the db exists and create it otherwise
-          dbs = r.db_list.run
-          if !dbs.to_a.include? Kilt.config.db.db
-            r.db_create(Kilt.config.db.db).run
-          end
-          
-          # See if the table exists and create it otherwise
-          tables = r.db(Kilt.config.db.db).table_list.run
-          if !tables.to_a.include? "objects"
-            r.db(Kilt.config.db.db).table_create("objects", :primary_key => "unique_id").run
-          end
-      
-        rescue
-          raise Kilt::CantSetupDatabaseError
-        ensure
-          db.close
-        end
-        
-      else
-        raise Kilt::NoDatabaseConfigError
+      return unless current_db_config
+      if db_type = current_db_config[:type]
+        use_db(db_type.to_sym)
       end
-    end
-    
-    # Make a db call
-    def self.db(&block)
-      @db ||= r.connect(:host => Kilt.config.db.host, :port => Kilt.config.db.port).repl
-      block.call
+      database.setup!
     end
 
+    def self.use_db db_type
+      return if @db_type == db_type
+      @db_type = db_type
+      @database = nil
+    end
+    
     def self.database
-      @database ||= Kilt::Database.new(:host => Kilt.config.db.host, :port => Kilt.config.db.port)
+      @database ||= if @db_type == :active_record
+                      Kilt::DB::ActiveRecord.new
+                    else
+                      Kilt::DB::RethinkDb.new current_db_config
+                    end
+    end
+
+    def self.current_db_config
+      current_environment = (ENV['RAILS_ENV'].to_s == '' ? 'development' : ENV['RAILS_ENV']).to_sym
+      Kilt.config[current_environment][:db]
+    rescue
+      Kilt.config[:db]
     end
     
     # Ensure we have local storage dirs
@@ -91,7 +76,7 @@ module Kilt
       ret.gsub! /\s*&\s*/, " and "
 
       #replace all non alphanumeric, underscore or periods with dash
-      ret.gsub! /\s*[^A-Za-z0-9\.\_]\s*/, '-'  
+      ret.gsub! /\s*[^A-Za-z0-9]\s*/, '-'  
 
       #convert double dash to single
       ret.gsub! /-+/, "-"
@@ -109,11 +94,17 @@ module Kilt
       ret.gsub! /_/, " "   
       ret.capitalize
     end
+
+    def self.config_is_valid?
+      Kilt.config.empty? == false && current_db_config
+      #!(Kilt.config.empty? || !Kilt.config.db)
+      #!Kilt.config.empty? && Kilt.config.db
+    end
     
     # Print a list of objects, functions, etc.
     def self.tips
       lines = []
-      if !Kilt.config.empty? && Kilt.config.db
+      if config_is_valid?
         lines << ''
         
         # Store the first type so we can use it down below

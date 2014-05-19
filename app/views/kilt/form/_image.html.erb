@@ -4,7 +4,7 @@
     <% if object["#{field_name}"] && object["#{field_name}"] != '' %>
         <div id="image-container-<%= index %>">
             <div id="image-<%= index %>">
-                <%= image_tag Kilt::Utils.download_location(field_name, object["#{field_name}"]), :width => '100%' %>
+                <%= image_tag Kilt::Utils.download_location('image', object["#{field_name}"]), :width => '100%' %>
             </div>
             <div>
                 <a id="image-reset-<%= index%>" class="button delete <% if !object["#{field_name}"] || object["#{field_name}"] == "" %>hidden<% end %>">Reset/remove image</a>

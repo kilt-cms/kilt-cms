@@ -2,7 +2,8 @@
     <h2>Dashboard</h2>
 
     <ul class="object-list">
-        <% @types.each do |type, name| %>
+        <% @types.each do |type, _| %>
+            <% name = Kilt::Formatting.plural_name_of(type) %>
             <li><%= link_to name, list_path(type.pluralize) %></li>
         <% end %>
     </ul>

@@ -1,8 +1,10 @@
 ENV['RAILS_ENV'] = 'test'
+require 'fileutils'
 require 'rails'
 require 'action_pack'
 require 'action_view'
 require 'active_support'
+require 'active_record'
 require File.expand_path(File.dirname(__FILE__) + '/../lib/kilt')
 require 'minitest/autorun'
 require 'minitest/spec'
@@ -13,11 +15,17 @@ require 'mocha/setup'
 
 def default_test_config
   config         = Hashie::Mash.new
-  config.db      = Hashie::Mash.new(db: 'kilt_test', host: '127.0.0.1', port: '28015')
+
+  config.test         = Hashie::Mash.new
+  config.test.db      = Hashie::Mash.new(db: 'kilt_test', host: '127.0.0.1', port: '28015')
+
   config.name    = 'Test App'
   config.objects = Hashie::Mash.new(cat: Hashie::Mash.new(fields: { name: 'text', size: 'text', headshot: 'image', resume: 'file' } ),
                                     dog: Hashie::Mash.new(fields: { name: 'text', size: 'text', headshot: 'image', resume: 'file' } ),
-                                    no_namey: Hashie::Mash.new(fields: { } ))
+                                    no_namey: Hashie::Mash.new(fields: { } ),
+                                    horse: Hashie::Mash.new(fields: { name: 'text' } ),
+                                    big_green_alligator: Hashie::Mash.new(fields: { name: 'text' } ),
+                                    apple: Hashie::Mash.new(name: 'Orange', fields: { name: 'text' } ))
   config
 end
 
@@ -27,13 +35,33 @@ end
 
 def setup_the_database_with config
   Kilt.config = config
+  Kilt::Utils.use_db(:active_record) if ENV['TRAVIS']
   Kilt::Utils.setup_db
 end
 
 def clear_out_the_database
-  Kilt::Utils.db do
-    r.db(Kilt.config.db.db).table('objects').delete().run
-  end
+  clear_out_active_record
+  clear_out_rethinkdb
+end
+
+def clear_out_active_record
+
+  empty_file = File.expand_path(File.dirname(__FILE__) + '/empty.sqlite3')
+  test_file  = File.expand_path(File.dirname(__FILE__) + '/test.sqlite3')
+
+  File.delete(test_file) if File.exists? test_file
+  FileUtils.cp empty_file, test_file
+
+  options = {
+              adapter: 'sqlite3',
+              database: File.expand_path(File.dirname(__FILE__) + '/test.sqlite3')
+            }
+  ActiveRecord::Base.establish_connection options
+end
+
+def clear_out_rethinkdb
+  Kilt::Utils.database.delete_all
+rescue
 end
 
 setup_the_database

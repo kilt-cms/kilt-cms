@@ -69,16 +69,16 @@ describe Kilt::Object do
 
       describe "basic scenario" do
 
-        let(:name) { Object.new }
+        let(:the_name) { Object.new }
         let(:size) { Object.new }
 
         let(:object) do
-          Kilt::Object.new(type, { 'name' => name,
+          Kilt::Object.new(type, { 'name' => the_name,
                                    'size' => size } )
         end
 
         it "should initialize the variables" do
-          object['name'].must_be_same_as name
+          object['name'].must_be_same_as the_name
           object['size'].must_be_same_as size
         end
 
@@ -87,7 +87,7 @@ describe Kilt::Object do
         end
 
         it "should allow symbols to be used to retrieve values" do
-          object[:name].must_be_same_as name
+          object[:name].must_be_same_as the_name
           object[:size].must_be_same_as size
         end
 
@@ -95,21 +95,21 @@ describe Kilt::Object do
 
       describe "using symbols as keys" do
 
-        let(:name) { Object.new }
+        let(:the_name) { Object.new }
         let(:size) { Object.new }
 
         let(:object) do
-          Kilt::Object.new(type, { :name => name,
+          Kilt::Object.new(type, { :name => the_name,
                                    :size => size } )
         end
 
         it "should initialize the variables" do
-          object['name'].must_be_same_as name
+          object['name'].must_be_same_as the_name
           object['size'].must_be_same_as size
         end
 
         it "should allow symbols to be used to retrieve values" do
-          object[:name].must_be_same_as name
+          object[:name].must_be_same_as the_name
           object[:size].must_be_same_as size
         end
 
@@ -172,6 +172,15 @@ describe Kilt::Object do
               upload_result = Object.new
               object.fill( { 'name' => 'x', "#{scenario.property}-hidden" => 'clear' } )
               object[scenario.property].must_equal ''
+            end
+          end
+
+          describe "the hidden value is set to an empty string" do
+            it "should NOT set the value to an empty string" do
+              upload_result = Object.new
+              object[scenario.property] = scenario.value
+              object.fill( { 'name' => 'x', "#{scenario.property}-hidden" => '' } )
+              object[scenario.property].must_equal scenario.value
             end
           end
 

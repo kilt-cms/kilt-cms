@@ -3,7 +3,7 @@
 
     <% if object["#{field_name}"] && object["#{field_name}"] != '' %>
         <div class="filename">
-            <span><%= link_to object["#{field_name}"], Kilt::Utils.download_location(field_name, object["#{field_name}"]), :target => '_blank' %>
+            <span><%= link_to object["#{field_name}"], Kilt::Utils.download_location('file', object["#{field_name}"]), :target => '_blank' %>
             <a class="button delete <% if !object["#{field_name}"] || object["#{field_name}"] == "" %>hidden<% end %>">Reset/remove file</a></span>
         </div>
     <% end %>

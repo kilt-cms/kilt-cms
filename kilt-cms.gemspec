@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'uglifier'
   s.add_dependency 'aws-sdk'
 
+  s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'better_errors'
   s.add_development_dependency 'binding_of_caller'
   s.add_development_dependency 'meta_request'
@@ -31,5 +32,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'mocha'
   s.add_development_dependency 'hashie'
   s.add_development_dependency 'timecop'
+  s.add_development_dependency 'minitest', '4.7.5'
   
 end
