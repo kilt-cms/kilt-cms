@@ -8,33 +8,28 @@ describe Kilt::Form do
 
       describe "when the view exists" do
 
-        it "should return a rendered action view" do
-
-          rendered_action_view = Object.new
+        it "should return the content of the view" do
 
           object     = Object.new
           field_name = Object.new
           index      = Object.new
           options    = Object.new
+          view       = Object.new
 
-          action_view = Object.new
-          action_view.expects(:render)
-                     .with(:file    => "#{method}.html.erb", 
-                           :locals  => { 
-                                         :object      => object, 
-                                         :field_name  => field_name,
-                                         :index       => index,
-                                         :options     => options
-                                       } )
-                     .returns rendered_action_view
+          html = Object.new
 
-          ActionView::Base.stubs(:new)
-                          .with(Kilt::Form::TEMPLATES_DIR)
-                          .returns action_view
+          view.stubs(:render).with( { partial: "kilt/form/#{method}", 
+                                      locals:  {
+                                                 object:     object,
+                                                 field_name: field_name,
+                                                 index:      index,
+                                                 options:    options,
+                                                 view:       view
+                                               } } ).returns html
 
-          result = Kilt::Form.send(method.to_sym, object, field_name, index, options)
+          result = Kilt::Form.send(method.to_sym, object, field_name, index, view, options)
           
-          result.must_be_same_as rendered_action_view
+          result.must_be_same_as html
 
         end
 
@@ -42,43 +37,37 @@ describe Kilt::Form do
 
       describe "when the view does not exist" do
 
-        it "should return the default view" do
-
-          rendered_action_view = Object.new
+        it "should return the content of the default view" do
 
           object     = Object.new
           field_name = Object.new
           index      = Object.new
           options    = Object.new
+          view       = Object.new
 
-          action_view = Object.new
-          action_view.expects(:render)
-                     .with(:file    => "#{method}.html.erb", 
-                           :locals  => { 
-                                         :object      => object, 
-                                         :field_name  => field_name,
-                                         :index       => index,
-                                         :options     => options
-                                       } )
-                     .raises 'error'
+          html = Object.new
 
-          action_view.expects(:render)
-                     .with(:file    => "_default.html.erb", 
-                           :locals  => { 
-                                     :object     => object, 
-                                     :field_name => field_name,
-                                     :index       => index,
-                                     :options     => options
-                                   } )
-                     .returns rendered_action_view
+          view.stubs(:render).with( { partial: "kilt/form/#{method}", 
+                                      locals:  {
+                                                 object:     object,
+                                                 field_name: field_name,
+                                                 index:      index,
+                                                 options:    options,
+                                                 view:       view
+                                               } } ).raises 'error'
 
-          ActionView::Base.stubs(:new)
-                          .with(Kilt::Form::TEMPLATES_DIR)
-                          .returns action_view
+          view.stubs(:render).with( { partial: "kilt/form/default", 
+                                      locals:  {
+                                                 object:     object,
+                                                 field_name: field_name,
+                                                 index:      index,
+                                                 options:    options,
+                                                 view:       view
+                                               } } ).returns html
 
-          result = Kilt::Form.send(method.to_sym, object, field_name, index, options)
+          result = Kilt::Form.send(method.to_sym, object, field_name, index, view, options)
           
-          result.must_be_same_as rendered_action_view
+          result.must_be_same_as html
 
         end
 
