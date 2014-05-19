@@ -1,3 +1,2 @@
-<% name  = Kilt::Formatting.plural_name_of @type %>
-<% @path = update_object_path(name, @slug) %>
+<% @path = update_object_path(@type.pluralize, @slug) %>
 <%= render :partial => 'form' %>
