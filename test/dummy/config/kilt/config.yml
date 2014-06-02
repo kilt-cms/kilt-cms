@@ -1,9 +1,8 @@
-name: Kilt Dummy App
+name: Dummy
 storage:
   strategy: local
 objects:
   bagpipe:
-    name: Scottish bagpipes
     fields:
       name: text
       weight: number
