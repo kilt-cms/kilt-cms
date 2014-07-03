@@ -468,6 +468,35 @@ describe Kilt do
 
       end
 
+      describe "setting the slug manually" do
+
+        describe "creating the record" do
+          it "should not prepend the prefix to the slug" do
+            object = Kilt::Object.new(scenario.type, { 'name' => scenario.name, 'slug' => 'something hardcoded' } )
+            Kilt.create object
+
+            created_record = Kilt.get(object['slug'])
+            created_record['slug'].must_equal 'something hardcoded'
+          end
+        end
+
+        describe "updating the record" do
+
+          it "should not prepend the prefix to the slug" do
+            object = Kilt::Object.new(scenario.type, { 'name' => scenario.name, 'slug' => 'hardcoded value' } )
+            Kilt.create object
+
+            created_record = Kilt.get(object['slug'])
+            Kilt.update created_record['slug'], created_record
+
+            updated_record = Kilt.get(created_record['slug'])
+            created_record['slug'].must_equal 'hardcoded value'
+          end
+
+        end
+
+      end
+
     end
 
     describe "slug conflicts when applying a prefix" do
