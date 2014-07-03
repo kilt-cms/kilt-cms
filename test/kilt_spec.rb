@@ -422,8 +422,10 @@ describe Kilt do
   describe "slug prefixes" do
 
     [
-      ['prefix_holder',  'Happy Camper', 'a-prefix-happy-camper'],
-      ['another_prefix', 'Happy Camper', 'another-happy-camper'],
+      ['prefix_holder',  'Happy Camper',  'a-prefix-happy-camper'],
+      ['another_prefix', 'Happy Camper',  'another-happy-camper'],
+      ['prefix_holder',  'Sad Camper',    'a-prefix-sad-camper'],
+      ['another_prefix', 'Amused Camper', 'another-amused-camper'],
     ].map { |x| Struct.new(:type, :name, :expected_slug).new(*x) }.each do |scenario|
 
       describe "creating an object with a slug prefix" do

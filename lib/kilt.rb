@@ -98,7 +98,7 @@ module Kilt
       result = slug_is_unique_for?(slug, object) ? slug
                                                  : "#{slug}-#{(Time.now.to_f * 1000).to_i}"
       if prefix = Kilt.send(object.type.to_sym)['slug_prefix']
-        "#{prefix}-happy-camper"
+        "#{prefix}-#{slug}"
       else
         result
       end
