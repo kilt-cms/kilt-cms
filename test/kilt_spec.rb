@@ -422,11 +422,11 @@ describe Kilt do
   describe "slug prefixes" do
 
     [
-      ['prefix_holder',  :prefix_holders,   'Happy Camper',  'a-prefix-happy-camper'],
-      ['another_prefix', :another_prefixes, 'Happy Camper',  'another-happy-camper'],
-      ['prefix_holder',  :prefix_holders,   'Sad Camper',    'a-prefix-sad-camper'],
-      ['another_prefix', :another_prefixes, 'Amused Camper', 'another-amused-camper'],
-    ].map { |x| Struct.new(:type, :plural_type, :name, :expected_slug).new(*x) }.each do |scenario|
+      ['prefix_holder',  :prefix_holders,   'Happy Camper',  'a-prefix-happy-camper', 'a-prefix'],
+      ['another_prefix', :another_prefixes, 'Happy Camper',  'another-happy-camper',  'another'],
+      ['prefix_holder',  :prefix_holders,   'Sad Camper',    'a-prefix-sad-camper',   'a-prefix'],
+      ['another_prefix', :another_prefixes, 'Amused Camper', 'another-amused-camper', 'another'],
+    ].map { |x| Struct.new(:type, :plural_type, :name, :expected_slug, :the_prefix).new(*x) }.each do |scenario|
 
       describe "creating an object with a slug prefix" do
 
@@ -435,6 +435,17 @@ describe Kilt do
           Kilt.create object
 
           object['slug'].must_equal scenario.expected_slug
+        end
+
+        describe "when creating a record that naturally will conflict with a prefix" do
+          it "should still append the appropriate slug" do
+            object = Kilt::Object.new(scenario.type, { 'name' => scenario.the_prefix } )
+
+            Kilt.create object
+
+            object['slug'].must_equal "#{scenario.the_prefix}-#{scenario.the_prefix}"
+                
+          end
         end
 
       end
