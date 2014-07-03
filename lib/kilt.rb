@@ -95,8 +95,10 @@ module Kilt
     def slug_for object
       slug = object['slug'].to_s.strip == '' ? Utils.slugify(object['name'])
                                              : "#{object['slug']}"
-      if prefix = Kilt.send(object.type.to_sym)['slug_prefix']
-        slug = "#{prefix}-#{slug}"
+      if prefix = Kilt.send(object['type'].to_sym)['slug_prefix']
+        unless slug.starts_with?(prefix)
+          slug = "#{prefix}-#{slug}"
+        end
       end
       result = slug_is_unique_for?(slug, object) ? slug
                                                  : "#{slug}-#{(Time.now.to_f * 1000).to_i}"

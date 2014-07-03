@@ -422,11 +422,11 @@ describe Kilt do
   describe "slug prefixes" do
 
     [
-      ['prefix_holder',  'Happy Camper',  'a-prefix-happy-camper'],
-      ['another_prefix', 'Happy Camper',  'another-happy-camper'],
-      ['prefix_holder',  'Sad Camper',    'a-prefix-sad-camper'],
-      ['another_prefix', 'Amused Camper', 'another-amused-camper'],
-    ].map { |x| Struct.new(:type, :name, :expected_slug).new(*x) }.each do |scenario|
+      ['prefix_holder',  :prefix_holders,   'Happy Camper',  'a-prefix-happy-camper'],
+      ['another_prefix', :another_prefixes, 'Happy Camper',  'another-happy-camper'],
+      ['prefix_holder',  :prefix_holders,   'Sad Camper',    'a-prefix-sad-camper'],
+      ['another_prefix', :another_prefixes, 'Amused Camper', 'another-amused-camper'],
+    ].map { |x| Struct.new(:type, :plural_type, :name, :expected_slug).new(*x) }.each do |scenario|
 
       describe "creating an object with a slug prefix" do
 
@@ -435,6 +435,24 @@ describe Kilt do
           Kilt.create object
 
           object['slug'].must_equal scenario.expected_slug
+        end
+
+      end
+
+      describe "updating the object later" do
+
+        it "should only have one prefix" do
+          object = Kilt::Object.new(scenario.type, { 'name' => scenario.name } )
+          Kilt.create object
+
+          created_record = Kilt.get(object['slug'])
+          first_slug = created_record['slug']
+
+          Kilt.update created_record['slug'], created_record
+
+          updated_record = Kilt.get(created_record['slug'])
+          updated_record['slug'].must_equal first_slug
+
         end
 
       end
