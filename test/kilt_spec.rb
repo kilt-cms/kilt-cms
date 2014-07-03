@@ -421,13 +421,20 @@ describe Kilt do
 
   describe "slug prefixes" do
 
-    describe "creating an object with a slug prefix" do
+    [
+      ['prefix_holder',  'Happy Camper', 'a-prefix-happy-camper'],
+      ['another_prefix', 'Happy Camper', 'another-happy-camper'],
+    ].map { |x| Struct.new(:type, :name, :expected_slug).new(*x) }.each do |scenario|
 
-      it "should prepend the slug prefix to the slug" do
-        object = Kilt::Object.new('prefix_holder', { 'name' => 'Happy Camper' } )
-        Kilt.create object
+      describe "creating an object with a slug prefix" do
 
-        object['slug'].must_equal 'a-prefix-happy-camper'
+        it "should prepend the slug prefix to the slug" do
+          object = Kilt::Object.new(scenario.type, { 'name' => scenario.name } )
+          Kilt.create object
+
+          object['slug'].must_equal scenario.expected_slug
+        end
+
       end
 
     end
