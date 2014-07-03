@@ -121,10 +121,8 @@ module Kilt
     def prefix_for object
       return nil unless prefix = lookup_the_suggested_prefix_for(object)
       slug = slugified_value_for object
-      unless slug.starts_with?(prefix) && slug != prefix
-        return prefix
-      end
-      nil
+      slug.starts_with?(prefix) && slug != prefix ? nil
+                                                  : prefix
     end
 
     def lookup_the_suggested_prefix_for object
