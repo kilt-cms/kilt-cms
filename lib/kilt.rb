@@ -119,13 +119,16 @@ module Kilt
     end
 
     def prefix_for object
-      if prefix = Kilt.send(object['type'].to_sym)['slug_prefix']
-        slug = slugified_value_for object
-        unless slug.starts_with?(prefix) && slug != prefix
-          return prefix
-        end
+      return nil unless prefix = lookup_the_suggested_prefix_for(object)
+      slug = slugified_value_for object
+      unless slug.starts_with?(prefix) && slug != prefix
+        return prefix
       end
       nil
+    end
+
+    def lookup_the_suggested_prefix_for object
+      Kilt.send(object['type'].to_sym)['slug_prefix']
     end
 
   end
