@@ -419,4 +419,19 @@ describe Kilt do
 
   end
 
+  describe "slug prefixes" do
+
+    describe "creating an object with a slug prefix" do
+
+      it "should prepend the slug prefix to the slug" do
+        object = Kilt::Object.new('prefix_holder', { 'name' => 'Happy Camper' } )
+        Kilt.create object
+
+        object['slug'].must_equal 'a-prefix-happy-camper'
+      end
+
+    end
+
+  end
+
 end

@@ -95,8 +95,13 @@ module Kilt
     def slug_for object
       slug = object['slug'].to_s.strip == '' ? Utils.slugify(object['name'])
                                              : "#{object['slug']}"
-      slug_is_unique_for?(slug, object) ? slug
-                                        : "#{slug}-#{(Time.now.to_f * 1000).to_i}"
+      result = slug_is_unique_for?(slug, object) ? slug
+                                                 : "#{slug}-#{(Time.now.to_f * 1000).to_i}"
+      if Kilt.send(object.type.to_sym)['slug_prefix']
+        'a-prefix-happy-camper'
+      else
+        result
+      end
     end
 
   end
