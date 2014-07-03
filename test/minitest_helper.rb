@@ -23,6 +23,8 @@ def default_test_config
   config.objects = Hashie::Mash.new(cat: Hashie::Mash.new(fields: { name: 'text', size: 'text', headshot: 'image', resume: 'file' } ),
                                     dog: Hashie::Mash.new(fields: { name: 'text', size: 'text', headshot: 'image', resume: 'file' } ),
                                     no_namey: Hashie::Mash.new(fields: { } ),
+                                    prefix_holder: Hashie::Mash.new(slug_prefix: 'a-prefix', fields: { name: 'text' } ),
+                                    another_prefix: Hashie::Mash.new(slug_prefix: 'another', fields: { name: 'text' } ),
                                     horse: Hashie::Mash.new(fields: { name: 'text' } ),
                                     big_green_alligator: Hashie::Mash.new(fields: { name: 'text' } ),
                                     apple: Hashie::Mash.new(name: 'Orange', fields: { name: 'text' } ))
