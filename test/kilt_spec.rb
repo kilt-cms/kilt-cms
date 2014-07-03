@@ -441,6 +441,30 @@ describe Kilt do
 
     end
 
+    describe "slug conflicts when applying a prefix" do
+
+      describe "when conflicting with the same type on record creation" do
+
+        it "should use the timestamped suffix" do
+
+          Timecop.freeze Time.parse('1/1/2001')
+
+          object = Kilt::Object.new('another_prefix', { 'name' => 'Apple' } )
+          Kilt.create object
+
+          Timecop.freeze Time.now + 1
+
+          object = Kilt::Object.new('another_prefix', { 'name' => 'Apple' } )
+          Kilt.create object
+
+          object['slug'].must_equal 'another-apple-978328801000'
+
+        end
+
+      end
+
+    end
+
   end
 
 end
