@@ -40,7 +40,7 @@ module Kilt
       # Ensure we have a name
       if p['name'] == ''
         flash[:error] = "Name is required"
-        redirect_to new_object_path(type.pluralize)
+        redirect_to new_object_path(type)
       else
         # Create an object and fill it with the values passed in by the form
         object = Kilt::Object.new(type)
@@ -48,10 +48,10 @@ module Kilt
         
         # Call Kilt's update method
         if Kilt.create(object)
-          flash[:notice] = "#{type.capitalize} successfully updated"
+          flash[:notice] = "#{Kilt::Formatting.singular_name_of(type)} successfully updated"
           redirect_to edit_object_path(type.pluralize, object.slug)
         else
-          flash[:error] = "Couldn't save #{type.capitalize}"
+          flash[:error] = "Couldn't save #{Kilt::Formatting.singular_name_of(type)}"
           redirect_to new_object_path(type.pluralize)
         end
       end
@@ -84,9 +84,9 @@ module Kilt
       
         # Call Kilt's update method
         if Kilt.update(slug, object)
-          flash[:notice] = "#{type.capitalize} successfully updated"
+          flash[:notice] = "#{Kilt::Formatting.singular_name_of(type)} successfully updated"
         else
-          flash[:error] = "Couldn't save #{type.capitalize}"
+          flash[:error] = "Couldn't save #{Kilt::Formatting.singular_name_of(type)}"
         end
       
         # redirect to the edit screen
@@ -102,9 +102,9 @@ module Kilt
       
       # Call Kilt's update method
       if Kilt.delete(slug)
-        flash[:notice] = "#{type.capitalize} successfully deleted"
+        flash[:notice] = "#{Kilt::Formatting.singular_name_of(type)} successfully deleted"
       else
-        flash[:error] = "Couldn't delete #{type.capitalize}"
+        flash[:error] = "Couldn't delete #{Kilt::Formatting.singular_name_of(type)}"
       end
       
       # redirect to the list screen
