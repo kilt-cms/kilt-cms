@@ -40,7 +40,7 @@ module Kilt
       # Ensure we have a name
       if p['name'] == ''
         flash[:error] = "Name is required"
-        redirect_to new_object_path(type)
+        redirect_to new_object_path(type.pluralize)
       else
         # Create an object and fill it with the values passed in by the form
         object = Kilt::Object.new(type)
