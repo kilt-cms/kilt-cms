@@ -41,7 +41,7 @@ module Kilt
     object['created_at'] = object['updated_at'] = Time.now
     object['unique_id']  = "#{(Time.now.to_f * 1000).to_i}"
     object['type']       = object.instance_eval { @type }
-    object['slug']       = slug_for object
+    object['slug']       = Slugger.slug_for object
 
     Utils.database.create object
   end
@@ -51,7 +51,7 @@ module Kilt
   # Example: Kilt.update(object)
   def self.update(slug, object)
     object['updated_at'] = Time.now
-    object['slug']       = slug_for object
+    object['slug']       = Slugger.slug_for object
 
     Utils.database.update object
   end
@@ -81,25 +81,4 @@ module Kilt
     Kilt::ObjectCollection.new results
   end
 
-  class << self
-
-    private
-
-    def slug_is_unique_for? slug, object
-      result = Utils.database.find(slug)
-      return true if result.nil?
-
-      "#{result['unique_id']}" == "#{object['unique_id']}"
-    end
-
-    def slug_for object
-      slug = object['slug'].to_s.strip == '' ? Utils.slugify(object['name'])
-                                             : "#{object['slug']}"
-      slug_is_unique_for?(slug, object) ? slug
-                                        : "#{slug}-#{(Time.now.to_f * 1000).to_i}"
-    end
-
-  end
-
 end
-

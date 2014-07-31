@@ -1,8 +1,8 @@
 {<img src="https://travis-ci.org/AsheAvenue/Kilt.png?branch=master" alt="Build Status" />}[https://travis-ci.org/AsheAvenue/Kilt]
 
-- Create a new Rails project without a database:
+- Create a new Rails project:
 
-    $ rails new Blah -O
+    $ rails new Blah
     
 - Add the Kilt CMS gem to your Gemfile:
 
@@ -26,7 +26,13 @@ Note: We're trying to find a way around that last step, but for now we're just e
 
     $ rails g kilt:install
 
-If you would like to use RethinkDB as your datastore, you'll need to copy the rethinkdb example. Add your database info to the creds.yml. You should have a RethinkDB set up and running already.
+If you would like to use RethinkDB as your datastore, you'll need to copy the rethinkdb example. Add your database info to the creds.yml. You should have a RethinkDB set up and running already, and you should probably use a Rails app that has no database.
+
+- To create a new Rails app:
+
+    $ rails new Blah
+
+- To copy over the example RethinkDB configuration file, use:
  
     $ mv config/kilt/creds.yml.rethinkdb.example config/kilt/creds.yml
     
