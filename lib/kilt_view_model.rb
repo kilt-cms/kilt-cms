@@ -35,11 +35,7 @@ class KiltViewModel
       records.map { |r| build_a_view_model_from r }
              .sort_by do |x|
                sequence = x.sequence.to_s.to_i
-               if sequence.to_s != x.sequence.to_s
-                 99999999999
-               else
-                 sequence
-               end
+               sequence.to_s == x.sequence.to_s ? sequence : 99999999999
              end
     end
 
