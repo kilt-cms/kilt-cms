@@ -66,4 +66,12 @@ def clear_out_rethinkdb
 rescue
 end
 
+def persistence_models_to_test
+  models = [['using active record for persistence', :active_record]]
+  unless ENV['TRAVIS']
+    models << ['using rethinkdb for persistence', :rethinkdb]
+  end
+  models.map { |args| Struct.new(:description, :db_type).new(*args) }
+end
+
 setup_the_database
