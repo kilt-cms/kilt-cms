@@ -513,11 +513,12 @@ describe Kilt do
             Kilt.create object
 
             Timecop.freeze Time.now + 1
+            timestamp = (Time.now.to_f * 1000).to_i
 
             object = Kilt::Object.new('another_prefix', { 'name' => 'Apple' } )
             Kilt.create object
 
-            object['slug'].must_equal 'another-apple-978328801000'
+            object['slug'].must_equal "another-apple-#{timestamp}"
 
           end
 
