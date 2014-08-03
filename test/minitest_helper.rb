@@ -68,7 +68,7 @@ end
 
 def persistence_models_to_test
   models = [['using active record for persistence', :active_record]]
-  unless ENV['TRAVIS']
+  if ENV['TEST_WITH_RETHINKDB']
     models << ['using rethinkdb for persistence', :rethinkdb]
   end
   models.map { |args| Struct.new(:description, :db_type).new(*args) }
