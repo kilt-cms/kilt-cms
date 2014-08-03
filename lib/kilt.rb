@@ -1,5 +1,6 @@
 require "kilt/base"
 require_relative "kilt_object"
+require_relative "kilt_view_model"
 
 # Include the Rethink shortcut module, which will among other things instantiate a new
 # Rethink object (as "r") if needed
