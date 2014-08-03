@@ -37,7 +37,7 @@ end
 
 def setup_the_database_with config
   Kilt.config = config
-  Kilt::Utils.use_db(:active_record) if ENV['TRAVIS']
+  Kilt::Utils.use_db(:active_record) # default the tests to AR
   Kilt::Utils.setup_db
 end
 
