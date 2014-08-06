@@ -15,12 +15,7 @@ describe Kilt do
 
   end
 
-  persistence_models_to_test = [['using active record for persistence', :active_record]]
-  unless ENV['TRAVIS']
-    persistence_models_to_test << ['using rethinkdb for persistence', :rethinkdb]
-  end
-
-  persistence_models_to_test.map { |args| Struct.new(:description, :db_type).new(*args) }.each do |persistence|
+  persistence_models_to_test.each do |persistence|
 
     describe persistence.description do
 
@@ -419,103 +414,113 @@ describe Kilt do
 
   end
 
-  describe "slug prefixes" do
+  persistence_models_to_test.each do |persistence|
 
-    [
-      ['prefix_holder',  :prefix_holders,   'Happy Camper',  'a-prefix-happy-camper', 'a-prefix'],
-      ['another_prefix', :another_prefixes, 'Happy Camper',  'another-happy-camper',  'another'],
-      ['prefix_holder',  :prefix_holders,   'Sad Camper',    'a-prefix-sad-camper',   'a-prefix'],
-      ['another_prefix', :another_prefixes, 'Amused Camper', 'another-amused-camper', 'another'],
-    ].map { |x| Struct.new(:type, :plural_type, :name, :expected_slug, :the_prefix).new(*x) }.each do |scenario|
+    before do
+      Kilt::Utils.use_db persistence.db_type
+      clear_out_the_database
+    end
 
-      describe "creating an object with a slug prefix" do
+    describe "slug prefixes #{persistence.db_type}" do
 
-        it "should prepend the slug prefix to the slug" do
-          object = Kilt::Object.new(scenario.type, { 'name' => scenario.name } )
-          Kilt.create object
+      [
+        ['prefix_holder',  :prefix_holders,   'Happy Camper',  'a-prefix-happy-camper', 'a-prefix'],
+        ['another_prefix', :another_prefixes, 'Happy Camper',  'another-happy-camper',  'another'],
+        ['prefix_holder',  :prefix_holders,   'Sad Camper',    'a-prefix-sad-camper',   'a-prefix'],
+        ['another_prefix', :another_prefixes, 'Amused Camper', 'another-amused-camper', 'another'],
+      ].map { |x| Struct.new(:type, :plural_type, :name, :expected_slug, :the_prefix).new(*x) }.each do |scenario|
 
-          object['slug'].must_equal scenario.expected_slug
-        end
+        describe "creating an object with a slug prefix" do
 
-        describe "when creating a record that naturally will conflict with a prefix" do
-          it "should still append the appropriate slug" do
-            object = Kilt::Object.new(scenario.type, { 'name' => scenario.the_prefix } )
-
+          it "should prepend the slug prefix to the slug" do
+            object = Kilt::Object.new(scenario.type, { 'name' => scenario.name } )
             Kilt.create object
 
-            object['slug'].must_equal "#{scenario.the_prefix}-#{scenario.the_prefix}"
-                
+            object['slug'].must_equal scenario.expected_slug
           end
-        end
 
-      end
+          describe "when creating a record that naturally will conflict with a prefix" do
+            it "should still append the appropriate slug" do
+              object = Kilt::Object.new(scenario.type, { 'name' => scenario.the_prefix } )
 
-      describe "updating the object later" do
+              Kilt.create object
 
-        it "should only have one prefix" do
-          object = Kilt::Object.new(scenario.type, { 'name' => scenario.name } )
-          Kilt.create object
-
-          created_record = Kilt.get(object['slug'])
-          first_slug = created_record['slug']
-
-          Kilt.update created_record['slug'], created_record
-
-          updated_record = Kilt.get(created_record['slug'])
-          updated_record['slug'].must_equal first_slug
+              object['slug'].must_equal "#{scenario.the_prefix}-#{scenario.the_prefix}"
+                  
+            end
+          end
 
         end
 
-      end
+        describe "updating the object later" do
 
-      describe "setting the slug manually" do
-
-        describe "creating the record" do
-          it "should not prepend the prefix to the slug" do
-            object = Kilt::Object.new(scenario.type, { 'name' => scenario.name, 'slug' => 'something hardcoded' } )
+          it "should only have one prefix" do
+            object = Kilt::Object.new(scenario.type, { 'name' => scenario.name } )
             Kilt.create object
 
             created_record = Kilt.get(object['slug'])
-            created_record['slug'].must_equal 'something hardcoded'
-          end
-        end
+            first_slug = created_record['slug']
 
-        describe "updating the record" do
-
-          it "should not prepend the prefix to the slug" do
-            object = Kilt::Object.new(scenario.type, { 'name' => scenario.name, 'slug' => 'hardcoded value' } )
-            Kilt.create object
-
-            created_record = Kilt.get(object['slug'])
             Kilt.update created_record['slug'], created_record
 
             updated_record = Kilt.get(created_record['slug'])
-            created_record['slug'].must_equal 'hardcoded value'
+            updated_record['slug'].must_equal first_slug
+
+          end
+
+        end
+
+        describe "setting the slug manually" do
+
+          describe "creating the record" do
+            it "should not prepend the prefix to the slug" do
+              object = Kilt::Object.new(scenario.type, { 'name' => scenario.name, 'slug' => 'something hardcoded' } )
+              Kilt.create object
+
+              created_record = Kilt.get(object['slug'])
+              created_record['slug'].must_equal 'something hardcoded'
+            end
+          end
+
+          describe "updating the record" do
+
+            it "should not prepend the prefix to the slug" do
+              object = Kilt::Object.new(scenario.type, { 'name' => scenario.name, 'slug' => 'hardcoded value' } )
+              Kilt.create object
+
+              created_record = Kilt.get(object['slug'])
+              Kilt.update created_record['slug'], created_record
+
+              updated_record = Kilt.get(created_record['slug'])
+              created_record['slug'].must_equal 'hardcoded value'
+            end
+
           end
 
         end
 
       end
 
-    end
+      describe "slug conflicts when applying a prefix" do
 
-    describe "slug conflicts when applying a prefix" do
+        describe "when conflicting with the same type on record creation" do
 
-      describe "when conflicting with the same type on record creation" do
+          it "should use the timestamped suffix" do
 
-        it "should use the timestamped suffix" do
+            Timecop.freeze Time.parse('1/1/2001')
 
-          Timecop.freeze Time.parse('1/1/2001')
+            object = Kilt::Object.new('another_prefix', { 'name' => 'Apple' } )
+            Kilt.create object
 
-          object = Kilt::Object.new('another_prefix', { 'name' => 'Apple' } )
-          Kilt.create object
+            Timecop.freeze Time.now + 1
+            timestamp = (Time.now.to_f * 1000).to_i
 
-          Timecop.freeze Time.now + 1
+            object = Kilt::Object.new('another_prefix', { 'name' => 'Apple' } )
+            Kilt.create object
 
-          object = Kilt::Object.new('another_prefix', { 'name' => 'Apple' } )
-          Kilt.create object
+            object['slug'].must_equal "another-apple-#{timestamp}"
 
-          object['slug'].must_equal 'another-apple-978328801000'
+          end
 
         end
 
