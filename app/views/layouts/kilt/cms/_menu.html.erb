@@ -1,12 +1,6 @@
 <header class="hd">
     <div class="wr">
         <h6><a href="<%= kilt_engine.root_path %>"><%= Kilt.config.name %></a></h6>
-        <a class="button small dashboard" href="<%= kilt_engine.root_path %>">Dashboard</a>
-        <% Kilt.types.each do |type| %>
-          <% 
-              plural   = Kilt::Formatting.plural_name_of type
-          %>
-          <%= link_to plural, list_path(type.pluralize), class: "button small dashboard" %>
-        <% end %>
+        <a class="button dashboard home" href="<%= kilt_engine.root_path %>">Admin Home</a>
     </div>
 </header>

@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <title><%= Kilt.config.name %></title>
         
-        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,800,300" rel="stylesheet" type="text/css">
+        <link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>
         <%= stylesheet_link_tag "kilt/application", :media => "all" %>
         
         <%= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.min.js" %>
@@ -15,6 +15,7 @@
         <%= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/htmlmixed/htmlmixed.min.js" %>
         
         <%= javascript_include_tag "kilt/application" %>
+        
         <%= csrf_meta_tags %>
 </head>
 <body>
@@ -24,6 +25,12 @@
     <section class="body">
         <%= yield %>
     </section>
+    
+    <footer>
+        <div class="icon">
+            <%= link_to image_tag('kilt/logo.png'), 'http://github.com/kilt-cms/kilt-cms', :target => '_blank' %>
+        </div>
+    </footer>
     
 </body>
 </html>

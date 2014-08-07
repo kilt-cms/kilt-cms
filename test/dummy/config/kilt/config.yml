@@ -1,4 +1,4 @@
-name: Dummy
+name: Test Kilt CMS App
 storage:
   strategy: local
 objects:
@@ -15,3 +15,12 @@ objects:
       vimeo_video: vimeo
       youtube_video: youtube
       other: file
+  satchel:
+    fields:
+      name: text
+      weight: number
+      description: longtext
+  dictionary:
+    fields:
+      name: text
+    

@@ -1,3 +1,4 @@
+
 <div class="wr">
 
     <% 
@@ -5,9 +6,8 @@
         plural   = Kilt::Formatting.plural_name_of @type
     %>
 
-    <h2><%= plural %></h2>
-
     <div class="page-actions">
+        <h3><%= plural %></h3>
         <%= link_to "New #{singular}", new_object_path(@type.singularize), :class => 'button' %>
     </div>
 

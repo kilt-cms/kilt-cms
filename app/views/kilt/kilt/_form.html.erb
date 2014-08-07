@@ -6,11 +6,15 @@
         plural   = Kilt::Formatting.plural_name_of @type
     %>
     
-    <h2><%= @object['name'] %> <small><%= singular %></small></h2>
-
     <div class="page-actions">
-        <%= link_to "← Back to #{plural}", list_path(@type), :class => 'button back' %>
-        <%= link_to "New #{singular}", new_object_path(@type), :class => 'button back' if !@object.empty? %>
+        <h2><%= @object['name'] || "New #{singular}" %> 
+            <% if @object['name'] %>
+                <small>Type: <%= singular %></small>
+            <% end %>
+        </h2>
+
+        <%= link_to "← Back to #{plural}", list_path(@type), :class => 'button back newline' %>
+        <%= link_to "New #{singular}", new_object_path(@type), :class => 'button back newline' if !@object.empty? %>
     </div>
 
     <% if flash[:error] -%>
@@ -33,7 +37,7 @@
         <% end %>
 
         <div class="form-input actions">
-            <input type="submit" class="submit save" value="Save">
+            <input type="submit" class="submit button save" value="Save">
         </div>
 
     <% end%>
