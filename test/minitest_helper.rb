@@ -37,7 +37,7 @@ end
 
 def setup_the_database_with config
   Kilt.config = config
-  Kilt::Utils.use_db(:active_record) if ENV['TRAVIS']
+  Kilt::Utils.use_db(:active_record) # default the tests to AR
   Kilt::Utils.setup_db
 end
 
@@ -64,6 +64,14 @@ end
 def clear_out_rethinkdb
   Kilt::Utils.database.delete_all
 rescue
+end
+
+def persistence_models_to_test
+  models = [['using active record for persistence', :active_record]]
+  if ENV['TEST_WITH_RETHINKDB']
+    models << ['using rethinkdb for persistence', :rethinkdb]
+  end
+  models.map { |args| Struct.new(:description, :db_type).new(*args) }
 end
 
 setup_the_database
