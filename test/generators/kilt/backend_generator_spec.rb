@@ -44,13 +44,6 @@ describe Kilt::Generators::BackendGenerator do
       generator.generate
     end
 
-    it "should copy the rethinkdb credential file to the app" do
-      root_result = Object.new
-      root.stubs(:join).with('config', 'kilt', 'creds.yml.rethinkdb.example').returns root_result
-      generator.expects(:copy_file).with 'creds.yml.rethinkdb.example', root_result
-      generator.generate
-    end
-
     it "should copy the kilt.rb file as an app initializer" do
       root_result = Object.new
       root.stubs(:join).with('config', 'initializers', 'kilt.rb').returns root_result
