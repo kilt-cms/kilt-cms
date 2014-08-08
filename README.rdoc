@@ -70,7 +70,7 @@ If you would like to use RethinkDB as your datastore, you'll need to copy the re
     
 - Go back to /admin and you'll see the new object type. Click around and add some objects of that type.
 
-- From here, try using it on the front-end by creating controllers and views like you would in any other rails app. Instead of calling to a database, though, use the Kilt methods found in the rake taske, or listed on the homepage.
+- From here, try using it on the front-end by creating controllers and views like you would in any other rails app. Instead of calling to a database, though, use the Kilt methods found in the rake task, or listed on the homepage.
 
 - You can override the admin menu by copying app/views/layouts/kilt/cms/_menu.html.erb to your own project.
 
