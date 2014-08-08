@@ -43,7 +43,6 @@ end
 
 def clear_out_the_database
   clear_out_active_record
-  clear_out_rethinkdb
 end
 
 def clear_out_active_record
@@ -61,16 +60,8 @@ def clear_out_active_record
   ActiveRecord::Base.establish_connection options
 end
 
-def clear_out_rethinkdb
-  Kilt::Utils.database.delete_all
-rescue
-end
-
 def persistence_models_to_test
   models = [['using active record for persistence', :active_record]]
-  if ENV['TEST_WITH_RETHINKDB']
-    models << ['using rethinkdb for persistence', :rethinkdb]
-  end
   models.map { |args| Struct.new(:description, :db_type).new(*args) }
 end
 
