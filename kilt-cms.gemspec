@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.email       = ["community@asheavenue.com"]
   s.homepage    = "http://community.asheavenue.com"
   s.summary     = "Microsite Platform for Rails 4"
-  s.description = "Microsite Platform for Rails 4 built with RethinkDB"
+  s.description = "Microsite Platform for Rails 4"
   s.license     = 'MIT'
   
   s.required_ruby_version = '>= 2.0.0'
