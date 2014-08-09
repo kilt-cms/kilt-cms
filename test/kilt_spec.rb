@@ -114,18 +114,10 @@ describe Kilt do
         [1, 2, 3, 4].each do |error_count|
 
           describe "when creating a record fails" do
-            if persistence.db_type == :active_record
-              it "should return false" do
-                KiltObject.stubs(:create!).raises 'error'
-                object = Kilt::Object.new('dog', { 'name' => 'A name.' } )
-                Kilt.create(object).must_equal false
-              end
-            else
-              it "should return false" do
-                Kilt::DB::RethinkDb.any_instance.stubs(:execute).returns( { 'errors' => error_count } )
-                object = Kilt::Object.new('dog', { 'name' => 'A name.' } )
-                Kilt.create(object).must_equal false
-              end
+            it "should return false" do
+              KiltObject.stubs(:create!).raises 'error'
+              object = Kilt::Object.new('dog', { 'name' => 'A name.' } )
+              Kilt.create(object).must_equal false
             end
           end
 
@@ -396,16 +388,9 @@ describe Kilt do
           Kilt.delete(object['slug']).must_equal true
         end
 
-        if persistence.db_type == :active_record
-          it "should return false if the delete returned errors" do
-            KiltObject.any_instance.stubs(:delete).raises 'error'
-            Kilt.delete(object['slug']).must_equal false
-          end
-        else
-          it "should return false if the delete returned errors" do
-            Kilt::DB::RethinkDb.any_instance.stubs(:execute).returns( { 'errors' => 1 } )
-            Kilt.delete(object['slug']).must_equal false
-          end
+        it "should return false if the delete returned errors" do
+          KiltObject.any_instance.stubs(:delete).raises 'error'
+          Kilt.delete(object['slug']).must_equal false
         end
 
       end

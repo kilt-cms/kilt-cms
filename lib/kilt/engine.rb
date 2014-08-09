@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'rethinkdb'
 require 'rails_config'
 require 'jquery-rails'
 require 'jquery-ui-rails'

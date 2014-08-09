@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.email       = ["community@asheavenue.com"]
   s.homepage    = "http://community.asheavenue.com"
   s.summary     = "Microsite Platform for Rails 4"
-  s.description = "Microsite Platform for Rails 4 built with RethinkDB"
+  s.description = "Microsite Platform for Rails 4"
   s.license     = 'MIT'
   
   s.required_ruby_version = '>= 2.0.0'
@@ -17,7 +17,6 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency 'rails', '>= 4.0.1'
-  s.add_dependency 'rethinkdb'
   s.add_dependency 'rails_config'
   s.add_dependency 'jquery-rails'
   s.add_dependency 'jquery-ui-rails', '4.2.1'

@@ -22,7 +22,6 @@ module Kilt
 
       def add_the_credential_file_examples
         copy_file 'creds.yml.example', Rails.root.join('config', 'kilt', 'creds.yml')
-        copy_file 'creds.yml.rethinkdb.example', Rails.root.join('config', 'kilt', 'creds.yml.rethinkdb.example')
       end
 
       def add_the_database_migration_file

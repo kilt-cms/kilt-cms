@@ -16,11 +16,7 @@ module Kilt
     end
     
     def self.database
-      @database ||= if @db_type == :active_record
-                      Kilt::DB::ActiveRecord.new
-                    else
-                      Kilt::DB::RethinkDb.new current_db_config
-                    end
+      Kilt::DB::ActiveRecord.new
     end
 
     def self.current_db_config
