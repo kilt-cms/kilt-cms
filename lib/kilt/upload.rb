@@ -12,8 +12,8 @@ module Kilt
     def self.do(type, file_reference)
       if Kilt.config.storage.strategy == 'local'
         self.handle_local_upload(type, file_reference)
-      #elsif Kilt.config.storage.strategy == 's3'
-        #self.handle_s3_upload(type, file_reference)
+      elsif Kilt.config.storage.strategy == 's3'
+        self.handle_s3_upload(type, file_reference)
       end
     end
     
@@ -32,7 +32,7 @@ module Kilt
     end
     
     def self.handle_s3_upload(type, file_reference)
-      #Kilt::Utils.ensure_s3_bucket_exists
+      Kilt::Utils.ensure_s3_bucket_exists
       #if file_reference
         #begin
           #s3 = AWS::S3.new(

@@ -98,6 +98,20 @@ describe Kilt::Upload do
 
     end
 
+    describe "uploading a file to s3" do
+
+      let(:strategy) { 's3' }
+
+      it "should ensure that the s3 bucket exists" do
+
+        Kilt::Utils.expects(:ensure_s3_bucket_exists)
+
+        Kilt::Upload.do type, file_reference
+
+      end
+
+    end
+
   end
 
 end
