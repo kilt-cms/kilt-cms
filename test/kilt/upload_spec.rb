@@ -70,6 +70,34 @@ describe Kilt::Upload do
 
     end
 
+    describe "actually writing the file locally" do
+
+      let(:strategy) { 'local' }
+
+      let(:test_file) { "test/test_s3.txt" }
+
+      before do
+        File.delete(test_file) if File.exists? test_file
+      end
+
+      after do
+        File.delete(test_file) if File.exists? test_file
+      end
+
+      it "should write the file" do
+        Kilt::Utils.stubs(:ensure_local_storage_dir_exists)
+
+        random_content = SecureRandom.uuid
+        file_reference.stubs(:read).returns random_content
+        root.stubs(:join).returns test_file
+
+        Kilt::Upload.do type, file_reference
+
+        File.open(test_file).read.must_equal random_content
+      end
+
+    end
+
   end
 
 end
