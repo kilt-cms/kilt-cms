@@ -157,6 +157,40 @@ describe Kilt::Upload do
         result.must_be_same_as file_reference.original_filename
       end
 
+      describe "when the s3 write fails" do
+
+        before do
+          the_file.expects(:write).raises 'error'
+        end
+
+        it "should eat the error" do
+          # this better not fail
+          Kilt::Upload.do type, file_reference
+        end
+
+        it "should return an empty string" do
+          result = Kilt::Upload.do type, file_reference
+          result.must_equal ''
+        end
+
+      end
+
+      describe "when there is an error getting the s3 object" do
+        before do
+          AWS::S3.stubs(:new).raises 'error'
+        end
+
+        it "should eat the error" do
+          # this better not fail
+          Kilt::Upload.do type, file_reference
+        end
+
+        it "should return an empty string" do
+          result = Kilt::Upload.do type, file_reference
+          result.must_equal ''
+        end
+      end
+
     end
 
   end
