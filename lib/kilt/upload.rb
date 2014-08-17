@@ -2,7 +2,8 @@ module Kilt
   module Upload  
 
     def self.uploadable_types
-      ['file', 'image']
+      types = ['file', 'image'] + Kilt.config.uploadable_types.to_s.split(',').map { |x| x.strip }
+      types.group_by { |x| x }.map { |x| x[0] }
     end
     
     def self.do(type, file_reference)

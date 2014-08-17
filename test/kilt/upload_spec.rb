@@ -247,4 +247,63 @@ describe Kilt::Upload do
 
   end
 
+  describe "uploadable types" do
+
+    let(:strategy) { nil }
+
+    describe "and no config was set" do
+
+      before do
+        config.stubs(:uploadable_types).returns nil
+      end
+
+      it "should return file and image" do
+        types = Kilt::Upload.uploadable_types
+        types.count.must_equal 2
+        types.include?('file').must_equal true
+        types.include?('image').must_equal true
+      end
+    end
+
+    describe "and the fields were overridden by config" do
+
+      before do
+        config.stubs(:uploadable_types).returns 'a, b, c'
+      end
+
+      it "should return file and image" do
+        types = Kilt::Upload.uploadable_types
+        types.include?('file').must_equal true
+        types.include?('image').must_equal true
+      end
+
+      it "should return the types" do
+        types = Kilt::Upload.uploadable_types
+        types.include?('a').must_equal true
+        types.include?('b').must_equal true
+        types.include?('c').must_equal true
+      end
+
+    end
+
+    describe "and some edge cases" do
+
+      before do
+        config.stubs(:uploadable_types).returns 'r, r, r, file, image, q, s'
+      end
+
+      it "should return every type only once" do
+        types = Kilt::Upload.uploadable_types
+        types.count.must_equal 5
+        types.include?('r').must_equal true
+        types.include?('q').must_equal true
+        types.include?('s').must_equal true
+        types.include?('file').must_equal true
+        types.include?('image').must_equal true
+      end
+
+    end
+
+  end
+
 end
