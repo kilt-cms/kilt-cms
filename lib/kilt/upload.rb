@@ -1,5 +1,9 @@
 module Kilt
   module Upload  
+
+    def self.uploadable_types
+      ['file', 'image']
+    end
     
     def self.do(type, file_reference)
       uploader = begin
