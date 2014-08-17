@@ -220,7 +220,7 @@ describe Kilt::Upload do
 
   end
 
-  describe "field types" do
+  describe "uploading different fields" do
 
     let(:strategy)       { Object.new }
     let(:file_reference) { Object.new }
@@ -247,41 +247,41 @@ describe Kilt::Upload do
 
   end
 
-  describe "uploadable types" do
+  describe "uploadable fields" do
 
     let(:strategy) { nil }
 
     describe "and no config was set" do
 
       before do
-        config.stubs(:uploadable_types).returns nil
+        config.stubs(:uploadable_fields).returns nil
       end
 
       it "should return file and image" do
-        types = Kilt::Upload.uploadable_types
-        types.count.must_equal 2
-        types.include?('file').must_equal true
-        types.include?('image').must_equal true
+        fields = Kilt::Upload.uploadable_fields
+        fields.count.must_equal 2
+        fields.include?('file').must_equal true
+        fields.include?('image').must_equal true
       end
     end
 
     describe "and the fields were overridden by config" do
 
       before do
-        config.stubs(:uploadable_types).returns 'a, b, c'
+        config.stubs(:uploadable_fields).returns 'a, b, c'
       end
 
       it "should return file and image" do
-        types = Kilt::Upload.uploadable_types
-        types.include?('file').must_equal true
-        types.include?('image').must_equal true
+        fields = Kilt::Upload.uploadable_fields
+        fields.include?('file').must_equal true
+        fields.include?('image').must_equal true
       end
 
-      it "should return the types" do
-        types = Kilt::Upload.uploadable_types
-        types.include?('a').must_equal true
-        types.include?('b').must_equal true
-        types.include?('c').must_equal true
+      it "should return the fields" do
+        fields = Kilt::Upload.uploadable_fields
+        fields.include?('a').must_equal true
+        fields.include?('b').must_equal true
+        fields.include?('c').must_equal true
       end
 
     end
@@ -289,17 +289,17 @@ describe Kilt::Upload do
     describe "and some edge cases" do
 
       before do
-        config.stubs(:uploadable_types).returns 'r, r, r, file, image, q, s'
+        config.stubs(:uploadable_fields).returns 'r, r, r, file, image, q, s'
       end
 
       it "should return every type only once" do
-        types = Kilt::Upload.uploadable_types
-        types.count.must_equal 5
-        types.include?('r').must_equal true
-        types.include?('q').must_equal true
-        types.include?('s').must_equal true
-        types.include?('file').must_equal true
-        types.include?('image').must_equal true
+        fields = Kilt::Upload.uploadable_fields
+        fields.count.must_equal 5
+        fields.include?('r').must_equal true
+        fields.include?('q').must_equal true
+        fields.include?('s').must_equal true
+        fields.include?('file').must_equal true
+        fields.include?('image').must_equal true
       end
 
     end
