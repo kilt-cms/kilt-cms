@@ -33,7 +33,7 @@ module Kilt
     
     def self.handle_s3_upload(type, file_reference)
       Kilt::Utils.ensure_s3_bucket_exists
-      #if file_reference
+      if file_reference
         begin
           s3 = AWS::S3.new(
             :access_key_id     => Kilt.config.s3.key,
@@ -45,9 +45,9 @@ module Kilt
         rescue
           ''
         end
-      #else
-        #''
-      #end
+      else
+        ''
+      end
     end
     
   end

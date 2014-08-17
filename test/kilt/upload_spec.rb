@@ -193,6 +193,31 @@ describe Kilt::Upload do
 
     end
 
+    describe "when no file reference is passed with a s3 type" do
+
+      let(:strategy) { 's3' }
+
+      before do
+        Kilt::Utils.stubs(:ensure_s3_bucket_exists)
+      end
+
+      it "should ensure that the s3 bucket exists" do
+        Kilt::Utils.expects(:ensure_s3_bucket_exists)
+        Kilt::Upload.do type, nil
+      end
+
+      it "should not attempt to hit s3" do
+        AWS::S3.expects(:new).never
+        Kilt::Upload.do type, nil
+      end
+
+      it "should return an empty string" do
+        result = Kilt::Upload.do type, nil
+        result.must_equal ''
+      end
+
+    end
+
   end
 
 end
