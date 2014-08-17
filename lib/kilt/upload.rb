@@ -1,5 +1,5 @@
 module Kilt
-  class Upload  
+  module Upload  
     
     def self.file(file_reference)
       self.do('file', file_reference)
