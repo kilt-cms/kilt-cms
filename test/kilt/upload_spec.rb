@@ -109,44 +109,52 @@ describe Kilt::Upload do
               .new(Object.new, Object.new, Object.new)
       end
 
+      let(:s3)       {  Object.new }
+      let(:bucket)   { Object.new }
+      let(:buckets)  { Object.new }
+      let(:objects)  { Object.new }
+      let(:the_file) { Object.new }
+
+      let(:the_location_of_the_temp_file) { Object.new }
+
       before do
         Kilt::Utils.stubs(:ensure_s3_bucket_exists)
         config.stubs(:s3).returns s3_config
-      end
 
-      #it "should ensure that the s3 bucket exists" do
-        #Kilt::Utils.expects(:ensure_s3_bucket_exists)
-        #Kilt::Upload.do type, file_reference
-      #end
-
-      it "should write the file to the bucket" do
-        s3 = Object.new
         AWS::S3.stubs(:new)
                .with(access_key_id:     s3_config.key,
                      secret_access_key: s3_config.secret)
                .returns s3
-        bucket = Object.new
-        buckets = Object.new
+
         s3.stubs(:buckets).returns buckets
         buckets.stubs(:[]).with(s3_config.bucket).returns bucket
 
-        objects = Object.new
         bucket.stubs(:objects).returns objects
 
-        the_file = Object.new
         objects.stubs(:[])
                .with("#{type}/#{file_reference.original_filename}")
                .returns the_file
 
-        the_location_of_the_temp_file = Object.new
         Pathname.stubs(:new)
                 .with(file_reference.tempfile)
                 .returns the_location_of_the_temp_file
 
-        the_file.expects(:write).with(the_location_of_the_temp_file, { acl: :public_read } )
+        the_file.stubs(:write)
+      end
 
+      it "should ensure that the s3 bucket exists" do
+        Kilt::Utils.expects(:ensure_s3_bucket_exists)
         Kilt::Upload.do type, file_reference
-          
+      end
+
+      it "should write the file to the bucket" do
+        the_file.expects(:write).with(the_location_of_the_temp_file, { acl: :public_read } )
+        Kilt::Upload.do type, file_reference
+      end
+
+      it "should return the original filename" do
+        result = Kilt::Upload.do type, file_reference
+        result.must_be_same_as file_reference.original_filename
       end
 
     end

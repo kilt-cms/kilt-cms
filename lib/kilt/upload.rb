@@ -40,8 +40,8 @@ module Kilt
             :secret_access_key => Kilt.config.s3.secret)   
           bucket = s3.buckets[Kilt.config.s3.bucket]
           new_file = bucket.objects["#{type}/#{file_reference.original_filename}"]
-          #new_file.write(Pathname.new(file_reference.tempfile), :acl => :public_read)
-          #file_reference.original_filename
+          new_file.write(Pathname.new(file_reference.tempfile), :acl => :public_read)
+          file_reference.original_filename
         #rescue
           #''
         #end
