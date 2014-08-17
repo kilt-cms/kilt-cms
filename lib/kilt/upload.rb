@@ -2,11 +2,13 @@ module Kilt
   module Upload  
     
     def self.do(type, file_reference)
-      if Kilt.config.storage.strategy == 'local'
-        ::Kilt::Upload::Local.upload type, file_reference
-      elsif Kilt.config.storage.strategy == 's3'
-        ::Kilt::Upload::S3.upload type, file_reference
-      end
+      uploader = begin
+                   strategy = Kilt.config.storage.strategy.to_s
+                   "Kilt::Upload::#{strategy.classify}".constantize
+                 rescue
+                   nil
+                 end
+      uploader.upload(type, file_reference) if uploader
     end
 
     class << self
