@@ -16,7 +16,7 @@ describe Kilt::Upload do
     let(:root) { Object.new }
 
     let(:file_reference) do
-      Struct.new(:original_filename, :read).new Object.new, nil
+      Struct.new(:original_filename, :read, :tempfile).new SecureRandom.uuid, nil, Object.new
     end
 
     before do
@@ -102,12 +102,51 @@ describe Kilt::Upload do
 
       let(:strategy) { 's3' }
 
-      it "should ensure that the s3 bucket exists" do
+      let(:type) { SecureRandom.uuid  }
 
-        Kilt::Utils.expects(:ensure_s3_bucket_exists)
+      let(:s3_config) do
+        Struct.new(:key, :secret, :bucket)
+              .new(Object.new, Object.new, Object.new)
+      end
+
+      before do
+        Kilt::Utils.stubs(:ensure_s3_bucket_exists)
+        config.stubs(:s3).returns s3_config
+      end
+
+      #it "should ensure that the s3 bucket exists" do
+        #Kilt::Utils.expects(:ensure_s3_bucket_exists)
+        #Kilt::Upload.do type, file_reference
+      #end
+
+      it "should write the file to the bucket" do
+        s3 = Object.new
+        AWS::S3.stubs(:new)
+               .with(access_key_id:     s3_config.key,
+                     secret_access_key: s3_config.secret)
+               .returns s3
+        bucket = Object.new
+        buckets = Object.new
+        s3.stubs(:buckets).returns buckets
+        buckets.stubs(:[]).with(s3_config.bucket).returns bucket
+
+        objects = Object.new
+        bucket.stubs(:objects).returns objects
+
+        the_file = Object.new
+        objects.stubs(:[])
+               .with("#{type}/#{file_reference.original_filename}")
+               .returns the_file
+
+        the_location_of_the_temp_file = Object.new
+        Pathname.stubs(:new)
+                .with(file_reference.tempfile)
+                .returns the_location_of_the_temp_file
+
+        the_file.expects(:write).with(the_location_of_the_temp_file, { acl: :public_read } )
 
         Kilt::Upload.do type, file_reference
-
+          
       end
 
     end
