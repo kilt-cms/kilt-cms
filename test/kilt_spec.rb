@@ -515,4 +515,14 @@ describe Kilt do
 
   end
 
+  describe "all_used_fields" do
+    it "should return a list of all of the used fields" do
+      fields = Kilt.all_used_fields
+      fields.count.must_equal 3
+      fields.include?("file").must_equal true
+      fields.include?("text").must_equal true
+      fields.include?("image").must_equal true
+    end
+  end
+
 end

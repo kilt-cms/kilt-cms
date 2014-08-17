@@ -78,4 +78,20 @@ module Kilt
     Kilt::ObjectCollection.new results
   end
 
+  # Get every field type used
+  # Returns: Array of strings
+  # Example: Kilt.all_used_fields
+  def self.all_used_fields
+    used_field_types = Kilt.config[:objects].map do |object|
+                         object.map do |config|
+                           begin
+                             config[:fields].map { |_, v| v }
+                           rescue
+                             nil
+                           end
+                         end
+                       end.flatten
+    used_field_types.select { |x| x }.group_by { |x| x }.map { |x| x[0] }
+  end
+
 end
