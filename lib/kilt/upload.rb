@@ -12,8 +12,8 @@ module Kilt
     def self.do(type, file_reference)
       if Kilt.config.storage.strategy == 'local'
         self.handle_local_upload(type, file_reference)
-      elsif Kilt.config.storage.strategy == 's3'
-        self.handle_s3_upload(type, file_reference)
+      #elsif Kilt.config.storage.strategy == 's3'
+        #self.handle_s3_upload(type, file_reference)
       end
     end
     
@@ -32,22 +32,22 @@ module Kilt
     end
     
     def self.handle_s3_upload(type, file_reference)
-      Kilt::Utils.ensure_s3_bucket_exists
-      if file_reference
-        begin
-          s3 = AWS::S3.new(
-            :access_key_id     => Kilt.config.s3.key,
-            :secret_access_key => Kilt.config.s3.secret)   
-          bucket = s3.buckets[Kilt.config.s3.bucket]
-          new_file = bucket.objects["#{type}/#{file_reference.original_filename}"]
-          new_file.write(Pathname.new(file_reference.tempfile), :acl => :public_read)
-          file_reference.original_filename
-        rescue
-          ''
-        end
-      else
-        ''
-      end
+      #Kilt::Utils.ensure_s3_bucket_exists
+      #if file_reference
+        #begin
+          #s3 = AWS::S3.new(
+            #:access_key_id     => Kilt.config.s3.key,
+            #:secret_access_key => Kilt.config.s3.secret)   
+          #bucket = s3.buckets[Kilt.config.s3.bucket]
+          #new_file = bucket.objects["#{type}/#{file_reference.original_filename}"]
+          #new_file.write(Pathname.new(file_reference.tempfile), :acl => :public_read)
+          #file_reference.original_filename
+        #rescue
+          #''
+        #end
+      #else
+        #''
+      #end
     end
     
   end
