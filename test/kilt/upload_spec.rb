@@ -220,4 +220,31 @@ describe Kilt::Upload do
 
   end
 
+  describe "field types" do
+
+    let(:strategy)       { Object.new }
+    let(:file_reference) { Object.new }
+
+    [:image, :file].each do |type|
+
+      describe type do
+
+        it "should call the do method and return the result" do
+          expected_result = Object.new
+
+          Kilt::Upload.stubs(:do)
+                      .with(type.to_s, file_reference)
+                      .returns expected_result
+
+          result = Kilt::Upload.send type, file_reference
+
+          result.must_be_same_as expected_result
+        end
+
+      end
+
+    end
+
+  end
+
 end
