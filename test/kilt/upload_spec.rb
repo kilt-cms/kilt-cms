@@ -109,7 +109,7 @@ describe Kilt::Upload do
               .new(Object.new, Object.new, Object.new)
       end
 
-      let(:s3)       {  Object.new }
+      let(:s3)       { Object.new }
       let(:bucket)   { Object.new }
       let(:buckets)  { Object.new }
       let(:objects)  { Object.new }
