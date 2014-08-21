@@ -1,0 +1,6 @@
+<% Kilt.all_used_fields.each do |field| %>
+  <% begin %>
+    <%= render partial: "kilt/form/#{field}_#{type}" %>
+  <% rescue %>
+  <% end %>
+<% end %>
