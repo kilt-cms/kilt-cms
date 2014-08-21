@@ -4,6 +4,7 @@ module Kilt
     protect_from_forgery
     before_filter :ensure_config
     before_filter :authorize
+    before_filter :show_default_creds_warning
     
     # Show all the object types
     def index
@@ -136,6 +137,13 @@ module Kilt
       else
         true
       end
+    end
+
+    def show_default_creds_warning
+      @show_default_creds_warning = Kilt.config.auth && Kilt.config.auth.username && Kilt.config.auth.password &&
+                                    Kilt.config.default_auth && Kilt.config.default_auth.username && Kilt.config.default_auth.password &&
+                                    Kilt.config.auth.username == Kilt.config.default_auth.username &&
+                                    Kilt.config.auth.password == Kilt.config.default_auth.password
     end
     
   end
