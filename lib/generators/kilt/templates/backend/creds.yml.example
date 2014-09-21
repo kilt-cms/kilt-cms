@@ -12,5 +12,9 @@ s3:
   secret: <S3 secret>
   bucket: <S3 bucket>
 auth:
-  username: <Username>
-  password: <Password>
+  username: admin
+  password: changeme
+default_auth:
+  username: admin
+  password: changeme
+  note: "Feel free to remove default_auth when you change your username/password"
