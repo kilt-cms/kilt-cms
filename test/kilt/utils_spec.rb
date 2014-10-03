@@ -140,8 +140,7 @@ describe Kilt::Utils do
 
     after do
       Kilt::Utils.instance_eval do
-        @fancy_database = nil
-        @fancy_type     = nil
+        @special_types = nil
       end
     end
 
@@ -174,6 +173,33 @@ describe Kilt::Utils do
 
         end
 
+      end
+
+    end
+
+    describe "if a new database is registered for two types" do
+
+      let(:cat_database) { Object.new }
+      let(:dog_database) { Object.new }
+
+      before do
+        Kilt::Utils.register_database_for(:cat) do
+          cat_database
+        end
+
+        Kilt::Utils.register_database_for(:dog) do
+          cat_database
+        end
+      end
+
+      it "should use the cat database for cats" do
+        database = Kilt::Utils.database_for :cat
+        database.must_be_same_as cat_database
+      end
+
+      it "should use the dog database for dogs" do
+        database = Kilt::Utils.database_for :dog
+        database.wont_be_same_as dog_database
       end
 
     end

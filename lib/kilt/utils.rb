@@ -16,12 +16,13 @@ module Kilt
     end
 
     def self.register_database_for type, &block
-      @fancy_database = block.call
-      @fancy_type = type
+      @special_types ||= {}
+      @special_types[type] = block.call
     end
 
     def self.database_for type
-      return @fancy_database if @fancy_database && @fancy_type == type
+      @special_types ||= {}
+      return @special_types[type] if @special_types[type]
       Kilt::DB::ActiveRecord.new
     end
 
