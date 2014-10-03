@@ -145,7 +145,7 @@ describe Kilt::Utils do
       end
     end
 
-    describe "if a new database is registered for cat" do
+    describe "if a new database is registered for one type" do
 
       [
         [:cat, :dog],
