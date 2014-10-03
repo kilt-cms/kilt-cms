@@ -38,7 +38,6 @@ module Kilt
       s3 = AWS::S3.new(
         :access_key_id     => Kilt.config.s3.key,
         :secret_access_key => Kilt.config.s3.secret)  
-      puts s3 
       bucket = s3.buckets[Kilt.config.s3.bucket]
       if !bucket.exists?
         bucket = s3.buckets.create(Kilt.config.s3.bucket, :acl => :public_read)
