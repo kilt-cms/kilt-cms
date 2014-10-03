@@ -20,7 +20,7 @@ module Kilt
     end
 
     def self.database_for type
-      return @fancy_database if @fancy_database
+      return @fancy_database if @fancy_database && type == :cat
       Kilt::DB::ActiveRecord.new
     end
 

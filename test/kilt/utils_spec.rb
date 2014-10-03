@@ -159,6 +159,11 @@ describe Kilt::Utils do
         database.must_be_same_as cat_database
       end
 
+      it "should still use the old database for dog" do
+        database = Kilt::Utils.database_for :dog
+        database.wont_be_same_as cat_database
+      end
+
     end
 
   end
