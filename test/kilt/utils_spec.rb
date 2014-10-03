@@ -6,7 +6,7 @@ describe Kilt::Utils do
     it "should call setup on the current database" do
 
       database = Object.new
-      Kilt::Utils.stubs(:database).returns database
+      Kilt::Utils.stubs(:database_for).with(nil).returns database
 
       database.expects(:setup!)
 
@@ -38,7 +38,7 @@ describe Kilt::Utils do
 
           Kilt::DB::ActiveRecord.stubs(:new).returns database
 
-          Kilt::Utils.database.must_be_same_as database
+          Kilt::Utils.database_for(nil).must_be_same_as database
 
         end
 
@@ -52,7 +52,7 @@ describe Kilt::Utils do
 
           Kilt::DB::ActiveRecord.stubs(:new).returns database
 
-          Kilt::Utils.database.must_be_same_as Kilt::Utils.database
+          Kilt::Utils.database_for(nil).must_be_same_as Kilt::Utils.database_for(nil)
 
         end
 
@@ -68,7 +68,7 @@ describe Kilt::Utils do
 
             Kilt::DB::ActiveRecord.stubs(:new).returns database
 
-            Kilt::Utils.database.must_be_same_as database
+            Kilt::Utils.database_for(nil).must_be_same_as database
 
           end
 
@@ -99,7 +99,7 @@ describe Kilt::Utils do
 
           Kilt::DB::ActiveRecord.stubs(:new).returns database
 
-          Kilt::Utils.database.must_be_same_as database
+          Kilt::Utils.database_for(nil).must_be_same_as database
 
         end
 

@@ -40,7 +40,7 @@ module Kilt
     object['type']       = object.instance_eval { @type }
     object['slug']       = Slugger.slug_for object
 
-    Utils.database.create object
+    Utils.database_for(nil).create object
   end
 
   # Update an object
@@ -50,21 +50,21 @@ module Kilt
     object['updated_at'] = Time.now
     object['slug']       = Slugger.slug_for object
 
-    Utils.database.update object
+    Utils.database_for(nil).update object
   end
 
   # Delete an object
   # Returns: boolean
   # Example: Kilt.delete('some-object')
   def self.delete(slug)
-    Utils.database.delete slug
+    Utils.database_for(nil).delete slug
   end
 
   # Get the content for a specific object
   # Returns: Kilt::Object instance
   # Example: Kilt.object('big-event')
   def self.get(slug)
-    result = Utils.database.find(slug)
+    result = Utils.database_for(nil).find(slug)
     result ? Kilt::Object.new(result['type'], result)
            : nil
   end
@@ -74,7 +74,7 @@ module Kilt
   # Example: Kilt.objects('events')
   # Used directly or via method_missing
   def self.get_collection(object_type)
-    results = Utils.database.find_all_by_type object_type
+    results = Utils.database_for(nil).find_all_by_type object_type
     Kilt::ObjectCollection.new results
   end
 

@@ -6,17 +6,13 @@ module Kilt
       if db_type = current_db_config[:type]
         use_db(db_type.to_sym)
       end
-      database.setup!
+      database_for(nil).setup!
     end
 
     def self.use_db db_type
       return if @db_type == db_type
       @db_type = db_type
       @database = nil
-    end
-    
-    def self.database
-      Kilt::DB::ActiveRecord.new
     end
 
     def self.database_for type
