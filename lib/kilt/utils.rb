@@ -17,10 +17,11 @@ module Kilt
 
     def self.register_database_for type, &block
       @fancy_database = block.call
+      @fancy_type = type
     end
 
     def self.database_for type
-      return @fancy_database if @fancy_database && type == :cat
+      return @fancy_database if @fancy_database && @fancy_type == type
       Kilt::DB::ActiveRecord.new
     end
 

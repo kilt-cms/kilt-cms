@@ -141,27 +141,39 @@ describe Kilt::Utils do
     after do
       Kilt::Utils.instance_eval do
         @fancy_database = nil
+        @fancy_type     = nil
       end
     end
 
     describe "if a new database is registered for cat" do
 
-      let(:cat_database) { Object.new }
+      [
+        [:cat, :dog],
+        [:dog, :cat],
+      ].map { |x| Struct.new(:special, :regular).new(*x) }.each do |example|
 
-      before do
-        Kilt::Utils.register_database_for(:cat) do
-          cat_database
+        describe "multiple examples" do
+
+          let(:special_database) { Object.new }
+
+          before do
+            Kilt::Utils.register_database_for(example.special) do
+              special_database
+            end
+          end
+
+          it "should use the new database for #{example.special}" do
+            database = Kilt::Utils.database_for example.special
+            database.must_be_same_as special_database
+          end
+
+          it "should still use the old database for dog" do
+            database = Kilt::Utils.database_for example.regular
+            database.wont_be_same_as special_database
+          end
+
         end
-      end
 
-      it "should use the new database for cat" do
-        database = Kilt::Utils.database_for :cat
-        database.must_be_same_as cat_database
-      end
-
-      it "should still use the old database for dog" do
-        database = Kilt::Utils.database_for :dog
-        database.wont_be_same_as cat_database
       end
 
     end
