@@ -19,6 +19,10 @@ module Kilt
       Kilt::DB::ActiveRecord.new
     end
 
+    def self.database_for type
+      Kilt::DB::ActiveRecord.new
+    end
+
     def self.current_db_config
       current_environment = (ENV['RAILS_ENV'].to_s == '' ? 'development' : ENV['RAILS_ENV']).to_sym
       Kilt.config[current_environment][:db]
