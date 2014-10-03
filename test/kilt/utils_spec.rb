@@ -144,15 +144,20 @@ describe Kilt::Utils do
       end
     end
 
-    it "should use the new database" do
+    describe "if a new database is registered for cat" do
 
-      cat_database = Object.new
-      Kilt::Utils.register_database_for(:cat) do
-        cat_database
+      let(:cat_database) { Object.new }
+
+      before do
+        Kilt::Utils.register_database_for(:cat) do
+          cat_database
+        end
       end
 
-      database = Kilt::Utils.database_for :cat
-      database.must_be_same_as cat_database
+      it "should use the new database for cat" do
+        database = Kilt::Utils.database_for :cat
+        database.must_be_same_as cat_database
+      end
 
     end
 
