@@ -15,7 +15,12 @@ module Kilt
       @database = nil
     end
 
+    def self.register_database_for type, &block
+      @fancy_database = block.call
+    end
+
     def self.database_for type
+      return @fancy_database if @fancy_database
       Kilt::DB::ActiveRecord.new
     end
 

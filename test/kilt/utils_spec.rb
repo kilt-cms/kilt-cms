@@ -136,4 +136,26 @@ describe Kilt::Utils do
     end
   end
 
+  describe "different databases for different types" do
+
+    after do
+      Kilt::Utils.instance_eval do
+        @fancy_database = nil
+      end
+    end
+
+    it "should use the new database" do
+
+      cat_database = Object.new
+      Kilt::Utils.register_database_for(:cat) do
+        cat_database
+      end
+
+      database = Kilt::Utils.database_for :cat
+      database.must_be_same_as cat_database
+
+    end
+
+  end
+
 end
