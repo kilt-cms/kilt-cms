@@ -26,10 +26,6 @@ Note: We're trying to find a way around that last step, but for now we're just e
 
     $ rails g kilt:install
 
-- To create a new Rails app:
-
-    $ rails new Blah
-
 - If you want to use S3 for your image and file uploads, add your S3 info to creds.yml. Also set the following in your config.yml:
 
     storage:
