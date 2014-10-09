@@ -25,6 +25,10 @@ Note: We're trying to find a way around that last step, but for now we're just e
 - Run the Kilt generator:
 
     $ rails g kilt:install
+    
+- Run the migrations. This will add one table to your application:
+
+    $ rake db:migrate
 
 - If you want to use S3 for your image and file uploads, add your S3 info to creds.yml. Also set the following in your config.yml:
 
