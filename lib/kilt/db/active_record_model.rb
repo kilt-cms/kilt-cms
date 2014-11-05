@@ -24,6 +24,18 @@ module Kilt
       rescue
         false
       end
+
+      def update data
+        giraffe = Giraffe.where(id: data['unique_id']).first
+        return false unless giraffe
+        data.each do |k, v|
+          begin
+            giraffe.send("#{k}=".to_sym, v)
+          rescue
+          end
+        end
+        giraffe.save!
+      end
     end
   end
 end

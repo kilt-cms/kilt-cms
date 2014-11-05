@@ -91,4 +91,47 @@ describe Kilt::DB::ActiveRecordModel do
 
   end
 
+  describe "update" do
+
+    describe "provided a block of data for a record that exists" do
+
+      let(:giraffe) { Giraffe.create }
+      let(:data)    { { 'unique_id' => giraffe.id } }
+
+      it "should update the reord" do
+        data['first_name'] = SecureRandom.uuid
+        data['last_name']  = SecureRandom.uuid
+        data['city']       = SecureRandom.uuid
+        data['state']      = SecureRandom.uuid
+        data['height']     = SecureRandom.uuid
+        database.update data
+        result = Giraffe.find giraffe.id
+        result.first_name.must_equal data['first_name']
+        result.last_name.must_equal data['last_name']
+        result.city.must_equal data['city']
+        result.state.must_equal data['state']
+        result.height.must_equal data['height']
+      end
+
+      it "should return true" do
+        data['first_name'] = SecureRandom.uuid
+        result = database.update data
+        result.must_equal true
+      end
+
+    end
+
+    describe "provided a block of data for a record that DOES NOT exist" do
+      let(:giraffe) { Giraffe.create }
+      let(:data)    { { 'unique_id' => giraffe.id + 1 } }
+
+      it "should return false" do
+        result = database.update data
+        result.must_equal false
+      end
+
+    end
+
+  end
+
 end
