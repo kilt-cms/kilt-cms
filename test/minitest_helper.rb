@@ -69,3 +69,7 @@ setup_the_database
 
 class Giraffe < ActiveRecord::Base
 end
+
+class Tiger < Giraffe
+  self.table_name = "giraffes"
+end
