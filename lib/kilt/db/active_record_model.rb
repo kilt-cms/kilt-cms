@@ -11,14 +11,11 @@ module Kilt
       end
 
       def find id
-        record = model.find id
-        JSON.parse(record.to_json).merge( 'unique_id' => record.id )
+        convert_to_json model.find(id)
       end
 
       def find_all_by_type _
-        model.all.map do |record|
-          JSON.parse(record.to_json).merge( 'unique_id' => record.id )
-        end
+        model.all.map { |r| convert_to_json r }
       end
 
       def create data
@@ -53,6 +50,12 @@ module Kilt
         return false unless record
         record.delete
         true
+      end
+
+      private
+
+      def convert_to_json record
+        JSON.parse(record.to_json).merge( 'unique_id' => record.id )
       end
 
     end
