@@ -11,7 +11,8 @@ module Kilt
       end
 
       def find id
-        convert_to_json model.find(id)
+        record = find_this_record id
+        record ? convert_to_json(record) : nil
       end
 
       def find_all_by_type _
