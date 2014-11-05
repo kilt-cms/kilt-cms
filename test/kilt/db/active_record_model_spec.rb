@@ -119,6 +119,19 @@ describe Kilt::DB::ActiveRecordModel do
         result.must_equal true
       end
 
+      it "should use the save method that throws on errors" do
+        Giraffe.any_instance.expects(:save!)
+        database.update data
+      end
+
+      describe "and an error occurs during the save" do
+        it "should return false" do
+          Giraffe.any_instance.stubs(:save!).raises 'k'
+          result = database.update data
+          result.must_equal false
+        end
+      end
+
     end
 
     describe "provided a block of data for a record that DOES NOT exist" do

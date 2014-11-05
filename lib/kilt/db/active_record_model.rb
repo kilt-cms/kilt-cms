@@ -35,6 +35,8 @@ module Kilt
           end
         end
         giraffe.save!
+      rescue
+        false
       end
     end
   end
