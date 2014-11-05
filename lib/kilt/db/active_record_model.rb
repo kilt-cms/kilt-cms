@@ -11,6 +11,18 @@ module Kilt
       def find_all_by_type _
         Giraffe.all
       end
+
+      def create data
+
+        giraffe = Giraffe.new
+        data.each do |k, v|
+          begin
+            giraffe.send("#{k}=".to_sym, v)
+          rescue
+          end
+        end
+        giraffe.save
+      end
     end
   end
 end

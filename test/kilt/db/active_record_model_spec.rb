@@ -31,4 +31,49 @@ describe Kilt::DB::ActiveRecordModel do
 
   end
 
+  describe "create" do
+    it "should create a new record" do
+      data = {}
+      database = Kilt::DB::ActiveRecordModel.new Giraffe
+      database.create data
+      Giraffe.count.must_equal 1
+    end
+
+    it "should assign the properties" do
+      data = { 
+               first_name: SecureRandom.uuid,
+               last_name:  SecureRandom.uuid,
+               city:       SecureRandom.uuid,
+               state:      SecureRandom.uuid,
+               height:     SecureRandom.uuid,
+             }
+      database = Kilt::DB::ActiveRecordModel.new Giraffe
+      database.create data
+      Giraffe.first.first_name.must_equal data[:first_name]
+      Giraffe.first.last_name.must_equal data[:last_name]
+      Giraffe.first.city.must_equal data[:city]
+      Giraffe.first.state.must_equal data[:state]
+      Giraffe.first.height.must_equal data[:height]
+    end
+
+    it "should ignore properties not on the model" do
+      data = { 
+               something_else: SecureRandom.uuid,
+               first_name:     SecureRandom.uuid,
+             }
+      database = Kilt::DB::ActiveRecordModel.new Giraffe
+      database.create data
+      Giraffe.first.first_name.must_equal data[:first_name]
+    end
+
+    it "should return true properties not on the model" do
+      data = { 
+               first_name:     SecureRandom.uuid,
+             }
+      database = Kilt::DB::ActiveRecordModel.new Giraffe
+      database.create(data).must_equal true
+    end
+
+  end
+
 end
