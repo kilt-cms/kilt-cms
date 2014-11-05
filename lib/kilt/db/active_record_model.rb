@@ -20,12 +20,7 @@ module Kilt
 
       def create data
         record = model.new
-        data.each do |k, v|
-          begin
-            record.send("#{k}=".to_sym, v)
-          rescue
-          end
-        end
+        update_record_with_this_data record, data
         record.save!
       rescue
         false
@@ -34,12 +29,7 @@ module Kilt
       def update data
         record = model.where(id: data['unique_id']).first
         return false unless record
-        data.each do |k, v|
-          begin
-            record.send("#{k}=".to_sym, v)
-          rescue
-          end
-        end
+        update_record_with_this_data record, data
         record.save!
       rescue
         false
@@ -56,6 +46,15 @@ module Kilt
 
       def convert_to_json record
         JSON.parse(record.to_json).merge( 'unique_id' => record.id )
+      end
+
+      def update_record_with_this_data record, data
+        data.each { |k, v| set_record_attribute record, k, v }
+      end
+
+      def set_record_attribute record, key, value
+        record.send("#{key}=".to_sym, value)
+      rescue
       end
 
     end
