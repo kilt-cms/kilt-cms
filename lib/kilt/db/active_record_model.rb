@@ -13,7 +13,6 @@ module Kilt
       end
 
       def create data
-
         giraffe = Giraffe.new
         data.each do |k, v|
           begin
@@ -21,7 +20,9 @@ module Kilt
           rescue
           end
         end
-        giraffe.save
+        giraffe.save!
+      rescue
+        false
       end
     end
   end

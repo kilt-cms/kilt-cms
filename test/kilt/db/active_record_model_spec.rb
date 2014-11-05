@@ -32,6 +32,7 @@ describe Kilt::DB::ActiveRecordModel do
   end
 
   describe "create" do
+
     it "should create a new record" do
       data = {}
       database.create data
@@ -68,6 +69,24 @@ describe Kilt::DB::ActiveRecordModel do
                first_name:     SecureRandom.uuid,
              }
       database.create(data).must_equal true
+    end
+
+    it "should use the save method that throws an error" do
+      data = { 
+               first_name:     SecureRandom.uuid,
+             }
+      Giraffe.any_instance.expects(:save!)
+      database.create(data)
+    end
+
+    describe "an error is thrown when saving the model" do
+      it "should return false" do
+        data = { 
+                 first_name:     SecureRandom.uuid,
+               }
+        Giraffe.any_instance.expects(:save!).raises 'k'
+        database.create(data).must_equal false
+      end
     end
 
   end
