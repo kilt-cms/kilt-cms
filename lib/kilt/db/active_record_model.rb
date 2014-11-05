@@ -27,7 +27,7 @@ module Kilt
       end
 
       def update data
-        record = model.where(id: data['unique_id']).first
+        record = find_this_record data['unique_id']
         return false unless record
         update_record_with_this_data record, data
         record.save!
@@ -36,13 +36,17 @@ module Kilt
       end
 
       def delete id
-        record = model.where(id: id).first
+        record = find_this_record id
         return false unless record
         record.delete
         true
       end
 
       private
+
+      def find_this_record id
+        model.where(id: id).first
+      end
 
       def convert_to_json record
         JSON.parse(record.to_json).merge( 'unique_id' => record.id )
