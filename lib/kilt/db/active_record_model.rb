@@ -38,6 +38,13 @@ module Kilt
       rescue
         false
       end
+
+      def delete id
+        giraffe = Giraffe.where(id: id).first
+        return false unless giraffe
+        giraffe.delete
+        true
+      end
     end
   end
 end

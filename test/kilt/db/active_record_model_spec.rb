@@ -147,4 +147,47 @@ describe Kilt::DB::ActiveRecordModel do
 
   end
 
+  describe "delete" do
+
+    describe "the record being deleted exists" do
+
+      let(:giraffe) { Giraffe.create }
+
+      before do
+        Giraffe.create
+        giraffe
+        Giraffe.create
+      end
+
+      it "should delete the record with the matching id" do
+        database.delete giraffe.id
+
+        Giraffe.count.must_equal 2
+        Giraffe.where(id: giraffe.id).count.must_equal 0
+      end
+
+      it "should return true" do
+        database.delete(giraffe.id).must_equal true
+      end
+
+    end
+
+    describe "the record being deleted does not exist" do
+
+      let(:giraffe) { Giraffe.create }
+
+      before do
+        Giraffe.create
+        giraffe
+        Giraffe.create
+        giraffe.delete
+      end
+
+      it "should return falses" do
+        database.delete(giraffe.id).must_equal false
+      end
+
+    end
+  end
+
 end
