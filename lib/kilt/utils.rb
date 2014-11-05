@@ -17,12 +17,12 @@ module Kilt
 
     def self.register_database_for type, &block
       @special_types ||= {}
-      @special_types[type] = block
+      @special_types[type.to_s.underscore] = block
     end
 
     def self.database_for type
       @special_types ||= {}
-      return @special_types[type].call if @special_types[type]
+      return @special_types[type.to_s.underscore].call if @special_types[type.to_s.underscore]
       Kilt::DB::ActiveRecord.new
     end
 

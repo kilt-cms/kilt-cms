@@ -147,18 +147,35 @@ describe Kilt::Utils do
     describe "if a new database is registered for one type" do
 
       [
-        [:cat, :dog],
-        [:dog, :cat],
+        [:cat,    :dog],
+        [:dog,    :cat],
+        [Giraffe, :cat],
       ].map { |x| Struct.new(:special, :regular).new(*x) }.each do |example|
 
         describe "multiple examples" do
 
           let(:special_database) { Object.new }
 
-          it "should use the new database for #{example.special}" do
-            Kilt::Utils.register_database_for(example.special) { special_database }
-            database = Kilt::Utils.database_for example.special
-            database.must_be_same_as special_database
+          describe "getting the database back out" do
+            it "should use the new database for #{example.special}" do
+              Kilt::Utils.register_database_for(example.special) { special_database }
+              database = Kilt::Utils.database_for example.special
+              database.must_be_same_as special_database
+            end
+
+            it "should allow retrieval with a string #{example.special}" do
+              symbol = example.special.to_s.underscore
+              Kilt::Utils.register_database_for(example.special) { special_database }
+              database = Kilt::Utils.database_for symbol
+              database.must_be_same_as special_database
+            end
+
+            it "should allow retrieval with a symbol #{example.special}" do
+              symbol = example.special.to_s.underscore.to_sym
+              Kilt::Utils.register_database_for(example.special) { special_database }
+              database = Kilt::Utils.database_for symbol
+              database.must_be_same_as special_database
+            end
           end
 
           it "should still use the old database for dog" do
