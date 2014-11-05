@@ -155,20 +155,20 @@ describe Kilt::Utils do
 
           let(:special_database) { Object.new }
 
-          before do
-            Kilt::Utils.register_database_for(example.special) do
-              special_database
-            end
-          end
-
           it "should use the new database for #{example.special}" do
+            Kilt::Utils.register_database_for(example.special) { special_database }
             database = Kilt::Utils.database_for example.special
             database.must_be_same_as special_database
           end
 
           it "should still use the old database for dog" do
+            Kilt::Utils.register_database_for(example.special) { special_database }
             database = Kilt::Utils.database_for example.regular
             database.wont_be_same_as special_database
+          end
+
+          it "should not call the database block if the database is not requested" do
+            Kilt::Utils.register_database_for(example.special) { raise 'k' }
           end
 
         end
