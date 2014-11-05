@@ -6,6 +6,8 @@ describe Kilt::DB::ActiveRecordModel do
     clear_out_the_database
   end
 
+  let(:database) { Kilt::DB::ActiveRecordModel.new Giraffe }
+
   it "should accept an AR model as a constructor argument" do
     Kilt::DB::ActiveRecordModel.new Giraffe
   end
@@ -13,7 +15,6 @@ describe Kilt::DB::ActiveRecordModel do
   describe "find" do
     it "should allow the finding of an object by an id" do
       giraffe = Giraffe.create
-      database = Kilt::DB::ActiveRecordModel.new Giraffe
       result = database.find giraffe.id
       result.id.must_equal giraffe.id
     end
@@ -24,7 +25,6 @@ describe Kilt::DB::ActiveRecordModel do
     it "should return nothing all of the records" do
       all_the_giraffes = Object.new
       Giraffe.stubs(:all).returns all_the_giraffes
-      database = Kilt::DB::ActiveRecordModel.new Giraffe
       result = database.find_all_by_type nil
       result.must_be_same_as all_the_giraffes
     end
@@ -34,7 +34,6 @@ describe Kilt::DB::ActiveRecordModel do
   describe "create" do
     it "should create a new record" do
       data = {}
-      database = Kilt::DB::ActiveRecordModel.new Giraffe
       database.create data
       Giraffe.count.must_equal 1
     end
@@ -47,7 +46,6 @@ describe Kilt::DB::ActiveRecordModel do
                state:      SecureRandom.uuid,
                height:     SecureRandom.uuid,
              }
-      database = Kilt::DB::ActiveRecordModel.new Giraffe
       database.create data
       Giraffe.first.first_name.must_equal data[:first_name]
       Giraffe.first.last_name.must_equal data[:last_name]
@@ -61,7 +59,6 @@ describe Kilt::DB::ActiveRecordModel do
                something_else: SecureRandom.uuid,
                first_name:     SecureRandom.uuid,
              }
-      database = Kilt::DB::ActiveRecordModel.new Giraffe
       database.create data
       Giraffe.first.first_name.must_equal data[:first_name]
     end
@@ -70,7 +67,6 @@ describe Kilt::DB::ActiveRecordModel do
       data = { 
                first_name:     SecureRandom.uuid,
              }
-      database = Kilt::DB::ActiveRecordModel.new Giraffe
       database.create(data).must_equal true
     end
 
