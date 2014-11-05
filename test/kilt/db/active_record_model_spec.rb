@@ -13,11 +13,30 @@ describe Kilt::DB::ActiveRecordModel do
   end
 
   describe "find" do
+
     it "should allow the finding of an object by an id" do
       giraffe = Giraffe.create
       result = database.find giraffe.id
-      result.id.must_equal giraffe.id
+      result['id'].must_equal giraffe.id
     end
+
+    it "should return the jsonified data of the object in question" do
+      giraffe = Struct.new(:id).new(Object.new)
+      json    = Object.new
+      giraffe.stubs(:to_json).returns json
+      data    = { SecureRandom.uuid => SecureRandom.uuid }
+      JSON.stubs(:parse).with(json).returns data
+      Giraffe.stubs(:find).with(giraffe.id).returns giraffe
+      result = database.find giraffe.id
+      result[data.first[0]].must_be_same_as data.first[1]
+    end
+
+    it "should set the unique id to be the id of the record" do
+      giraffe = Giraffe.create
+      result = database.find giraffe.id
+      result['unique_id'].must_equal giraffe.id
+    end
+
   end
 
   describe "find all by type" do
@@ -188,6 +207,7 @@ describe Kilt::DB::ActiveRecordModel do
       end
 
     end
+
   end
 
 end

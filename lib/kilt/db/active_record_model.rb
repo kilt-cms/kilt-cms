@@ -5,7 +5,8 @@ module Kilt
       end
 
       def find id
-        Giraffe.find id
+        giraffe = Giraffe.find id
+        JSON.parse(giraffe.to_json).merge( 'unique_id' => giraffe.id )
       end
 
       def find_all_by_type _
