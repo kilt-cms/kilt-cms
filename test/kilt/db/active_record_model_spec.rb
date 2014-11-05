@@ -41,11 +41,18 @@ describe Kilt::DB::ActiveRecordModel do
 
   describe "find all by type" do
 
-    it "should return nothing all of the records" do
-      all_the_giraffes = Object.new
-      Giraffe.stubs(:all).returns all_the_giraffes
+    it "should return all of the records" do
+      all_the_giraffes = [Giraffe.create, Giraffe.create, Giraffe.create]
       result = database.find_all_by_type nil
-      result.must_be_same_as all_the_giraffes
+      result.count.must_equal 3
+    end
+
+    it "should return hashes for each record" do
+      all_the_giraffes = [Giraffe.create, Giraffe.create, Giraffe.create]
+      result = database.find_all_by_type nil
+      result[0]['unique_id'].must_equal all_the_giraffes[0].id
+      result[1]['unique_id'].must_equal all_the_giraffes[1].id
+      result[2]['unique_id'].must_equal all_the_giraffes[2].id
     end
 
   end

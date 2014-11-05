@@ -10,7 +10,9 @@ module Kilt
       end
 
       def find_all_by_type _
-        Giraffe.all
+        Giraffe.all.map do |giraffe|
+          JSON.parse(giraffe.to_json).merge( 'unique_id' => giraffe.id )
+        end
       end
 
       def create data
