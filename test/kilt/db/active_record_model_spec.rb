@@ -58,6 +58,18 @@ describe Kilt::DB::ActiveRecordModel do
             result['unique_id'].must_equal giraffe.id
           end
 
+          it "should set the slug" do
+            giraffe = model.create
+
+            slug    = Object.new
+            database.stubs(:slug_for).with do |data|
+              data['unique_id'] == giraffe.id
+            end.returns slug
+
+            result = database.find giraffe.id
+            result['slug'].must_be_same_as slug
+          end
+
         end
 
         describe "when the record does not exist" do

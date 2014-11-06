@@ -53,7 +53,9 @@ module Kilt
       end
 
       def convert_to_json record
-        JSON.parse(record.to_json).merge( 'unique_id' => record.id )
+        data = JSON.parse(record.to_json).merge( 'unique_id' => record.id )
+        data['slug'] = slug_for data
+        data
       end
 
       def update_record_with_this_data record, data
