@@ -15,24 +15,22 @@ module Kilt
       @database = nil
     end
 
-    def self.register_database_for type, &block
+    def self.special_types
       @special_types ||= {}
+    end
+
+    def self.register_database_for type, &block
       type = make_consistent type
-      @special_types[type] = block
+      special_types[type] = block
     end
 
     def self.databases
-      if @special_types
-        [database_for(nil), @special_types.keys.map { |k| database_for(k) } ].flatten
-      else
-        [database_for(nil)]
-      end
+      [database_for(nil), special_types.keys.map { |k| database_for(k) }].flatten
     end
 
     def self.database_for type
-      @special_types ||= {}
       type = make_consistent(type)
-      return @special_types[type].call if @special_types[type]
+      return special_types[type].call if special_types[type]
       Kilt::DB::ActiveRecord.new
     end
 
