@@ -22,7 +22,11 @@ module Kilt
     end
 
     def self.databases
-      [database_for(nil)]
+      if @special_types
+        [database_for(nil), @special_types.keys.map { |k| database_for(k) } ].flatten
+      else
+        [database_for(nil)]
+      end
     end
 
     def self.database_for type

@@ -223,4 +223,77 @@ describe Kilt::Utils do
 
   end
 
+  describe "databases" do
+
+    let(:default_database) { Object.new }
+
+    before do
+      Kilt::Utils.instance_eval { @special_types = nil }
+      Kilt::Utils.stubs(:database_for).with(nil).returns default_database
+    end
+
+    after { Kilt::Utils.instance_eval { @special_types = nil } }
+
+    it "should return one database" do
+      Kilt::Utils.databases.count.must_equal 1
+    end
+
+    it "should start with the default database (database_for nil)" do
+      Kilt::Utils.databases.first.must_be_same_as default_database
+    end
+
+    describe "and I registered a database" do
+
+      let(:second_database) { Object.new }
+
+      before do
+        key = SecureRandom.uuid.underscore
+        Kilt::Utils.register_database_for(key) { second_database }
+        Kilt::Utils.stubs(:database_for).with(key).returns second_database
+      end
+
+      it "should have 2 databases" do
+        Kilt::Utils.databases.count.must_equal 2
+      end
+
+      it "should bring the default database up first" do
+        Kilt::Utils.databases[0].must_be_same_as default_database
+      end
+
+      it "should return the special database second" do
+        Kilt::Utils.databases[1].must_be_same_as second_database
+      end
+
+      describe "and I registered a third database" do
+
+        let(:third_database) { Object.new }
+
+        before do
+          key = SecureRandom.uuid.underscore
+          Kilt::Utils.register_database_for(key) { third_database }
+          Kilt::Utils.stubs(:database_for).with(key).returns third_database
+        end
+
+        it "should have 3 databases" do
+          Kilt::Utils.databases.count.must_equal 3
+        end
+
+        it "should bring the default database up first" do
+          Kilt::Utils.databases[0].must_be_same_as default_database
+        end
+
+        it "should return the second database second" do
+          Kilt::Utils.databases[1].must_be_same_as second_database
+        end
+
+        it "should return the third database third" do
+          Kilt::Utils.databases[2].must_be_same_as third_database
+        end
+
+      end
+
+    end
+
+  end
+
 end
