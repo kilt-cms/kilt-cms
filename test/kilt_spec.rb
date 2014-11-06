@@ -592,6 +592,38 @@ describe Kilt do
 
   end
 
+  describe "deleting records from multiple databases" do
+
+    let(:slug)      { Object.new }
+    let(:databases) { [Object.new, Object.new, Object.new] }
+    let(:data)      { { 'type' => Object.new } }
+
+    before do
+      Kilt::Utils.stubs(:databases).returns databases
+      databases.each { |d| d.stubs(:find).returns nil }
+    end
+
+    [0, 1, 2].each do |index|
+
+      describe "deleting a record from database #{index}" do
+
+        let(:expected) { Object.new }
+
+        before do
+          databases[index].stubs(:find).with(slug).returns data
+        end
+
+        it "should delete the record" do
+          databases[index].expects(:delete).with slug
+          Kilt.delete slug
+        end
+
+      end
+
+    end
+
+  end
+
   describe "all_used_fields" do
     it "should return a list of all of the used fields" do
       fields = Kilt.all_used_fields
