@@ -59,14 +59,14 @@ module Kilt
   # Returns: boolean
   # Example: Kilt.delete('some-object')
   def self.delete(slug)
-    Utils.database_for(nil).delete slug
+    Utils.databases.first.delete slug
   end
 
   # Get the content for a specific object
   # Returns: Kilt::Object instance
   # Example: Kilt.object('big-event')
   def self.get(slug)
-    result = Utils.database_for(nil).find(slug)
+    result = Utils.databases.first.find(slug)
     result ? Kilt::Object.new(result['type'], result)
            : nil
   end

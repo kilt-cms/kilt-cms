@@ -21,6 +21,10 @@ module Kilt
       @special_types[type] = block
     end
 
+    def self.databases
+      [database_for(nil)]
+    end
+
     def self.database_for type
       @special_types ||= {}
       type = make_consistent(type)
