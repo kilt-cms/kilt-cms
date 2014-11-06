@@ -11,7 +11,7 @@ module Kilt
       end
 
       def find id
-        type, id = id.to_s.split('_')
+        type, id = id.to_s.split('-')
         return nil unless type == model.to_s.underscore
         record = find_this_record id
         record ? convert_to_json(record) : nil
@@ -46,7 +46,7 @@ module Kilt
       end
 
       def slug_for object
-        "#{model.to_s.underscore}_#{object['unique_id']}"
+        "#{model.to_s.underscore}-#{object['unique_id']}"
       end
 
       private

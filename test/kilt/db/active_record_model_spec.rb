@@ -26,7 +26,7 @@ describe Kilt::DB::ActiveRecordModel do
       describe "slug for" do
         it "should return the object type with the id " do
           id = SecureRandom.uuid
-          expected = "#{model.to_s.underscore}_#{id}"
+          expected = "#{model.to_s.underscore}-#{id}"
 
           object = { 'unique_id' => id }
           result = database.slug_for object
@@ -39,24 +39,23 @@ describe Kilt::DB::ActiveRecordModel do
 
         describe "when the record exists" do
 
-
           it "should allow the finding of an object by an id" do
             giraffe = model.create
-            slug    = "#{model.to_s.underscore}_#{giraffe.id}"
+            slug    = "#{model.to_s.underscore}-#{giraffe.id}"
             result  = database.find slug
             result['id'].must_equal giraffe.id
           end
 
           it "should return the jsonified data of the object in question" do
-            giraffe = Struct.new(:id).new(SecureRandom.uuid)
+            giraffe = Struct.new(:id).new(SecureRandom.uuid.gsub('-', ''))
             json    = Object.new
-            data    = { SecureRandom.uuid => SecureRandom.uuid }
+            data    = { SecureRandom.uuid => SecureRandom.uuid.gsub('-', '') }
 
             giraffe.stubs(:to_json).returns json
             JSON.stubs(:parse).with(json).returns data
             model.stubs(:where).with(id: giraffe.id).returns [giraffe]
 
-            slug = "#{model.to_s.underscore}_#{giraffe.id}"
+            slug = "#{model.to_s.underscore}-#{giraffe.id}"
 
             result = database.find slug
             result[data.first[0]].must_be_same_as data.first[1]
@@ -64,7 +63,7 @@ describe Kilt::DB::ActiveRecordModel do
 
           it "should set the unique id to be the id of the record" do
             giraffe = model.create
-            slug    = "#{model.to_s.underscore}_#{giraffe.id}"
+            slug    = "#{model.to_s.underscore}-#{giraffe.id}"
             result = database.find slug
             result['unique_id'].must_equal giraffe.id
           end
@@ -77,14 +76,14 @@ describe Kilt::DB::ActiveRecordModel do
               data['unique_id'] == giraffe.id
             end.returns slug
 
-            result = database.find "#{model.to_s.underscore}_#{giraffe.id}"
+            result = database.find "#{model.to_s.underscore}-#{giraffe.id}"
             result['slug'].must_be_same_as slug
           end
 
           describe "the model in the slug does not match the current type" do
             it "should return nil" do
               giraffe = model.create
-              slug    = "#{SecureRandom.uuid}_#{giraffe.id}"
+              slug    = "#{SecureRandom.uuid}-#{giraffe.id}"
               database.find(slug).nil?.must_equal true
             end
           end
