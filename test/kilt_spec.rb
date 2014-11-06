@@ -112,7 +112,7 @@ describe Kilt do
                 database = Object.new
                 object   = Kilt::Object.new(scenario.type, values)
 
-                Kilt::Slugger.stubs(:slug_for)
+                database.stubs(:slug_for)
                 Kilt::Utils.stubs(:database_for)
                            .with(scenario.type)
                            .returns database
@@ -198,8 +198,8 @@ describe Kilt do
 
             describe "using the correct database when updating" do
               it "should use the object type to determine which database to use" do
-                Kilt::Slugger.stubs(:slug_for)
                 database = Object.new
+                database.stubs(:slug_for)
                 Kilt::Utils.stubs(:database_for)
                            .with(scenario.type)
                            .returns database

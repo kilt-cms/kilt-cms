@@ -38,19 +38,21 @@ module Kilt
     object['created_at'] = object['updated_at'] = Time.now
     object['unique_id']  = "#{(Time.now.to_f * 1000).to_i}"
     object['type']       = object.type
-    object['slug']       = Slugger.slug_for object
 
-    Utils.database_for(object['type']).create object
+    database = Utils.database_for(object['type'])
+    object['slug'] = database.slug_for object
+    database.create object
   end
 
   # Update an object
   # Returns: boolean
   # Example: Kilt.update(object)
   def self.update(slug, object)
+    database = Utils.database_for(object['type'])
     object['updated_at'] = Time.now
-    object['slug']       = Slugger.slug_for object
+    object['slug']       = database.slug_for object
 
-    Utils.database_for(object['type']).update object
+    database.update object
   end
 
   # Delete an object
