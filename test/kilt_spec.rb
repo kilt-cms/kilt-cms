@@ -559,6 +559,39 @@ describe Kilt do
 
   end
 
+  describe "getting records from multiple databases" do
+
+    let(:slug)      { Object.new }
+    let(:databases) { [Object.new, Object.new, Object.new] }
+    let(:data)      { { 'type' => Object.new } }
+
+    before do
+      Kilt::Utils.stubs(:databases).returns databases
+      databases.each { |d| d.stubs(:find).returns nil }
+    end
+
+    [0, 1, 2].each do |index|
+
+      describe "pulling a record from database #{index}" do
+
+        let(:expected) { Object.new }
+
+        before do
+          databases[index].stubs(:find).with(slug).returns data
+          Kilt::Object.stubs(:new).with(data['type'], data).returns expected
+        end
+
+        it "should return the record" do
+          result = Kilt.get(slug)
+          result.must_be_same_as expected
+        end
+
+      end
+
+    end
+
+  end
+
   describe "all_used_fields" do
     it "should return a list of all of the used fields" do
       fields = Kilt.all_used_fields

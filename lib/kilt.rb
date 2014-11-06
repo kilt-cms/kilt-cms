@@ -66,9 +66,8 @@ module Kilt
   # Returns: Kilt::Object instance
   # Example: Kilt.object('big-event')
   def self.get(slug)
-    data = Utils.databases.first.find(slug)
-    data ? Kilt::Object.new(result['type'], result)
-         : nil
+    data = Utils.databases.map { |d| d.find(slug) }.select { |x| x }.first
+    data ? Kilt::Object.new(data['type'], data) : nil
   end
   
   # Get a list of objects
