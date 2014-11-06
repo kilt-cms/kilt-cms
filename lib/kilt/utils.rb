@@ -17,12 +17,13 @@ module Kilt
 
     def self.register_database_for type, &block
       @special_types ||= {}
-      @special_types[type.to_s.underscore] = block
+      type = make_consistent type
+      @special_types[type] = block
     end
 
     def self.database_for type
       @special_types ||= {}
-      type = type.to_s.underscore
+      type = make_consistent(type)
       return @special_types[type].call if @special_types[type]
       Kilt::DB::ActiveRecord.new
     end
@@ -156,6 +157,13 @@ module Kilt
         lines << 'Then open config/kilt/config.yml and config/kilt/creds.yml, add your database information, define your data model, start Rails, and visit http://&lt;your_app&gt;/admin'
       end
       lines.join("\n")
+    end
+
+    class << self
+      private
+      def make_consistent type
+        type.to_s.underscore
+      end
     end
     
   end
