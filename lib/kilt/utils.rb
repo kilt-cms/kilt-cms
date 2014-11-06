@@ -22,7 +22,8 @@ module Kilt
 
     def self.database_for type
       @special_types ||= {}
-      return @special_types[type.to_s.underscore].call if @special_types[type.to_s.underscore]
+      type = type.to_s.underscore
+      return @special_types[type].call if @special_types[type]
       Kilt::DB::ActiveRecord.new
     end
 
