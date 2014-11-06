@@ -97,6 +97,7 @@ module Kilt
 
   class << self
     private
+
     def look_in_all_databases_for slug
       Utils.databases.each do |database|
         object = database.find slug
@@ -104,6 +105,7 @@ module Kilt
       end
       nil
     end
+
   end
 
 end
