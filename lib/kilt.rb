@@ -59,18 +59,15 @@ module Kilt
   # Returns: boolean
   # Example: Kilt.delete('some-object')
   def self.delete(slug)
-    Utils.databases.each do |database|
-      if database.find slug
-        return database.delete slug
-      end
-    end
+    look_in_all_databases_for(slug)[:database]
+      .delete slug
   end
 
   # Get the content for a specific object
   # Returns: Kilt::Object instance
   # Example: Kilt.object('big-event')
   def self.get(slug)
-    data = look_in_all_databases_for slug
+    data = look_in_all_databases_for(slug)[:data]
     data ? Kilt::Object.new(data['type'], data) : nil
   end
   
@@ -104,10 +101,11 @@ module Kilt
 
     def look_in_all_databases_for slug
       Utils.databases.each do |database|
-        object = database.find slug
-        return object if object
+        if object = database.find(slug)
+          return { data: object, database: database }
+        end
       end
-      nil
+      { database: Utils.databases.first }
     end
 
   end
