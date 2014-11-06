@@ -44,6 +44,7 @@ module Kilt
       end
 
       def slug_for object
+        "#{model.to_s.underscore}_#{object['unique_id']}"
       end
 
       private

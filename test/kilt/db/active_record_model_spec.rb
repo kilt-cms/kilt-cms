@@ -24,8 +24,14 @@ describe Kilt::DB::ActiveRecordModel do
       end
 
       describe "slug for" do
-        it "should return nil" do
-          database.slug_for(nil).nil?.must_equal true
+        it "should return the object type with the id " do
+          id = SecureRandom.uuid
+          expected = "#{model.to_s.underscore}_#{id}"
+
+          object = { 'unique_id' => id }
+          result = database.slug_for object
+
+          result.must_equal expected
         end
       end
 
