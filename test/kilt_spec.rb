@@ -107,6 +107,21 @@ describe Kilt do
 
             end
 
+            describe "using the correct database" do
+              it "should use the type of the object to determine which database to use" do
+                database = Object.new
+                object   = Kilt::Object.new(scenario.type, values)
+
+                Kilt::Slugger.stubs(:slug_for)
+                Kilt::Utils.stubs(:database_for)
+                           .with(scenario.type)
+                           .returns database
+                database.expects(:create).with object
+
+                Kilt.create object
+              end
+            end
+
           end
 
         end

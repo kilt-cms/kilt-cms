@@ -40,7 +40,7 @@ module Kilt
     object['type']       = object.instance_eval { @type }
     object['slug']       = Slugger.slug_for object
 
-    Utils.database_for(nil).create object
+    Utils.database_for(object['type']).create object
   end
 
   # Update an object
