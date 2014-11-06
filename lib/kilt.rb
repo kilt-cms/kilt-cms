@@ -37,7 +37,7 @@ module Kilt
   def self.create(object)
     object['created_at'] = object['updated_at'] = Time.now
     object['unique_id']  = "#{(Time.now.to_f * 1000).to_i}"
-    object['type']       = object.instance_eval { @type }
+    object['type']       = object.type
     object['slug']       = Slugger.slug_for object
 
     Utils.database_for(object['type']).create object
