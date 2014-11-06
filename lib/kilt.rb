@@ -74,7 +74,7 @@ module Kilt
   # Example: Kilt.objects('events')
   # Used directly or via method_missing
   def self.get_collection(object_type)
-    results = Utils.database_for(nil).find_all_by_type object_type
+    results = Utils.database_for(object_type).find_all_by_type object_type
     Kilt::ObjectCollection.new results
   end
 

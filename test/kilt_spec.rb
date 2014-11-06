@@ -393,6 +393,23 @@ describe Kilt do
 
           end
 
+          describe "using the correct databsae for the object type" do
+            it "should use the object type when looking up the collection" do
+              records  = Object.new
+              expected = Object.new
+              database = Object.new
+              Kilt::Utils.stubs(:database_for)
+                         .with(scenario.type)
+                         .returns database
+              database.stubs(:find_all_by_type).with(scenario.type).returns records
+
+              Kilt::ObjectCollection.stubs(:new).with(records).returns expected
+
+              results = Kilt.get_collection scenario.type
+              results.must_be_same_as expected
+            end
+          end
+
         end
 
       end
