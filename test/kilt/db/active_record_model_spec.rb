@@ -23,6 +23,12 @@ describe Kilt::DB::ActiveRecordModel do
         end
       end
 
+      describe "slug for" do
+        it "should return nil" do
+          database.slug_for(nil).nil?.must_equal true
+        end
+      end
+
       describe "find" do
 
         describe "when the record exists" do

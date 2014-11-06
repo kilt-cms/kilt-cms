@@ -43,6 +43,9 @@ module Kilt
         true
       end
 
+      def slug_for object
+      end
+
       private
 
       def find_this_record id
