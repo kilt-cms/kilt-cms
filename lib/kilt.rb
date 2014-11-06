@@ -66,7 +66,7 @@ module Kilt
   # Returns: Kilt::Object instance
   # Example: Kilt.object('big-event')
   def self.get(slug)
-    data = Utils.databases.map { |d| d.find(slug) }.select { |x| x }.first
+    data = look_in_all_databases_for slug
     data ? Kilt::Object.new(data['type'], data) : nil
   end
   
@@ -93,6 +93,17 @@ module Kilt
                          end
                        end.flatten
     used_field_types.select { |x| x }.group_by { |x| x }.map { |x| x[0] }
+  end
+
+  class << self
+    private
+    def look_in_all_databases_for slug
+      Utils.databases.each do |database|
+        object = database.find slug
+        return object if object
+      end
+      nil
+    end
   end
 
 end
