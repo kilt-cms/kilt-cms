@@ -39,14 +39,16 @@ describe Kilt::DB::ActiveRecordModel do
 
         describe "when the record exists" do
 
+
           it "should allow the finding of an object by an id" do
             giraffe = model.create
-            result = database.find giraffe.id
+            slug    = "#{model.to_s.underscore}_#{giraffe.id}"
+            result  = database.find slug
             result['id'].must_equal giraffe.id
           end
 
           it "should return the jsonified data of the object in question" do
-            giraffe = Struct.new(:id).new(Object.new)
+            giraffe = Struct.new(:id).new(SecureRandom.uuid)
             json    = Object.new
             data    = { SecureRandom.uuid => SecureRandom.uuid }
 
@@ -54,13 +56,16 @@ describe Kilt::DB::ActiveRecordModel do
             JSON.stubs(:parse).with(json).returns data
             model.stubs(:where).with(id: giraffe.id).returns [giraffe]
 
-            result = database.find giraffe.id
+            slug = "#{model.to_s.underscore}_#{giraffe.id}"
+
+            result = database.find slug
             result[data.first[0]].must_be_same_as data.first[1]
           end
 
           it "should set the unique id to be the id of the record" do
             giraffe = model.create
-            result = database.find giraffe.id
+            slug    = "#{model.to_s.underscore}_#{giraffe.id}"
+            result = database.find slug
             result['unique_id'].must_equal giraffe.id
           end
 
@@ -72,8 +77,16 @@ describe Kilt::DB::ActiveRecordModel do
               data['unique_id'] == giraffe.id
             end.returns slug
 
-            result = database.find giraffe.id
+            result = database.find "#{model.to_s.underscore}_#{giraffe.id}"
             result['slug'].must_be_same_as slug
+          end
+
+          describe "the model in the slug does not match the current type" do
+            it "should return nil" do
+              giraffe = model.create
+              slug    = "#{SecureRandom.uuid}_#{giraffe.id}"
+              database.find(slug).nil?.must_equal true
+            end
           end
 
         end

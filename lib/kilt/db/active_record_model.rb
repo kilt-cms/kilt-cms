@@ -11,6 +11,8 @@ module Kilt
       end
 
       def find id
+        type, id = id.to_s.split('_')
+        return nil unless type == model.to_s.underscore
         record = find_this_record id
         record ? convert_to_json(record) : nil
       end
