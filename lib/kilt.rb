@@ -50,7 +50,7 @@ module Kilt
     object['updated_at'] = Time.now
     object['slug']       = Slugger.slug_for object
 
-    Utils.database_for(nil).update object
+    Utils.database_for(object['type']).update object
   end
 
   # Delete an object

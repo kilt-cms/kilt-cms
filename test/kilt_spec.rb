@@ -196,6 +196,18 @@ describe Kilt do
               object['slug'].must_equal scenario.original_slug
             end
 
+            describe "using the correct database when updating" do
+              it "should use the object type to determine which database to use" do
+                Kilt::Slugger.stubs(:slug_for)
+                database = Object.new
+                Kilt::Utils.stubs(:database_for)
+                           .with(scenario.type)
+                           .returns database
+                database.expects(:update).with object
+                Kilt.update object.slug, object
+              end
+            end
+
           end
 
         end
