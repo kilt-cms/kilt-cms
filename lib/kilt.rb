@@ -37,36 +37,38 @@ module Kilt
   def self.create(object)
     object['created_at'] = object['updated_at'] = Time.now
     object['unique_id']  = "#{(Time.now.to_f * 1000).to_i}"
-    object['type']       = object.instance_eval { @type }
-    object['slug']       = Slugger.slug_for object
+    object['type']       = object.type
 
-    Utils.database.create object
+    database = Utils.database_for(object['type'])
+    object['slug'] = database.slug_for object
+    database.create object
   end
 
   # Update an object
   # Returns: boolean
   # Example: Kilt.update(object)
   def self.update(slug, object)
+    database = Utils.database_for(object['type'])
     object['updated_at'] = Time.now
-    object['slug']       = Slugger.slug_for object
+    object['slug']       = database.slug_for object
 
-    Utils.database.update object
+    database.update object
   end
 
   # Delete an object
   # Returns: boolean
   # Example: Kilt.delete('some-object')
   def self.delete(slug)
-    Utils.database.delete slug
+    look_in_all_databases_for(slug)[:database]
+      .delete slug
   end
 
   # Get the content for a specific object
   # Returns: Kilt::Object instance
   # Example: Kilt.object('big-event')
   def self.get(slug)
-    result = Utils.database.find(slug)
-    result ? Kilt::Object.new(result['type'], result)
-           : nil
+    data = look_in_all_databases_for(slug)[:data]
+    data ? Kilt::Object.new(data['type'], data) : nil
   end
   
   # Get a list of objects
@@ -74,7 +76,7 @@ module Kilt
   # Example: Kilt.objects('events')
   # Used directly or via method_missing
   def self.get_collection(object_type)
-    results = Utils.database.find_all_by_type object_type
+    results = Utils.database_for(object_type).find_all_by_type object_type
     Kilt::ObjectCollection.new results
   end
 
@@ -92,6 +94,20 @@ module Kilt
                          end
                        end.flatten
     used_field_types.select { |x| x }.group_by { |x| x }.map { |x| x[0] }
+  end
+
+  class << self
+    private
+
+    def look_in_all_databases_for slug
+      Utils.databases.each do |database|
+        if object = database.find(slug)
+          return { data: object, database: database }
+        end
+      end
+      { database: Utils.databases.first }
+    end
+
   end
 
 end

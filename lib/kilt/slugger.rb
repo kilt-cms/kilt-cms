@@ -11,7 +11,7 @@ module Kilt
     class << self
 
       def slug_is_unique_for? slug, object
-        result = Utils.database.find(slug)
+        result = Utils.database_for(object['type']).find(slug)
         return true if result.nil?
 
         "#{result['unique_id']}" == "#{object['unique_id']}"

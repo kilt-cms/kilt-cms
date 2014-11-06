@@ -107,6 +107,21 @@ describe Kilt do
 
             end
 
+            describe "using the correct database" do
+              it "should use the type of the object to determine which database to use" do
+                database = Object.new
+                object   = Kilt::Object.new(scenario.type, values)
+
+                database.stubs(:slug_for)
+                Kilt::Utils.stubs(:database_for)
+                           .with(scenario.type)
+                           .returns database
+                database.expects(:create).with object
+
+                Kilt.create object
+              end
+            end
+
           end
 
         end
@@ -179,6 +194,18 @@ describe Kilt do
               Kilt.update object.slug, object
 
               object['slug'].must_equal scenario.original_slug
+            end
+
+            describe "using the correct database when updating" do
+              it "should use the object type to determine which database to use" do
+                database = Object.new
+                database.stubs(:slug_for)
+                Kilt::Utils.stubs(:database_for)
+                           .with(scenario.type)
+                           .returns database
+                database.expects(:update).with object
+                Kilt.update object.slug, object
+              end
             end
 
           end
@@ -366,6 +393,23 @@ describe Kilt do
 
           end
 
+          describe "using the correct databsae for the object type" do
+            it "should use the object type when looking up the collection" do
+              records  = Object.new
+              expected = Object.new
+              database = Object.new
+              Kilt::Utils.stubs(:database_for)
+                         .with(scenario.type)
+                         .returns database
+              database.stubs(:find_all_by_type).with(scenario.type).returns records
+
+              Kilt::ObjectCollection.stubs(:new).with(records).returns expected
+
+              results = Kilt.get_collection scenario.type
+              results.must_be_same_as expected
+            end
+          end
+
         end
 
       end
@@ -507,6 +551,71 @@ describe Kilt do
 
           end
 
+        end
+
+      end
+
+    end
+
+  end
+
+  describe "getting records from multiple databases" do
+
+    let(:slug)      { Object.new }
+    let(:databases) { [Object.new, Object.new, Object.new] }
+    let(:data)      { { 'type' => Object.new } }
+
+    before do
+      Kilt::Utils.stubs(:databases).returns databases
+      databases.each { |d| d.stubs(:find).returns nil }
+    end
+
+    [0, 1, 2].each do |index|
+
+      describe "pulling a record from database #{index}" do
+
+        let(:expected) { Object.new }
+
+        before do
+          databases[index].stubs(:find).with(slug).returns data
+          Kilt::Object.stubs(:new).with(data['type'], data).returns expected
+        end
+
+        it "should return the record" do
+          result = Kilt.get(slug)
+          result.must_be_same_as expected
+        end
+
+      end
+
+    end
+
+  end
+
+  describe "deleting records from multiple databases" do
+
+    let(:slug)      { Object.new }
+    let(:databases) { [Object.new, Object.new, Object.new] }
+    let(:data)      { { 'type' => Object.new } }
+
+    before do
+      Kilt::Utils.stubs(:databases).returns databases
+      databases.each { |d| d.stubs(:find).returns nil }
+    end
+
+    [0, 1, 2].each do |index|
+
+      describe "deleting a record from database #{index}" do
+
+        let(:expected) { Object.new }
+
+        before do
+          databases[index].stubs(:find).with(slug).returns data
+        end
+
+        it "should delete the record" do
+          databases[index].expects(:delete).with slug
+          Kilt.delete slug
         end
 
       end

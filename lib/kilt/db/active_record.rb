@@ -43,6 +43,10 @@ module Kilt
       def setup!
       end
 
+      def slug_for object
+        Slugger.slug_for object
+      end
+
     end
 
   end
